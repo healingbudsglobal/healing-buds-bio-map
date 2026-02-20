@@ -13,8 +13,8 @@ export default {
       },
     },
     fontFamily: {
-      display: ['Space Grotesk', 'sans-serif'],
-      body: ['Outfit', 'sans-serif'],
+      display: ['DM Sans', 'sans-serif'],
+      body: ['Inter', 'sans-serif'],
     },
     extend: {
       colors: {
