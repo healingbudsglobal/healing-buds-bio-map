@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Shield, FlaskConical, FileCheck, ArrowRight, Sparkles } from "lucide-react";
-import healingBudsLogo from "@/assets/healing-buds-logo.svg";
+import hbLogoWhite from "@/assets/hb-logo-white-full.png";
 
 interface SqueezeScreenProps {
   onSubmit: (email: string) => void;
@@ -24,7 +24,7 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
 
   return (
     <div className="animate-fade-in relative z-10 flex flex-col items-center justify-center px-6 text-center">
-      {/* Floating orbs for visual depth */}
+      {/* Ambient orbs */}
       <div className="pointer-events-none absolute -top-20 left-1/2 -translate-x-1/2">
         <div className="h-64 w-64 rounded-full bg-[hsl(var(--accent-green))] opacity-[0.04] blur-[80px]" style={{ animation: 'orbFloat 8s ease-in-out infinite' }} />
       </div>
@@ -35,29 +35,29 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
       {/* Logo */}
       <div className="mb-10 animate-float">
         <img
-          src={healingBudsLogo}
+          src={hbLogoWhite}
           alt="Healing Buds"
-          className="h-12 w-auto sm:h-14"
+          className="h-14 w-auto sm:h-16"
         />
       </div>
 
-      {/* Pharma badge */}
+      {/* Badge */}
       <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--accent-green)_/_0.25)] bg-[hsl(var(--accent-green)_/_0.08)] px-5 py-2 shadow-elegant">
         <Sparkles className="h-3.5 w-3.5 text-[hsl(var(--accent-green))]" />
-        <span className="text-xs font-semibold tracking-widest uppercase text-[hsl(var(--accent-green))]">
-          Pharmaceutical-Grade Cannabis
+        <span className="text-xs font-semibold tracking-[0.15em] uppercase text-[hsl(var(--accent-green))]">
+          Precision Bio-Mapping
         </span>
       </div>
 
-      <h1 className="font-display text-4xl font-extrabold leading-[1.1] text-foreground sm:text-5xl md:text-6xl text-glow mb-3">
+      <h1 className="font-display text-4xl font-extrabold leading-[1.1] tracking-[0.02em] text-foreground sm:text-5xl md:text-6xl text-glow mb-3">
         Find Your Perfect
         <br />
-        <span className="bg-clip-text text-transparent inline-block" style={{ backgroundImage: 'var(--gradient-accent)' }}>
+        <span className="bg-clip-text text-transparent inline-block" style={{ backgroundImage: 'linear-gradient(135deg, hsl(164 48% 53%), hsl(84 81% 44%))' }}>
           Strain Match
         </span>
       </h1>
 
-      <p className="mb-3 text-sm font-medium text-[hsl(var(--accent-green))] tracking-wide uppercase">
+      <p className="mb-3 text-sm font-medium text-[hsl(var(--accent-green))] tracking-[0.15em] uppercase">
         in 60 Seconds
       </p>
 
@@ -74,7 +74,7 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
           "Results delivered straight to your inbox",
         ].map((text, i) => (
           <div key={i} className="flex items-center gap-3 animate-slide-up" style={{ animationDelay: `${i * 0.1}s` }}>
-            <span className="flex h-6 w-6 items-center justify-center rounded-full gradient-accent text-xs font-bold text-accent-foreground shadow-sm">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full gradient-accent text-xs font-bold text-white shadow-sm">
               ✓
             </span>
             <span>{text}</span>
@@ -99,7 +99,7 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
         {error && <p className="text-sm text-destructive">{error}</p>}
         <button
           type="submit"
-          className="group w-full rounded-2xl gradient-accent py-4 font-display font-bold text-accent-foreground text-base transition-all hover:brightness-110 hover:scale-[1.02] active:scale-[0.98] animate-pulse-glow flex items-center justify-center gap-2"
+          className="group w-full rounded-2xl gradient-accent py-4 font-display font-bold text-white text-base transition-all hover:brightness-110 hover:scale-[1.02] active:scale-[0.98] animate-pulse-glow flex items-center justify-center gap-2"
         >
           Start My Bio-Mapping
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -113,7 +113,7 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
           { icon: FlaskConical, label: "Lab Tested" },
           { icon: FileCheck, label: "POPIA Compliant" },
         ].map(({ icon: Icon, label }) => (
-          <div key={label} className="flex items-center gap-2 rounded-full border border-border/50 bg-surface px-3.5 py-1.5">
+          <div key={label} className="flex items-center gap-2 rounded-full border border-border/50 bg-[hsl(var(--surface))] px-3.5 py-1.5">
             <Icon className="h-3.5 w-3.5 text-primary" />
             <span className="font-medium">{label}</span>
           </div>

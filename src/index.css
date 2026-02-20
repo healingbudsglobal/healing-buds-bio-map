@@ -179,8 +179,15 @@
 
   .glass-card {
     background: hsl(175 6% 11% / 0.7);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(24px);
     border: 1px solid hsl(170 8% 20% / 0.5);
+  }
+
+  .glass-card-elevated {
+    background: hsl(175 6% 11% / 0.75);
+    backdrop-filter: blur(24px);
+    border: 1px solid hsl(170 8% 25% / 0.6);
+    box-shadow: var(--shadow-elegant);
   }
 }
 

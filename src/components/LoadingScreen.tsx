@@ -1,34 +1,44 @@
-import healingBudsLogo from "@/assets/healing-buds-logo.svg";
+import hbLogoJar from "@/assets/hb-logo-jar.png";
 
 const LoadingScreen = () => {
   return (
     <div className="animate-fade-in relative z-10 flex flex-col items-center justify-center px-6 text-center">
-      {/* Glow orb behind spinner */}
+      {/* Glow orb */}
       <div className="pointer-events-none absolute">
-        <div className="h-40 w-40 rounded-full bg-[hsl(var(--accent-green))] opacity-[0.06] blur-[60px]" />
+        <div className="h-48 w-48 rounded-full bg-[hsl(var(--accent-green))] opacity-[0.06] blur-[80px]" />
       </div>
 
       <div className="relative mb-8">
         {/* Outer ring */}
-        <div className="h-20 w-20 rounded-full border border-border" />
-        {/* Spinning ring */}
+        <div className="h-24 w-24 rounded-full border border-border" />
+        {/* Spinning ring 1 */}
         <div
-          className="absolute inset-0 h-20 w-20 rounded-full border-2 border-[hsl(var(--accent-green))] border-t-transparent"
+          className="absolute inset-0 h-24 w-24 rounded-full border-2 border-[hsl(var(--accent-green))] border-t-transparent"
           style={{ animation: "spin 1.2s linear infinite" }}
         />
-        {/* Second spinning ring */}
+        {/* Spinning ring 2 */}
         <div
-          className="absolute inset-1 h-[72px] w-[72px] rounded-full border border-[hsl(var(--lime-green)_/_0.3)] border-b-transparent"
+          className="absolute inset-1.5 h-[84px] w-[84px] rounded-full border border-[hsl(var(--lime-green)_/_0.3)] border-b-transparent"
           style={{ animation: "spin 2s linear infinite reverse" }}
         />
-        {/* Center logo */}
+        {/* Spinning ring 3 */}
+        <div
+          className="absolute inset-3 h-[72px] w-[72px] rounded-full border border-border/50 border-l-transparent"
+          style={{ animation: "spin 3s linear infinite" }}
+        />
+        {/* Center jar logo */}
         <span className="absolute inset-0 flex items-center justify-center">
-          <img src={healingBudsLogo} alt="HB" className="h-8 w-auto opacity-80" />
+          <img
+            src={hbLogoJar}
+            alt="HB"
+            className="h-8 w-auto"
+            style={{ animation: "pulse 2s ease-in-out infinite" }}
+          />
         </span>
       </div>
 
-      <h2 className="font-display text-2xl font-bold text-foreground mb-2 text-glow">
-        Calculating Your Match...
+      <h2 className="font-display text-2xl font-bold tracking-[0.02em] text-foreground mb-2 text-glow">
+        Analyzing Your Biological Profile...
       </h2>
       <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
         Cross-referencing your bio-profile with our lab-tested strain inventory

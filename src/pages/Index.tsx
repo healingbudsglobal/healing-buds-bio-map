@@ -3,6 +3,7 @@ import SqueezeScreen from "@/components/SqueezeScreen";
 import SurveyFlow from "@/components/SurveyFlow";
 import LoadingScreen from "@/components/LoadingScreen";
 import SuccessScreen from "@/components/SuccessScreen";
+import { surveyQuestions } from "@/data/surveyQuestions";
 
 type Screen = "squeeze" | "survey" | "loading" | "success";
 
@@ -21,17 +22,22 @@ const Index = () => {
     async (answers: Record<string, string>) => {
       setScreen("loading");
 
+      // Map answers to q1-q15 format
+      const payload: Record<string, string> = { email };
+      surveyQuestions.forEach((q, i) => {
+        payload[`q${i + 1}`] = answers[q.id] || "";
+      });
+
       try {
         await fetch(WEBHOOK_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, ...answers }),
+          body: JSON.stringify(payload),
         });
       } catch (err) {
         console.error("Webhook error:", err);
       }
 
-      // Show loading for at least 3 seconds for UX
       setTimeout(() => setScreen("success"), 3000);
     },
     [email]
