@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 40" fill="none">
+  <!-- HB Monogram -->
+  <rect x="0" y="4" width="32" height="32" rx="6" fill="#4DBFA1" opacity="0.15"/>
+  <text x="16" y="26" font-family="'DM Sans', sans-serif" font-size="18" font-weight="800" fill="#4DBFA1" text-anchor="middle">HB</text>
+  <!-- HEALING BUDS text -->
+  <text x="42" y="18" font-family="'DM Sans', sans-serif" font-size="15" font-weight="700" fill="#F0F4F3" letter-spacing="2">HEALING</text>
+  <text x="42" y="34" font-family="'DM Sans', sans-serif" font-size="15" font-weight="700" fill="#F0F4F3" letter-spacing="2">BUDS</text>
+</svg>
