@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { surveyQuestions } from "@/data/surveyQuestions";
-import { Leaf } from "lucide-react";
 
 interface SurveyFlowProps {
   onComplete: (answers: Record<string, string>) => void;
@@ -28,10 +27,9 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
     <div className="animate-fade-in flex w-full max-w-lg flex-col px-6">
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Leaf className="h-4 w-4 text-primary" />
-          <span className="font-display text-sm font-bold text-primary">Healing Buds</span>
-        </div>
+        <span className="font-display text-sm font-bold tracking-[0.2em] uppercase text-primary">
+          Healing Buds
+        </span>
         <span className="text-xs text-muted-foreground">
           {currentIndex + 1} of {surveyQuestions.length}
         </span>
@@ -59,7 +57,7 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
             <button
               key={option}
               onClick={() => handleSelect(option)}
-              className="w-full rounded-xl border border-border bg-surface-elevated px-4 py-3.5 text-left text-sm font-medium text-foreground transition-all hover:border-primary/50 hover:bg-secondary active:scale-[0.98] sm:text-base"
+              className="w-full rounded-xl border border-border bg-surface-elevated px-4 py-3.5 text-left text-sm font-medium text-foreground transition-all hover:border-primary/60 hover:bg-secondary active:scale-[0.98] sm:text-base"
             >
               {option}
             </button>
