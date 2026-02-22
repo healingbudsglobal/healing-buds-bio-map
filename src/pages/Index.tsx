@@ -7,7 +7,7 @@ import { surveyQuestions } from "@/data/surveyQuestions";
 
 type Screen = "squeeze" | "survey" | "loading" | "success";
 
-const WEBHOOK_URL = "https://hook.eu1.make.com/ies7377nwtjp83lxneyakinmvqrk5lmc";
+const WEBHOOK_URL = "https://hook.eu1.make.com/70z505ty60nkksvtl6l6r1yzj4cs58tb";
 
 const Index = () => {
   const [screen, setScreen] = useState<Screen>("squeeze");
