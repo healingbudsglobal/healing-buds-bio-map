@@ -1,13 +1,34 @@
 import { useState } from "react";
 import { Shield, FlaskConical, FileCheck, ArrowRight, Sparkles } from "lucide-react";
 import hbLogoWhite from "@/assets/hb-logo-white-full.png";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const PROVINCES = [
+  "Western Cape",
+  "Gauteng",
+  "KwaZulu-Natal",
+  "Eastern Cape",
+  "Free State",
+  "Limpopo",
+  "Mpumalanga",
+  "North West",
+  "Northern Cape",
+  "N/A",
+];
 
 interface SqueezeScreenProps {
-  onSubmit: (email: string) => void;
+  onSubmit: (email: string, province: string) => void;
 }
 
 const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
   const [email, setEmail] = useState("");
+  const [province, setProvince] = useState("");
   const [error, setError] = useState("");
   const [focused, setFocused] = useState(false);
 
@@ -18,8 +39,12 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
       setError("Please enter a valid email address");
       return;
     }
+    if (!province) {
+      setError("Please select your province");
+      return;
+    }
     setError("");
-    onSubmit(trimmed);
+    onSubmit(trimmed, province);
   };
 
   return (
@@ -76,6 +101,20 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
             required
           />
         </div>
+
+        <Select value={province} onValueChange={setProvince}>
+          <SelectTrigger className="w-full rounded-2xl border border-border bg-[hsl(var(--surface-elevated))] px-5 py-4 text-base text-foreground focus:ring-2 focus:ring-[hsl(var(--accent-green)_/_0.4)] focus:border-[hsl(var(--accent-green)_/_0.5)] transition-all h-auto [&>span]:text-left">
+            <SelectValue placeholder="Select your province" />
+          </SelectTrigger>
+          <SelectContent className="z-50 rounded-xl border border-border bg-card text-card-foreground shadow-lg">
+            {PROVINCES.map((p) => (
+              <SelectItem key={p} value={p} className="cursor-pointer">
+                {p}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
         {error && <p className="text-sm text-destructive">{error}</p>}
         <button
           type="submit"

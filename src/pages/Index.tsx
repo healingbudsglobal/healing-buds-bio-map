@@ -12,9 +12,11 @@ const WEBHOOK_URL = "https://hook.eu1.make.com/70z505ty60nkksvtl6l6r1yzj4cs58tb"
 const Index = () => {
   const [screen, setScreen] = useState<Screen>("squeeze");
   const [email, setEmail] = useState("");
+  const [province, setProvince] = useState("");
 
-  const handleEmailSubmit = useCallback((submittedEmail: string) => {
+  const handleEmailSubmit = useCallback((submittedEmail: string, submittedProvince: string) => {
     setEmail(submittedEmail);
+    setProvince(submittedProvince);
     setScreen("survey");
   }, []);
 
@@ -22,7 +24,7 @@ const Index = () => {
     async (answers: Record<string, string>) => {
       setScreen("loading");
 
-      const payload: Record<string, string> = { email };
+      const payload: Record<string, string> = { email, province };
       surveyQuestions.forEach((q, i) => {
         payload[`q${i + 1}`] = answers[q.id] || "";
       });
@@ -39,7 +41,7 @@ const Index = () => {
 
       setTimeout(() => setScreen("success"), 3000);
     },
-    [email]
+    [email, province]
   );
 
   return (
