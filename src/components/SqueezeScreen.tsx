@@ -51,10 +51,10 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
     <div className="animate-fade-in relative z-10 flex flex-col items-center justify-center px-6 text-center">
       {/* Ambient orbs */}
       <div className="pointer-events-none absolute -top-20 left-1/2 -translate-x-1/2">
-        <div className="h-64 w-64 rounded-full bg-[hsl(var(--accent-green))] opacity-[0.04] blur-[80px]" style={{ animation: 'orbFloat 8s ease-in-out infinite' }} />
+        <div className="h-64 w-64 rounded-full bg-[hsl(var(--brand-gold))] opacity-[0.05] blur-[80px]" style={{ animation: 'orbFloat 8s ease-in-out infinite' }} />
       </div>
       <div className="pointer-events-none absolute -bottom-32 right-0">
-        <div className="h-48 w-48 rounded-full bg-[hsl(var(--lime-green))] opacity-[0.03] blur-[60px]" style={{ animation: 'orbFloat 10s ease-in-out infinite 2s' }} />
+        <div className="h-48 w-48 rounded-full bg-[hsl(var(--accent-green))] opacity-[0.03] blur-[60px]" style={{ animation: 'orbFloat 10s ease-in-out infinite 2s' }} />
       </div>
 
       {/* Logo */}
@@ -63,9 +63,9 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
       </div>
 
       {/* Badge */}
-      <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--accent-green)_/_0.25)] bg-[hsl(var(--accent-green)_/_0.08)] px-5 py-2 shadow-elegant">
-        <Sparkles className="h-3.5 w-3.5 text-[hsl(var(--accent-green))]" />
-        <span className="text-xs font-semibold tracking-[0.15em] uppercase text-[hsl(var(--accent-green))]">
+      <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--brand-gold)_/_0.3)] bg-[hsl(var(--brand-gold)_/_0.08)] px-5 py-2 shadow-elegant">
+        <Sparkles className="h-3.5 w-3.5 text-[hsl(var(--brand-gold))]" />
+        <span className="text-xs font-semibold tracking-[0.15em] uppercase text-[hsl(var(--brand-gold))]">
           Precision Bio-Mapping
         </span>
       </div>
@@ -73,12 +73,12 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
       <h1 className="font-display text-4xl font-extrabold leading-[1.1] tracking-[0.02em] text-foreground sm:text-5xl md:text-6xl text-glow mb-3">
         Find Your Perfect
         <br />
-        <span className="bg-clip-text text-transparent inline-block" style={{ backgroundImage: 'linear-gradient(135deg, hsl(164 48% 53%), hsl(84 81% 44%))' }}>
+        <span className="bg-clip-text text-transparent inline-block" style={{ backgroundImage: 'linear-gradient(135deg, hsl(40 85% 55%), hsl(38 80% 65%))' }}>
           Strain Match
         </span>
       </h1>
 
-      <p className="mb-3 text-sm font-medium text-[hsl(var(--accent-green))] tracking-[0.15em] uppercase">
+      <p className="mb-3 text-sm font-medium text-[hsl(var(--brand-gold))] tracking-[0.15em] uppercase">
         in 60 Seconds
       </p>
 
@@ -89,7 +89,7 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="flex w-full max-w-sm flex-col gap-3">
-        <div className={`relative rounded-2xl transition-all duration-300 ${focused ? 'shadow-glow' : ''}`}>
+        <div className={`relative rounded-2xl transition-all duration-300 ${focused ? 'shadow-[var(--shadow-glow-gold)]' : ''}`}>
           <input
             type="email"
             placeholder="Enter your email address"
@@ -97,13 +97,13 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
             onChange={(e) => setEmail(e.target.value)}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            className="w-full rounded-2xl border border-border bg-[hsl(var(--surface-elevated))] px-5 py-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[hsl(var(--accent-green)_/_0.4)] focus:border-[hsl(var(--accent-green)_/_0.5)] transition-all text-base"
+            className="w-full rounded-2xl border border-border bg-[hsl(var(--surface-elevated))] px-5 py-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[hsl(var(--brand-gold)_/_0.4)] focus:border-[hsl(var(--brand-gold)_/_0.5)] transition-all text-base"
             required
           />
         </div>
 
         <Select value={province} onValueChange={setProvince}>
-          <SelectTrigger className="w-full rounded-2xl border border-border bg-[hsl(var(--surface-elevated))] px-5 py-4 text-base text-foreground focus:ring-2 focus:ring-[hsl(var(--accent-green)_/_0.4)] focus:border-[hsl(var(--accent-green)_/_0.5)] transition-all h-auto [&>span]:text-left">
+          <SelectTrigger className="w-full rounded-2xl border border-border bg-[hsl(var(--surface-elevated))] px-5 py-4 text-base text-foreground focus:ring-2 focus:ring-[hsl(var(--brand-gold)_/_0.4)] focus:border-[hsl(var(--brand-gold)_/_0.5)] transition-all h-auto [&>span]:text-left">
             <SelectValue placeholder="Select your province" />
           </SelectTrigger>
           <SelectContent className="z-50 rounded-xl border border-border bg-card text-card-foreground shadow-lg">

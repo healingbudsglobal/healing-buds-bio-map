@@ -45,6 +45,11 @@
     --deep-teal: 180 84% 32%;
     --subtle-dark: 176 39% 17%;
 
+    /* Brand Gold — primary CTA accent matching healingbuds.co.za */
+    --brand-gold: 40 85% 55%;
+    --brand-gold-light: 38 80% 65%;
+    --brand-gold-dark: 42 90% 42%;
+
     /* Surfaces */
     --surface: 175 6% 10%;
     --surface-elevated: 175 6% 13%;
@@ -52,8 +57,9 @@
     /* Gradients */
     --gradient-hero: linear-gradient(165deg, hsl(180 8% 7%) 0%, hsl(175 12% 10%) 40%, hsl(178 48% 21% / 0.3) 70%, hsl(180 8% 7%) 100%);
     --gradient-card: linear-gradient(145deg, hsl(175 8% 12%) 0%, hsl(175 6% 9%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(164 48% 53%), hsl(168 38% 38%));
-    --gradient-lime: linear-gradient(90deg, hsl(84 81% 44%), hsl(164 48% 53%));
+    --gradient-accent: linear-gradient(135deg, hsl(40 85% 55%), hsl(42 90% 42%));
+    --gradient-lime: linear-gradient(90deg, hsl(40 85% 55%), hsl(38 80% 65%));
+    --gradient-gold-teal: linear-gradient(135deg, hsl(40 85% 55%), hsl(164 48% 53%));
 
     /* Shadows from knowledge file */
     --shadow-xs: 0 1px 2px 0 hsla(175, 20%, 5%, 0.3);
@@ -63,9 +69,11 @@
     --shadow-xl: 0 10px 25px -5px hsla(175, 18%, 5%, 0.6), 0 8px 10px -6px hsla(175, 18%, 5%, 0.4);
     --shadow-elegant: 0 0 0 1px hsla(170, 15%, 30%, 0.12), 0 8px 24px -4px hsla(175, 18%, 5%, 0.5);
     --shadow-card: 0 0 0 1px hsla(170, 15%, 30%, 0.15), 0 2px 4px hsla(175, 15%, 5%, 0.3), 0 12px 24px hsla(175, 15%, 5%, 0.4);
-    --shadow-glow: 0 0 40px -10px hsl(164 48% 53% / 0.2);
-    --shadow-glow-lg: 0 0 80px -20px hsl(164 48% 53% / 0.15);
-    --shadow-glow-accent: 0 0 50px -10px hsl(164 48% 53% / 0.3);
+    --shadow-glow: 0 0 40px -10px hsl(40 85% 55% / 0.25);
+    --shadow-glow-lg: 0 0 80px -20px hsl(40 85% 55% / 0.15);
+    --shadow-glow-accent: 0 0 50px -10px hsl(40 85% 55% / 0.35);
+    --shadow-glow-gold: 0 0 40px -10px hsl(40 85% 55% / 0.3);
+    --shadow-glow-teal: 0 0 40px -10px hsl(164 48% 53% / 0.2);
 
     /* Sidebar */
     --sidebar-background: 175 6% 11%;
@@ -137,7 +145,7 @@
   }
 
   .animate-pulse-glow {
-    animation: pulseGlow 3s ease-in-out infinite;
+    animation: pulseGlowGold 3s ease-in-out infinite;
   }
 
   .animate-slide-up {
@@ -194,6 +202,11 @@
 @keyframes pulseGlow {
   0%, 100% { box-shadow: 0 0 20px -5px hsl(164 48% 53% / 0.2), 0 0 0 0 hsl(164 48% 53% / 0.1); }
   50% { box-shadow: 0 0 35px -5px hsl(164 48% 53% / 0.35), 0 0 0 8px hsl(164 48% 53% / 0); }
+}
+
+@keyframes pulseGlowGold {
+  0%, 100% { box-shadow: 0 0 20px -5px hsl(40 85% 55% / 0.25), 0 0 0 0 hsl(40 85% 55% / 0.1); }
+  50% { box-shadow: 0 0 35px -5px hsl(40 85% 55% / 0.4), 0 0 0 8px hsl(40 85% 55% / 0); }
 }
 
 @keyframes slideUp {
