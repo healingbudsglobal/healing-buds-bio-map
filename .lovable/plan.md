@@ -1,43 +1,45 @@
 
-I will add a Province dropdown to the Squeeze Screen and ensure it's included in the data sent to your webhook.
 
-### Proposed Changes
+# Rebrand Survey App to Match healingbuds.co.za + Create Branding Guide
 
-#### 1. Squeeze Screen Component (`src/components/SqueezeScreen.tsx`)
-- **State Management**: Add a new state for the selected province.
-- **UI Components**: Import and use the `Select` component family from our UI library.
-- **Dropdown Integration**: Add a "Province" dropdown below the email input.
-- **Styling**: Apply consistent styling (glassmorphism, `rounded-2xl`, etc.) to match the existing email field.
-- **Validation**: Ensure both an email is entered and a province is selected before allowing submission.
-- **Prop Update**: Modify the `onSubmit` callback to pass both the email and the selected province.
+## Analysis
 
-#### 2. Main Index Page (`src/pages/Index.tsx`)
-- **State Management**: Add a `province` state to store the value between the squeeze screen and the final survey submission.
-- **Flow Update**: Update the email submission handler to receive and save the province.
-- **Webhook Payload**: Modify the `handleSurveyComplete` function to include the `province` field at the top level of the JSON object, alongside the `email` and survey questions (`q1-q15`).
+From the healingbuds.co.za screenshot, the main site uses:
+- **Dark teal-charcoal background** (already close in the survey app)
+- **Gold/amber accent** for primary CTAs ("Check Eligibility" button) and highlighted text ("Medical Cannabis" in warm gold)
+- **White text** on dark surfaces
+- **Teal/green** for trust badges and secondary indicators
+- **Clean sans-serif typography** (Plus Jakarta Sans, Inter)
 
-### Province List
-The dropdown will include:
-- Western Cape
-- Gauteng
-- KwaZulu-Natal
-- Eastern Cape
-- Free State
-- Limpopo
-- Mpumalanga
-- North West
-- Northern Cape
-- N/A
+The current survey app uses **lime-green/teal gradients** for CTAs, which doesn't match the **gold/amber** CTA style on the main site.
+
+## Proposed Changes
+
+### 1. Color Rebranding (`src/index.css`)
+- Add a **gold/amber accent** CSS variable: `--brand-gold: 40 85% 55%` to match the CTA button color on healingbuds.co.za
+- Update `--gradient-accent` and `--gradient-lime` to incorporate gold tones
+- Keep the teal/green palette for badges and secondary elements (these already match)
+
+### 2. Component Updates
+- **SqueezeScreen.tsx**: Change the CTA button gradient from green→lime to a gold/amber gradient matching the main site's "Check Eligibility" button. Update the badge accent from green to gold where appropriate.
+- **SurveyFlow.tsx**: Update selected-option highlight from lime-green to gold to match CTA branding.
+- **LoadingScreen.tsx**: Keep teal spinner (matches secondary branding) but update accent dots to gold.
+- **SuccessScreen.tsx**: Update the success icon accent to align with the gold brand.
+
+### 3. Create Branding Markdown (`src/docs/BRANDING.md`)
+A comprehensive branding guide document covering:
+- Brand identity and mission statement
+- Full color palette (hex, HSL) with usage guidelines
+- Typography system (DM Sans for display, Inter for body)
+- Gradient definitions
+- Shadow system
+- Component styling patterns (glassmorphism, badges, CTAs)
+- Logo usage guidelines
+- Tone of voice
 
 ### Technical Details
-- The payload sent to `https://hook.eu1.make.com/70z505ty60nkksvtl6l6r1yzj4cs58tb` will look like this:
-```json
-{
-  "email": "user@example.com",
-  "province": "Western Cape",
-  "q1": "Answer 1",
-  ...
-  "q15": "Answer 15"
-}
-```
-- The dropdown will be placed above the "Start My Bio-Mapping" button for a natural form flow.
+- The gold color extracted from the main site CTA is approximately `hsl(40 85% 55%)` / `#E5A31E`
+- The highlighted "Medical Cannabis" text appears to use approximately `hsl(38 80% 60%)` / `#D4A34A`
+- All existing teal tokens remain for trust badges and secondary UI
+- Typography already uses DM Sans + Inter which matches the main site's clean sans-serif approach
+
