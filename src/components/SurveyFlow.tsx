@@ -38,7 +38,7 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
           className="h-full rounded-r-full transition-all duration-500 ease-out"
           style={{
             width: `${progress}%`,
-            background: 'linear-gradient(90deg, hsl(84 81% 44%), hsl(164 48% 53%))',
+            background: 'linear-gradient(90deg, hsl(40 85% 55%), hsl(38 80% 65%))',
           }}
         />
       </div>
@@ -51,7 +51,7 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
           className="h-8 w-auto"
         />
         <div className="flex items-center gap-1.5">
-          <span className="text-xs font-bold text-[hsl(var(--accent-green))]">
+          <span className="text-xs font-bold text-[hsl(var(--brand-gold))]">
             Step {currentIndex + 1}
           </span>
           <span className="text-xs text-muted-foreground">
@@ -78,16 +78,16 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
                 onClick={() => handleSelect(option)}
                 className={`group w-full rounded-xl border px-4 py-3.5 text-left text-sm font-medium text-foreground transition-all duration-200 sm:text-base active:scale-[0.98] ${
                   isSelected
-                    ? 'border-[hsl(var(--lime-green))] bg-[hsl(var(--accent-green)_/_0.1)] scale-[1.02]'
-                    : 'border-border bg-[hsl(var(--surface))] hover:border-[hsl(var(--lime-green)_/_0.5)] hover:bg-[hsl(var(--accent-green)_/_0.06)] hover:scale-[1.01]'
+                    ? 'border-[hsl(var(--brand-gold))] bg-[hsl(var(--brand-gold)_/_0.1)] scale-[1.02]'
+                    : 'border-border bg-[hsl(var(--surface))] hover:border-[hsl(var(--brand-gold)_/_0.5)] hover:bg-[hsl(var(--brand-gold)_/_0.06)] hover:scale-[1.01]'
                 }`}
                 style={{ animationDelay: `${i * 0.05}s` }}
               >
                 <span className="flex items-center gap-3">
                   <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border text-xs font-bold transition-all ${
                     isSelected
-                      ? 'border-[hsl(var(--lime-green))] text-[hsl(var(--lime-green))] bg-[hsl(var(--lime-green)_/_0.15)]'
-                      : 'border-border text-muted-foreground group-hover:border-[hsl(var(--lime-green)_/_0.5)] group-hover:text-[hsl(var(--accent-green))] group-hover:bg-[hsl(var(--accent-green)_/_0.1)]'
+                      ? 'border-[hsl(var(--brand-gold))] text-[hsl(var(--brand-gold))] bg-[hsl(var(--brand-gold)_/_0.15)]'
+                      : 'border-border text-muted-foreground group-hover:border-[hsl(var(--brand-gold)_/_0.5)] group-hover:text-[hsl(var(--brand-gold-light))] group-hover:bg-[hsl(var(--brand-gold)_/_0.1)]'
                   }`}>
                     {String.fromCharCode(65 + i)}
                   </span>
