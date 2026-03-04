@@ -5,13 +5,18 @@ import SurveyFlow from "@/components/SurveyFlow";
 import ContactCapture from "@/components/ContactCapture";
 import LoadingScreen from "@/components/LoadingScreen";
 import SuccessScreen from "@/components/SuccessScreen";
+import OtpVerification from "@/components/OtpVerification";
 import AmbientParticles from "@/components/AmbientParticles";
 import { surveyQuestions } from "@/data/surveyQuestions";
 import { matchStrain, type StrainMatch } from "@/lib/strainMatcher";
 
-type Screen = "squeeze" | "survey" | "contact" | "loading" | "success";
+type Screen = "squeeze" | "otp" | "survey" | "contact" | "loading" | "success";
 
 const WEBHOOK_URL = "https://hook.eu1.make.com/70z505ty60nkksvtl6l6r1yzj4cs58tb";
+
+function generateOtp(): string {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
 
 // Cinematic screen transition variants
 const screenVariants = {
@@ -29,14 +34,45 @@ const Index = () => {
   const [screen, setScreen] = useState<Screen>("squeeze");
   const [email, setEmail] = useState("");
   const [province, setProvince] = useState("");
+  const [otpCode, setOtpCode] = useState("");
   const [surveyAnswers, setSurveyAnswers] = useState<Record<string, string>>({});
   const [strainResult, setStrainResult] = useState<StrainMatch | null>(null);
+
+  const sendOtpWebhook = useCallback(async (userEmail: string, userProvince: string, code: string) => {
+    try {
+      await fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: userEmail,
+          province: userProvince,
+          otp_code: code,
+          type: "otp_verification",
+        }),
+      });
+    } catch (err) {
+      console.error("OTP webhook error:", err);
+    }
+  }, []);
 
   const handleEmailSubmit = useCallback((submittedEmail: string, submittedProvince: string) => {
     setEmail(submittedEmail);
     setProvince(submittedProvince);
+    const code = generateOtp();
+    setOtpCode(code);
+    sendOtpWebhook(submittedEmail, submittedProvince, code);
+    setScreen("otp");
+  }, [sendOtpWebhook]);
+
+  const handleOtpVerified = useCallback(() => {
     setScreen("survey");
   }, []);
+
+  const handleOtpResend = useCallback(() => {
+    const code = generateOtp();
+    setOtpCode(code);
+    sendOtpWebhook(email, province, code);
+  }, [email, province, sendOtpWebhook]);
 
   const handleSurveyComplete = useCallback((answers: Record<string, string>) => {
     const result = matchStrain(answers);
@@ -87,7 +123,7 @@ const Index = () => {
   );
 
   const handleContactSubmit = useCallback(
-    (name: string, whatsapp: string) => {
+    (name: string, whatsapp?: string) => {
       sendWebhook(name, whatsapp);
     },
     [sendWebhook]
@@ -99,7 +135,6 @@ const Index = () => {
 
   return (
     <div className="leaf-pattern relative flex min-h-[100dvh] items-center justify-center overflow-hidden pb-[env(safe-area-inset-bottom)]">
-      {/* Persistent ambient particles across all screens */}
       <AmbientParticles />
 
       <AnimatePresence mode="wait">
@@ -113,6 +148,14 @@ const Index = () => {
           className="flex w-full items-center justify-center"
         >
           {screen === "squeeze" && <SqueezeScreen onSubmit={handleEmailSubmit} />}
+          {screen === "otp" && (
+            <OtpVerification
+              email={email}
+              otpCode={otpCode}
+              onVerified={handleOtpVerified}
+              onResend={handleOtpResend}
+            />
+          )}
           {screen === "survey" && <SurveyFlow onComplete={handleSurveyComplete} />}
           {screen === "contact" && (
             <ContactCapture
