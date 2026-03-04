@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import hbLogoJar from "@/assets/hb-logo-jar.png";
+import heroFlower from "@/assets/hero-flower.jpg";
 
 const STATUS_MESSAGES = [
   "Analysing your profile…",
@@ -33,6 +34,18 @@ const LoadingScreen = () => {
       transition={{ duration: 0.4 }}
       className="relative z-10 flex flex-col items-center justify-center px-6 text-center"
     >
+      {/* Flower pulse backdrop */}
+      <div className="pointer-events-none absolute">
+        <motion.img
+          src={heroFlower}
+          alt=""
+          className="w-64 h-64 object-cover rounded-full flower-vignette"
+          style={{ filter: "blur(40px)", mixBlendMode: "luminosity" }}
+          animate={{ opacity: [0.04, 0.08, 0.04], scale: [0.95, 1.05, 0.95] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </div>
+
       {/* Green radial glow */}
       <div className="pointer-events-none absolute">
         <motion.div
