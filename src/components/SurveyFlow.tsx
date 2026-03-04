@@ -15,9 +15,9 @@ interface SurveyFlowProps {
 const getIconColor = (_questionId: string, optionLabel: string): string => {
   const calmOptions = ["Relaxation", "Sleep Support", "Night", "Sedation", "Stressed", "Sore", "Heavy & Sedated", "Warm & Relaxed", "Chronic Pain", "Insomnia", "Solo"];
   const activeOptions = ["Creativity & Focus", "Morning", "Functional", "Euphoric", "Adventurous", "Bored", "Light & Functional", "Social", "Daily"];
-  if (calmOptions.includes(optionLabel)) return "bg-primary/15 text-primary";
-  if (activeOptions.includes(optionLabel)) return "bg-[hsl(var(--brand-gold)_/_0.15)] text-[hsl(var(--brand-gold))]";
-  return "bg-muted text-muted-foreground";
+  if (calmOptions.includes(optionLabel)) return "bg-[hsl(var(--deep-teal)_/_0.2)] text-[hsl(var(--deep-teal))]";
+  if (activeOptions.includes(optionLabel)) return "bg-[hsl(var(--accent-green)_/_0.15)] text-[hsl(var(--accent-green))]";
+  return "bg-[hsl(var(--primary)_/_0.12)] text-primary";
 };
 
 const MIDPOINT = Math.floor(surveyQuestions.length / 2);
@@ -138,11 +138,11 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.15, type: "spring", stiffness: 300, damping: 15 }}
-                className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[hsl(var(--brand-gold)_/_0.12)] border border-[hsl(var(--brand-gold)_/_0.25)]"
+                className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[hsl(var(--accent-green)_/_0.12)] border border-[hsl(var(--accent-green)_/_0.25)]"
               >
                 <span className="text-2xl">🌿</span>
               </motion.div>
-              <p className="font-display text-xl font-bold text-[hsl(var(--brand-gold))]">
+              <p className="font-display text-xl font-bold text-[hsl(var(--accent-green))]">
                 Halfway there!
               </p>
               <p className="mt-1.5 text-sm text-muted-foreground">Your profile is taking shape</p>
@@ -169,18 +169,18 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
               {/* Botanical accent in corner */}
               <BotanicalAccent variant="corner" className="absolute -right-2 -top-2 rotate-45" />
 
-              {/* Gold accent line at top */}
-              <div className="absolute top-0 left-0 right-0 h-[2px] gradient-accent opacity-60" />
+              {/* Green-to-gold accent line at top */}
+              <div className="absolute top-0 left-0 right-0 h-[2px] opacity-60" style={{ background: 'linear-gradient(90deg, hsl(var(--accent-green)), hsl(var(--brand-gold)))' }} />
 
               {/* Question number pill */}
               <motion.div
                 initial={{ opacity: 0, x: -12 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 }}
-                className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-[hsl(var(--brand-gold)_/_0.08)] border border-[hsl(var(--brand-gold)_/_0.15)] px-3 py-1"
+                className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-[hsl(var(--accent-green)_/_0.08)] border border-[hsl(var(--accent-green)_/_0.15)] px-3 py-1"
               >
-                <span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--brand-gold))] animate-pulse" />
-                <span className="text-[10px] font-semibold uppercase tracking-wider text-[hsl(var(--brand-gold))]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--accent-green))] animate-pulse" />
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-[hsl(var(--accent-green))]">
                   Question {currentIndex + 1}
                 </span>
               </motion.div>

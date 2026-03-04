@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 
 interface LeafProgressProps {
-  progress: number; // 0-100
+  progress: number;
   currentStep: number;
   totalSteps: number;
 }
@@ -9,7 +9,6 @@ interface LeafProgressProps {
 const LeafProgress = ({ progress }: LeafProgressProps) => {
   return (
     <div className="fixed top-0 left-0 right-0 z-50" style={{ paddingTop: "env(safe-area-inset-top)" }}>
-      {/* Track */}
       <div className="h-1 bg-[hsl(var(--surface))]">
         <motion.div
           className="h-full rounded-r-full"
@@ -17,12 +16,11 @@ const LeafProgress = ({ progress }: LeafProgressProps) => {
           animate={{ width: `${progress}%` }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           style={{
-            background: 'linear-gradient(90deg, hsl(var(--primary)), hsl(var(--brand-gold)))',
+            background: 'linear-gradient(90deg, hsl(var(--primary-green)), hsl(var(--accent-green)))',
           }}
         />
       </div>
 
-      {/* Leaf indicator at the end of the bar */}
       <motion.div
         className="absolute top-0 flex items-center justify-center"
         initial={{ left: 0 }}
@@ -41,7 +39,7 @@ const LeafProgress = ({ progress }: LeafProgressProps) => {
         >
           <path
             d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c1.5 0 3-.3 4.5-1C11.5 19 8 15.5 8 12c0-4 3-7 7-8.5C13.5 2.5 12.5 2 12 2z"
-            fill="hsl(var(--brand-gold))"
+            fill="hsl(var(--accent-green))"
             opacity="0.9"
           />
           <path

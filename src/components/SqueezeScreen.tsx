@@ -66,26 +66,26 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
       {/* Botanical hero illustration */}
       <BotanicalAccent variant="hero" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%]" />
 
-      {/* Radial spotlight */}
-      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,hsl(40_85%_55%_/_0.04)_0%,transparent_70%)]" />
+      {/* Green radial spotlight */}
+      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,hsl(var(--accent-green)_/_0.05)_0%,transparent_70%)]" />
 
       {/* Logo */}
       <motion.div variants={itemVariants} className="mb-6">
         <img src={hbLogoWhite} alt="Healing Buds" className="h-14 w-auto sm:h-16" />
       </motion.div>
 
-      {/* Trust badges */}
+      {/* Trust badges — green icons */}
       <motion.div
         variants={itemVariants}
         className="mb-5 inline-flex items-center gap-4 rounded-full border border-border bg-[hsl(var(--surface-elevated))] px-5 py-2"
       >
         <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-          <FlaskConical className="h-3.5 w-3.5 text-[hsl(var(--brand-gold))]" />
+          <FlaskConical className="h-3.5 w-3.5 text-[hsl(var(--accent-green))]" />
           EU GMP Certified
         </span>
         <span className="h-3 w-px bg-border" />
         <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-          <Microscope className="h-3.5 w-3.5 text-[hsl(var(--brand-gold))]" />
+          <Microscope className="h-3.5 w-3.5 text-[hsl(var(--accent-green))]" />
           Lab Tested
         </span>
       </motion.div>
@@ -112,8 +112,8 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
         onSubmit={handleSubmit}
         className="flex w-full max-w-sm flex-col gap-3 glass-card-elevated rounded-2xl p-5 relative overflow-hidden"
       >
-        {/* Gold shimmer line */}
-        <div className="absolute top-0 left-0 right-0 h-[2px] gradient-accent opacity-50" />
+        {/* Green-to-gold shimmer line */}
+        <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: 'linear-gradient(90deg, hsl(var(--accent-green)), hsl(var(--brand-gold)))' }} />
 
         <div className={`relative rounded-2xl transition-all duration-300 ${focused ? 'shadow-[var(--shadow-glow-gold)]' : ''}`}>
           <input
@@ -166,12 +166,12 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
         </p>
       </motion.form>
 
-      {/* POPIA trust badge */}
+      {/* POPIA — green tint */}
       <motion.div
         variants={itemVariants}
-        className="mt-5 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--brand-gold)_/_0.15)] bg-[hsl(var(--brand-gold)_/_0.04)] px-4 py-2 text-xs text-muted-foreground"
+        className="mt-5 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--accent-green)_/_0.2)] bg-[hsl(var(--accent-green)_/_0.04)] px-4 py-2 text-xs text-muted-foreground"
       >
-        <Shield className="h-3.5 w-3.5 text-[hsl(var(--brand-gold))]" />
+        <Shield className="h-3.5 w-3.5 text-[hsl(var(--accent-green))]" />
         <span>POPIA Compliant · Secure medical data</span>
       </motion.div>
     </motion.div>

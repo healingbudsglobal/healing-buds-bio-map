@@ -1,3 +1,11 @@
+import blockberryImg from "@/assets/strains/blockberry.jpg";
+import blueZushiImg from "@/assets/strains/blue-zushi.jpg";
+import candyPaveImg from "@/assets/strains/candy-pave.jpg";
+import caribbeanBreezeImg from "@/assets/strains/caribbean-breeze.jpg";
+import femmeFataleImg from "@/assets/strains/femme-fatale.jpg";
+import nfs12Img from "@/assets/strains/nfs-12.jpg";
+import peanutButterBreathImg from "@/assets/strains/peanut-butter-breath.jpg";
+
 export type StrainType = "indica" | "sativa" | "hybrid";
 
 export interface Strain {
@@ -10,6 +18,7 @@ export interface Strain {
   price: string;
   available: boolean;
   shopUrl: string;
+  imageUrl: string;
 }
 
 export const strains: Strain[] = [
@@ -23,6 +32,7 @@ export const strains: Strain[] = [
     price: "R191.20/g",
     available: true,
     shopUrl: "https://healingbuds.co.za/shop",
+    imageUrl: blockberryImg,
   },
   {
     name: "Blue Zushi",
@@ -34,6 +44,7 @@ export const strains: Strain[] = [
     price: "R191.20/g",
     available: true,
     shopUrl: "https://healingbuds.co.za/shop",
+    imageUrl: blueZushiImg,
   },
   {
     name: "Candy Pave",
@@ -45,6 +56,7 @@ export const strains: Strain[] = [
     price: "R191.20/g",
     available: true,
     shopUrl: "https://healingbuds.co.za/shop",
+    imageUrl: candyPaveImg,
   },
   {
     name: "Caribbean Breeze",
@@ -56,6 +68,7 @@ export const strains: Strain[] = [
     price: "R173.80/g",
     available: false,
     shopUrl: "https://healingbuds.co.za/shop",
+    imageUrl: caribbeanBreezeImg,
   },
   {
     name: "Femme Fatale",
@@ -67,6 +80,7 @@ export const strains: Strain[] = [
     price: "R173.80/g",
     available: false,
     shopUrl: "https://healingbuds.co.za/shop",
+    imageUrl: femmeFataleImg,
   },
   {
     name: "NFS 12",
@@ -78,6 +92,7 @@ export const strains: Strain[] = [
     price: "R191.20/g",
     available: true,
     shopUrl: "https://healingbuds.co.za/shop",
+    imageUrl: nfs12Img,
   },
   {
     name: "Peanut Butter Breath",
@@ -89,5 +104,6 @@ export const strains: Strain[] = [
     price: "R191.20/g",
     available: true,
     shopUrl: "https://healingbuds.co.za/shop",
+    imageUrl: peanutButterBreathImg,
   },
 ];
