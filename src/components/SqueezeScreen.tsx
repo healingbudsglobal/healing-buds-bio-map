@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { validateEmail } from "@/lib/emailValidation";
 import hbLogoWhite from "@/assets/hb-logo-white-full.png";
 import heroFlower from "@/assets/hero-flower.jpg";
-import BotanicalAccent from "@/components/BotanicalAccent";
 import {
   Select,
   SelectContent,
@@ -22,7 +21,6 @@ interface SqueezeScreenProps {
   onSubmit: (email: string, province: string) => void;
 }
 
-// Staggered children animation
 const containerVariants = {
   hidden: {},
   visible: {
@@ -64,31 +62,45 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
       animate="visible"
       className="relative z-10 flex flex-col items-center justify-center px-5 text-center"
     >
-      {/* Hero flower backdrop — blurred, masked, cinematic */}
-      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[55%] w-[600px] h-[600px] sm:w-[700px] sm:h-[700px]">
-        <img
+      {/* Hero flower — full-bleed cinematic backdrop with Ken Burns */}
+      <motion.div
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5 }}
+      >
+        <motion.img
           src={heroFlower}
           alt=""
-          className="w-full h-full object-cover flower-vignette scale-110 opacity-[0.12]"
-          style={{ mixBlendMode: "luminosity", filter: "blur(8px) saturate(1.4)" }}
+          className="absolute top-1/2 left-1/2 w-[140%] max-w-none h-auto min-h-full object-cover"
+          style={{
+            transform: "translate(-50%, -50%)",
+            mixBlendMode: "soft-light",
+            filter: "saturate(1.3) contrast(1.1)",
+          }}
+          initial={{ scale: 1.15, x: "-50%", y: "-50%" }}
+          animate={{ scale: 1.05, x: "-50%", y: "-50%" }}
+          transition={{ duration: 20, ease: "linear", repeat: Infinity, repeatType: "reverse" }}
         />
-      </div>
-
-      {/* Botanical hero illustration */}
-      <BotanicalAccent variant="hero" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%]" />
-
-      {/* Green radial spotlight */}
-      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,hsl(var(--accent-green)_/_0.05)_0%,transparent_70%)]" />
-
-      {/* Logo */}
-      <motion.div variants={itemVariants} className="mb-6">
-        <img src={hbLogoWhite} alt="Healing Buds" className="h-14 w-auto sm:h-16" />
+        {/* Multi-layer vignette for depth */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_center,transparent_20%,hsl(180_8%_7%_/_0.75)_70%,hsl(180_8%_7%)_100%)]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[hsl(180_8%_7%)] via-[hsl(180_8%_7%_/_0.3)] to-[hsl(180_8%_7%_/_0.6)]" />
+        {/* Green tint overlay for brand cohesion */}
+        <div className="absolute inset-0 bg-[hsl(var(--primary-green)_/_0.25)]" style={{ mixBlendMode: "overlay" }} />
       </motion.div>
 
-      {/* Trust badges — green icons */}
+      {/* Subtle green radial spotlight */}
+      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,hsl(var(--accent-green)_/_0.06)_0%,transparent_70%)]" />
+
+      {/* Logo */}
+      <motion.div variants={itemVariants} className="mb-6 relative">
+        <img src={hbLogoWhite} alt="Healing Buds" className="h-14 w-auto sm:h-16 drop-shadow-lg" />
+      </motion.div>
+
+      {/* Trust badges */}
       <motion.div
         variants={itemVariants}
-        className="mb-5 inline-flex items-center gap-4 rounded-full border border-border bg-[hsl(var(--surface-elevated))] px-5 py-2"
+        className="mb-5 inline-flex items-center gap-4 rounded-full border border-[hsl(170_8%_20%_/_0.6)] bg-[hsl(var(--surface-elevated)_/_0.7)] backdrop-blur-xl px-5 py-2 shadow-sm"
       >
         <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
           <FlaskConical className="h-3.5 w-3.5 text-[hsl(var(--accent-green))]" />
@@ -103,7 +115,7 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
 
       <motion.h1
         variants={itemVariants}
-        className="font-display text-3xl font-extrabold leading-[1.1] tracking-[0.02em] text-foreground sm:text-4xl md:text-5xl mb-2"
+        className="font-display text-3xl font-extrabold leading-[1.1] tracking-[0.02em] text-foreground sm:text-4xl md:text-5xl mb-2 drop-shadow-md"
       >
         Your Personalised
         <br />
@@ -117,11 +129,12 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
         90-second guided consultation · clinically informed
       </motion.p>
 
-      {/* Form — glass card */}
+      {/* Form — glass card with stronger blur over flower */}
       <motion.form
         variants={itemVariants}
         onSubmit={handleSubmit}
-        className="flex w-full max-w-sm flex-col gap-3 glass-card-elevated rounded-2xl p-5 relative overflow-hidden"
+        className="flex w-full max-w-sm flex-col gap-3 rounded-2xl p-5 relative overflow-hidden border border-[hsl(170_8%_25%_/_0.5)] bg-[hsl(175_6%_11%_/_0.65)] backdrop-blur-2xl"
+        style={{ boxShadow: "var(--shadow-elegant), 0 0 80px -20px hsl(var(--accent-green) / 0.08)" }}
       >
         {/* Green-to-gold shimmer line */}
         <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: 'linear-gradient(90deg, hsl(var(--accent-green)), hsl(var(--brand-gold)))' }} />
@@ -134,13 +147,13 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
             onChange={(e) => setEmail(e.target.value)}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            className="w-full rounded-2xl border border-border bg-[hsl(var(--surface-elevated))] px-5 py-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[hsl(var(--brand-gold)_/_0.4)] focus:border-[hsl(var(--brand-gold)_/_0.5)] transition-all text-[16px]"
+            className="w-full rounded-2xl border border-border bg-[hsl(var(--surface-elevated)_/_0.8)] px-5 py-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[hsl(var(--brand-gold)_/_0.4)] focus:border-[hsl(var(--brand-gold)_/_0.5)] transition-all text-[16px]"
             required
           />
         </div>
 
         <Select value={province} onValueChange={setProvince}>
-          <SelectTrigger className="w-full rounded-2xl border border-border bg-[hsl(var(--surface-elevated))] px-5 py-4 text-[16px] text-foreground focus:ring-2 focus:ring-[hsl(var(--brand-gold)_/_0.4)] focus:border-[hsl(var(--brand-gold)_/_0.5)] transition-all h-auto [&>span]:text-left">
+          <SelectTrigger className="w-full rounded-2xl border border-border bg-[hsl(var(--surface-elevated)_/_0.8)] px-5 py-4 text-[16px] text-foreground focus:ring-2 focus:ring-[hsl(var(--brand-gold)_/_0.4)] focus:border-[hsl(var(--brand-gold)_/_0.5)] transition-all h-auto [&>span]:text-left">
             <SelectValue placeholder="Select your province" />
           </SelectTrigger>
           <SelectContent className="z-50 rounded-xl border border-border bg-card text-card-foreground shadow-lg">
@@ -177,10 +190,10 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
         </p>
       </motion.form>
 
-      {/* POPIA — green tint */}
+      {/* POPIA */}
       <motion.div
         variants={itemVariants}
-        className="mt-5 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--accent-green)_/_0.2)] bg-[hsl(var(--accent-green)_/_0.04)] px-4 py-2 text-xs text-muted-foreground"
+        className="mt-5 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--accent-green)_/_0.2)] bg-[hsl(var(--accent-green)_/_0.04)] backdrop-blur-sm px-4 py-2 text-xs text-muted-foreground"
       >
         <Shield className="h-3.5 w-3.5 text-[hsl(var(--accent-green))]" />
         <span>POPIA Compliant · Secure medical data</span>

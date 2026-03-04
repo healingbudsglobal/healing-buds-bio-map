@@ -34,16 +34,18 @@ const LoadingScreen = () => {
       transition={{ duration: 0.4 }}
       className="relative z-10 flex flex-col items-center justify-center px-6 text-center"
     >
-      {/* Flower pulse backdrop */}
-      <div className="pointer-events-none absolute">
+      {/* Full-bleed flower backdrop — cinematic */}
+      <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <motion.img
           src={heroFlower}
           alt=""
-          className="w-64 h-64 object-cover rounded-full flower-vignette"
-          style={{ filter: "blur(40px)", mixBlendMode: "luminosity" }}
-          animate={{ opacity: [0.04, 0.08, 0.04], scale: [0.95, 1.05, 0.95] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ filter: "blur(30px) saturate(1.2)", mixBlendMode: "soft-light" }}
+          animate={{ opacity: [0.08, 0.14, 0.08], scale: [1, 1.03, 1] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
         />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_30%,hsl(180_8%_7%_/_0.85)_80%)]" />
+        <div className="absolute inset-0 bg-[hsl(var(--primary-green)_/_0.15)]" style={{ mixBlendMode: "overlay" }} />
       </div>
 
       {/* Green radial glow */}
@@ -63,7 +65,7 @@ const LoadingScreen = () => {
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       >
         <div className="h-24 w-24 rounded-full border border-border" />
-        {/* Spinning ring 1 — gold (CTA color) */}
+        {/* Spinning ring 1 — gold */}
         <div
           className="absolute inset-0 h-24 w-24 rounded-full border-[3px] border-[hsl(var(--brand-gold)_/_0.8)] border-t-transparent"
           style={{ animation: "spin 1.2s linear infinite" }}
@@ -108,7 +110,7 @@ const LoadingScreen = () => {
         </AnimatePresence>
       </div>
 
-      {/* Progress bar — green-dominant gradient */}
+      {/* Progress bar */}
       <div className="mt-8 w-48 h-1 rounded-full bg-[hsl(var(--surface-elevated))] overflow-hidden">
         <div
           className="h-full rounded-full transition-all duration-[3000ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
