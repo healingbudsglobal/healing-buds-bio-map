@@ -10,6 +10,7 @@ interface OtpVerificationProps {
   otpCode: string;
   onVerified: () => void;
   onResend: () => void;
+  onBack: () => void;
 }
 
 const containerVariants = {
@@ -22,7 +23,7 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const } },
 };
 
-const OtpVerification = ({ email, otpCode, onVerified, onResend }: OtpVerificationProps) => {
+const OtpVerification = ({ email, otpCode, onVerified, onResend, onBack }: OtpVerificationProps) => {
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
   const [cooldown, setCooldown] = useState(30);
@@ -100,10 +101,19 @@ const OtpVerification = ({ email, otpCode, onVerified, onResend }: OtpVerificati
         </h2>
       </motion.div>
 
-      <motion.p variants={itemVariants} className="mb-6 text-sm text-muted-foreground leading-relaxed max-w-xs">
+      <motion.p variants={itemVariants} className="mb-1.5 text-sm text-muted-foreground leading-relaxed max-w-xs">
         We sent a 6-digit code to{" "}
         <span className="text-foreground font-medium">{email}</span>
       </motion.p>
+
+      <motion.button
+        variants={itemVariants}
+        type="button"
+        onClick={onBack}
+        className="mb-5 text-xs text-[hsl(var(--accent-green))] hover:text-[hsl(var(--accent-green)_/_0.8)] transition-colors"
+      >
+        Wrong email?
+      </motion.button>
 
       <motion.div
         variants={itemVariants}

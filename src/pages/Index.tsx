@@ -68,6 +68,10 @@ const Index = () => {
     setScreen("survey");
   }, []);
 
+  const handleOtpBack = useCallback(() => {
+    setScreen("squeeze");
+  }, []);
+
   const handleOtpResend = useCallback(() => {
     const code = generateOtp();
     setOtpCode(code);
@@ -154,6 +158,7 @@ const Index = () => {
               otpCode={otpCode}
               onVerified={handleOtpVerified}
               onResend={handleOtpResend}
+              onBack={handleOtpBack}
             />
           )}
           {screen === "survey" && <SurveyFlow onComplete={handleSurveyComplete} />}
