@@ -5,7 +5,7 @@ import hbLogoWhite from "@/assets/hb-logo-white-full.png";
 import heroFlower from "@/assets/hero-flower.jpg";
 
 interface ContactCaptureProps {
-  onSubmit: (name: string, whatsapp: string) => void;
+  onSubmit: (name: string, whatsapp?: string) => void;
   onSkip: () => void;
   strainName?: string;
   userEmail?: string;
@@ -32,12 +32,12 @@ const ContactCapture = ({ onSubmit, onSkip, strainName, userEmail }: ContactCapt
       setError("Please enter your name");
       return;
     }
-    if (!whatsapp.trim() || whatsapp.trim().length < 8) {
+    if (whatsapp.trim() && whatsapp.trim().length < 8) {
       setError("Please enter a valid WhatsApp number");
       return;
     }
     setError("");
-    onSubmit(name.trim(), whatsapp.trim());
+    onSubmit(name.trim(), whatsapp.trim() || undefined);
   };
 
   return (
@@ -133,7 +133,7 @@ const ContactCapture = ({ onSubmit, onSkip, strainName, userEmail }: ContactCapt
           <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <input
             type="tel"
-            placeholder="WhatsApp number"
+            placeholder="WhatsApp number (optional)"
             value={whatsapp}
             onChange={(e) => setWhatsapp(e.target.value)}
             className="w-full rounded-2xl border border-border bg-[hsl(var(--surface-elevated))] pl-11 pr-5 py-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[hsl(var(--brand-gold)_/_0.4)] focus:border-[hsl(var(--brand-gold)_/_0.5)] transition-all text-[16px]"
