@@ -8,8 +8,8 @@ export interface StrainMatch {
 
 /**
  * Weighted strain matching engine.
- * Maps 8 survey answers to strain attributes and returns the best match.
- * Removed questions use sensible defaults internally.
+ * Maps 15 survey answers to strain attributes and returns the best match.
+ * q4 (method) and q14 (discretion) are informational only — no scoring.
  */
 export function matchStrain(answers: Record<string, string>): StrainMatch {
   const availableStrains = strains.filter((s) => s.available);
@@ -54,6 +54,20 @@ export function matchStrain(answers: Record<string, string>): StrainMatch {
     if (anx === "Never" && strain.thc >= 22) score += 2;
     if (anx === "Rarely") score += 1;
 
+    // Q8: Body feel
+    const body = answers.q8;
+    if (body === "Light & Functional" && (strain.effects.includes("Energetic") || strain.effects.includes("Focused"))) score += 2;
+    if (body === "Warm & Relaxed" && strain.effects.includes("Relaxed")) score += 2;
+    if (body === "Heavy & Sedated" && strain.effects.includes("Sleepy")) score += 2;
+    // "No Preference" — no score
+
+    // Q11: Medical conditions
+    const med = answers.q11;
+    if (med === "Chronic Pain" && (strain.effects.includes("Relaxed") || strain.cbd > 0)) score += 2;
+    if (med === "Anxiety" && strain.thc < 23 && strain.effects.includes("Relaxed")) score += 2;
+    if (med === "Insomnia" && strain.effects.includes("Sleepy")) score += 2;
+    // "None" — no score
+
     // Q9: Physical relief
     const phys = answers.q9;
     if (phys !== "None" && strain.effects.includes("Relaxed")) score += 2;
@@ -74,8 +88,21 @@ export function matchStrain(answers: Record<string, string>): StrainMatch {
     if (tol === "Beginner" && strain.thc < 22) score += 1;
     if (tol === "Micro-doser" && strain.thc < 20) score += 1;
 
-    // Defaults for removed questions — give balanced strains a slight edge
-    if (strain.effects.includes("Relaxed") && strain.effects.includes("Euphoric")) score += 1;
+    // Q10: Consumption frequency (tolerance reinforcement)
+    const freq = answers.q10;
+    if (freq === "Daily" && strain.thc >= 22) score += 1;
+    if (freq === "Rarely" && strain.thc < 22) score += 1;
+
+    // Q12: Session length
+    const session = answers.q12;
+    if (session === "Quick (15-30min)" && strain.thc < 22) score += 1;
+    if (session === "Extended (3hr+)" && strain.thc >= 23) score += 1;
+
+    // Q13: Solo or social
+    const social = answers.q13;
+    if (social === "Solo" && (strain.effects.includes("Focused") || strain.effects.includes("Relaxed"))) score += 1;
+    if (social === "Social" && (strain.effects.includes("Giggly") || strain.effects.includes("Euphoric") || strain.effects.includes("Happy"))) score += 1;
+    if (social === "Both") score += 1;
 
     return { strain, score };
   });
@@ -83,8 +110,8 @@ export function matchStrain(answers: Record<string, string>): StrainMatch {
   scored.sort((a, b) => b.score - a.score);
 
   const best = scored[0];
-  // Max possible ~22 pts (3 high×3 + 4 med×2 + 2 low×1)
-  const maxScore = 22;
+  // Max possible ~32 pts (3 high×3 + 6 med×2 + 4 low×1)
+  const maxScore = 32;
   const compatibility = Math.min(Math.round((best.score / maxScore) * 100), 99);
 
   return {
