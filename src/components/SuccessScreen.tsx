@@ -1,4 +1,5 @@
 import { CheckCircle, Mail, RotateCcw, ExternalLink, Leaf } from "lucide-react";
+import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import type { StrainMatch } from "@/lib/strainMatcher";
 
@@ -10,27 +11,43 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
   const strain = result?.strain;
 
   return (
-    <div className="animate-scale-in relative z-10 flex flex-col items-center justify-center px-5 text-center max-w-md w-full">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      className="relative z-10 flex flex-col items-center justify-center px-5 text-center max-w-md w-full"
+    >
       {/* Glow */}
       <div className="pointer-events-none absolute">
         <div className="h-48 w-48 rounded-full bg-[hsl(var(--brand-gold))] opacity-[0.06] blur-[80px]" />
       </div>
 
       {/* Success icon */}
-      <div className="relative mb-6">
+      <motion.div
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+        className="relative mb-6"
+      >
         <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-[hsl(var(--brand-gold)_/_0.1)] border border-[hsl(var(--brand-gold)_/_0.25)] shadow-[var(--shadow-glow-gold)]">
           <CheckCircle className="h-10 w-10 text-[hsl(var(--brand-gold))]" />
         </div>
-      </div>
+      </motion.div>
 
       <h2 className="font-display text-2xl font-extrabold tracking-[0.02em] text-foreground sm:text-3xl mb-2 text-glow">
-        Your Match Is Ready
+        Your Recommendation Is Ready
       </h2>
 
       {strain && (
         <>
           {/* Strain card */}
-          <div className="mt-4 w-full rounded-2xl border border-border bg-[hsl(var(--surface-elevated))] p-5 text-left shadow-elegant">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            className="mt-4 w-full rounded-2xl border border-border bg-[hsl(var(--surface-elevated))] p-5 text-left shadow-elegant"
+          >
             <div className="flex items-start justify-between mb-3">
               <div>
                 <div className="flex items-center gap-2 mb-1">
@@ -91,15 +108,18 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
 
             {/* Availability */}
             <div className="flex items-center gap-2">
-              <span className={`h-2 w-2 rounded-full ${strain.available ? 'bg-green-500' : 'bg-destructive'}`} />
+              <span className={`h-2 w-2 rounded-full ${strain.available ? 'bg-primary' : 'bg-destructive'}`} />
               <span className="text-xs text-muted-foreground">
                 {strain.available ? "In Stock" : "Currently Unavailable"}
               </span>
             </div>
-          </div>
+          </motion.div>
 
           {/* Shop CTA */}
-          <a
+          <motion.a
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
             href={strain.shopUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -107,7 +127,7 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
           >
             Shop This Strain
             <ExternalLink className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-          </a>
+          </motion.a>
         </>
       )}
 
@@ -125,7 +145,7 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
         <RotateCcw className="h-3.5 w-3.5" />
         Start Over
       </button>
-    </div>
+    </motion.div>
   );
 };
 

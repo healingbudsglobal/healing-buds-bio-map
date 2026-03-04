@@ -1,12 +1,14 @@
 import { useState, useCallback } from "react";
+import { AnimatePresence } from "framer-motion";
 import SqueezeScreen from "@/components/SqueezeScreen";
 import SurveyFlow from "@/components/SurveyFlow";
+import ContactCapture from "@/components/ContactCapture";
 import LoadingScreen from "@/components/LoadingScreen";
 import SuccessScreen from "@/components/SuccessScreen";
 import { surveyQuestions } from "@/data/surveyQuestions";
 import { matchStrain, type StrainMatch } from "@/lib/strainMatcher";
 
-type Screen = "squeeze" | "survey" | "loading" | "success";
+type Screen = "squeeze" | "survey" | "contact" | "loading" | "success";
 
 const WEBHOOK_URL = "https://hook.eu1.make.com/70z505ty60nkksvtl6l6r1yzj4cs58tb";
 
@@ -14,6 +16,7 @@ const Index = () => {
   const [screen, setScreen] = useState<Screen>("squeeze");
   const [email, setEmail] = useState("");
   const [province, setProvince] = useState("");
+  const [surveyAnswers, setSurveyAnswers] = useState<Record<string, string>>({});
   const [strainResult, setStrainResult] = useState<StrainMatch | null>(null);
 
   const handleEmailSubmit = useCallback((submittedEmail: string, submittedProvince: string) => {
@@ -22,21 +25,31 @@ const Index = () => {
     setScreen("survey");
   }, []);
 
-  const handleSurveyComplete = useCallback(
-    async (answers: Record<string, string>) => {
-      setScreen("loading");
+  const handleSurveyComplete = useCallback((answers: Record<string, string>) => {
+    const result = matchStrain(answers);
+    setStrainResult(result);
+    setSurveyAnswers(answers);
+    setScreen("contact");
+  }, []);
 
-      const result = matchStrain(answers);
-      setStrainResult(result);
+  const sendWebhook = useCallback(
+    async (contactName?: string, whatsapp?: string) => {
+      if (!strainResult) return;
+
+      setScreen("loading");
 
       const payload: Record<string, string> = {
         email,
         province,
-        matched_strain: result.strain.name,
-        compatibility: `${result.compatibility}%`,
+        matched_strain: strainResult.strain.name,
+        compatibility: `${strainResult.compatibility}%`,
       };
+
+      if (contactName) payload.name = contactName;
+      if (whatsapp) payload.whatsapp = whatsapp;
+
       surveyQuestions.forEach((q, i) => {
-        payload[`q${i + 1}`] = answers[q.id] || "";
+        payload[`q${i + 1}`] = surveyAnswers[q.id] || "";
       });
 
       try {
@@ -51,15 +64,31 @@ const Index = () => {
 
       setTimeout(() => setScreen("success"), 3000);
     },
-    [email, province]
+    [email, province, strainResult, surveyAnswers]
   );
+
+  const handleContactSubmit = useCallback(
+    (name: string, whatsapp: string) => {
+      sendWebhook(name, whatsapp);
+    },
+    [sendWebhook]
+  );
+
+  const handleContactSkip = useCallback(() => {
+    sendWebhook();
+  }, [sendWebhook]);
 
   return (
     <div className="leaf-pattern flex min-h-[100dvh] items-center justify-center">
-      {screen === "squeeze" && <SqueezeScreen onSubmit={handleEmailSubmit} />}
-      {screen === "survey" && <SurveyFlow onComplete={handleSurveyComplete} />}
-      {screen === "loading" && <LoadingScreen />}
-      {screen === "success" && <SuccessScreen result={strainResult} />}
+      <AnimatePresence mode="wait">
+        {screen === "squeeze" && <SqueezeScreen key="squeeze" onSubmit={handleEmailSubmit} />}
+        {screen === "survey" && <SurveyFlow key="survey" onComplete={handleSurveyComplete} />}
+        {screen === "contact" && (
+          <ContactCapture key="contact" onSubmit={handleContactSubmit} onSkip={handleContactSkip} />
+        )}
+        {screen === "loading" && <LoadingScreen key="loading" />}
+        {screen === "success" && <SuccessScreen key="success" result={strainResult} />}
+      </AnimatePresence>
     </div>
   );
 };

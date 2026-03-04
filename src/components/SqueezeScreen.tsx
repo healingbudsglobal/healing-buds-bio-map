@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Shield } from "lucide-react";
+import { motion } from "framer-motion";
 import { validateEmail } from "@/lib/emailValidation";
 import hbLogoWhite from "@/assets/hb-logo-white-full.png";
-import heroBud from "@/assets/hero-bud.jpg";
+import heroTrichomes from "@/assets/hero-trichomes.jpg";
 import {
   Select,
   SelectContent,
@@ -51,34 +52,61 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
   };
 
   return (
-    <div className="animate-fade-in relative z-10 flex flex-col items-center justify-center px-5 text-center">
-      {/* Hero bud image — soft backdrop */}
-      <div className="pointer-events-none absolute -top-16 left-1/2 -translate-x-1/2">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className="relative z-10 flex flex-col items-center justify-center px-5 text-center"
+    >
+      {/* Cinematic hero backdrop */}
+      <div className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 w-[500px] h-[500px] sm:w-[600px] sm:h-[600px]">
         <img
-          src={heroBud}
+          src={heroTrichomes}
           alt=""
-          className="h-72 w-72 rounded-full object-cover opacity-[0.12] blur-[2px] sm:h-96 sm:w-96 sm:opacity-[0.18] sm:blur-[1px]"
+          className="h-full w-full rounded-full object-cover opacity-[0.08] blur-[6px] sm:opacity-[0.12] sm:blur-[3px]"
         />
-        <div className="absolute inset-0 rounded-full bg-gradient-to-b from-transparent to-background" />
+        <div className="absolute inset-0 rounded-full bg-gradient-to-b from-transparent via-transparent to-background" />
       </div>
 
       {/* Logo */}
-      <div className="mb-8">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.2, duration: 0.5 }}
+        className="mb-8"
+      >
         <img src={hbLogoWhite} alt="Healing Buds" className="h-14 w-auto sm:h-16" />
-      </div>
+      </motion.div>
 
-      <h1 className="font-display text-3xl font-extrabold leading-[1.1] tracking-[0.02em] text-foreground sm:text-4xl md:text-5xl mb-3">
-        Find Your Perfect
+      <motion.h1
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.6 }}
+        className="font-display text-3xl font-extrabold leading-[1.1] tracking-[0.02em] text-foreground sm:text-4xl md:text-5xl mb-3"
+      >
+        Your Path to
         <br />
-        <span className="text-[hsl(var(--brand-gold))]">Strain Match</span>
-      </h1>
+        <span className="text-[hsl(var(--brand-gold))]">Plant-Based Relief</span>
+      </motion.h1>
 
-      <p className="mb-8 max-w-sm text-base leading-relaxed text-muted-foreground">
-        Answer a few quick questions — we'll match you to your ideal strain.
-      </p>
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.45, duration: 0.5 }}
+        className="mb-8 max-w-sm text-base leading-relaxed text-muted-foreground"
+      >
+        A guided medical consultation to match you with the right strain for your needs.
+      </motion.p>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="flex w-full max-w-sm flex-col gap-3">
+      <motion.form
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.55, duration: 0.5 }}
+        onSubmit={handleSubmit}
+        className="flex w-full max-w-sm flex-col gap-3"
+      >
         <div className={`relative rounded-2xl transition-all duration-300 ${focused ? 'shadow-[var(--shadow-glow-gold)]' : ''}`}>
           <input
             type="email"
@@ -106,15 +134,27 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
         </Select>
 
         {error && <p className="text-sm text-destructive">{error}</p>}
+
         <button
           type="submit"
           className="group w-full rounded-2xl gradient-accent py-4 font-display font-bold text-white text-base transition-all hover:brightness-110 hover:scale-[1.02] active:scale-[0.98] animate-pulse-glow flex items-center justify-center gap-2"
         >
-          Find My Strain
+          Begin Your Personal Medical Mapping
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </button>
-      </form>
-    </div>
+      </motion.form>
+
+      {/* POPIA trust badge */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.8, duration: 0.5 }}
+        className="mt-6 inline-flex items-center gap-2 text-xs text-muted-foreground"
+      >
+        <Shield className="h-3.5 w-3.5 text-primary" />
+        <span>POPIA Compliant · Your data is secure</span>
+      </motion.div>
+    </motion.div>
   );
 };
 

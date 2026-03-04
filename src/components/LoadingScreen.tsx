@@ -1,8 +1,15 @@
+import { motion } from "framer-motion";
 import hbLogoJar from "@/assets/hb-logo-jar.png";
 
 const LoadingScreen = () => {
   return (
-    <div className="animate-fade-in relative z-10 flex flex-col items-center justify-center px-6 text-center">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.4 }}
+      className="relative z-10 flex flex-col items-center justify-center px-6 text-center"
+    >
       {/* Glow orb */}
       <div className="pointer-events-none absolute">
         <div className="h-48 w-48 rounded-full bg-[hsl(var(--brand-gold))] opacity-[0.06] blur-[80px]" />
@@ -38,11 +45,11 @@ const LoadingScreen = () => {
       </div>
 
       <h2 className="font-display text-2xl font-bold tracking-[0.02em] text-foreground mb-2 text-glow">
-      Finding Your Match...
-    </h2>
-    <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
-      Matching your profile to our strains
-    </p>
+        Calculating Your Profile...
+      </h2>
+      <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
+        Mapping your responses to our recommended strain database
+      </p>
 
       {/* Animated dots — gold */}
       <div className="mt-8 flex gap-2">
@@ -57,7 +64,7 @@ const LoadingScreen = () => {
           />
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

@@ -20,7 +20,7 @@ export function matchStrain(answers: Record<string, string>): StrainMatch {
     const goal = answers.q1;
     if (goal === "Relaxation" && strain.effects.includes("Relaxed")) score += 3;
     if (goal === "Pain Relief" && (strain.effects.includes("Relaxed") || strain.cbd > 0)) score += 3;
-    if (goal === "Creativity/Focus" && (strain.effects.includes("Focused") || strain.effects.includes("Euphoric") || strain.effects.includes("Uplifted"))) score += 3;
+    if ((goal === "Creativity/Focus" || goal === "Creativity & Focus") && (strain.effects.includes("Focused") || strain.effects.includes("Euphoric") || strain.effects.includes("Uplifted"))) score += 3;
     if (goal === "Sleep Support" && strain.effects.includes("Sleepy")) score += 3;
 
     // Q5: Head effect
@@ -32,9 +32,9 @@ export function matchStrain(answers: Record<string, string>): StrainMatch {
 
     // Q7: Flavour profile
     const flav = answers.q7;
-    if (flav === "Earthy/Pine" && strain.flavours.some((f) => ["Earthy", "Pine", "Herbal", "Nutty", "Spicy"].includes(f))) score += 3;
-    if (flav === "Sweet/Fruity" && strain.flavours.some((f) => ["Berry", "Fruit", "Candy", "Grape", "Tropical", "Pear", "Pineapple", "Vanilla", "Floral", "Creamy"].includes(f))) score += 3;
-    if (flav === "Diesel/Gas" && strain.flavours.some((f) => ["Diesel", "Spicy"].includes(f))) score += 3;
+    if ((flav === "Earthy/Pine" || flav === "Earthy / Pine") && strain.flavours.some((f) => ["Earthy", "Pine", "Herbal", "Nutty", "Spicy"].includes(f))) score += 3;
+    if ((flav === "Sweet/Fruity" || flav === "Sweet / Fruity") && strain.flavours.some((f) => ["Berry", "Fruit", "Candy", "Grape", "Tropical", "Pear", "Pineapple", "Vanilla", "Floral", "Creamy"].includes(f))) score += 3;
+    if ((flav === "Diesel/Gas" || flav === "Diesel / Gas") && strain.flavours.some((f) => ["Diesel", "Spicy"].includes(f))) score += 3;
     if (flav === "Citrus" && strain.flavours.some((f) => ["Citrus", "Pineapple", "Tropical"].includes(f))) score += 3;
 
     // Q13: Body stone
@@ -54,7 +54,7 @@ export function matchStrain(answers: Record<string, string>): StrainMatch {
 
     // Q4: Munchies
     const munch = answers.q4;
-    if (munch === "I want them!" && strain.effects.includes("Hungry")) score += 2;
+    if ((munch === "I want them!" || munch === "I want it!") && strain.effects.includes("Hungry")) score += 2;
     if (munch === "Avoid" && !strain.effects.includes("Hungry")) score += 2;
     if (munch === "Neutral") score += 1;
 
