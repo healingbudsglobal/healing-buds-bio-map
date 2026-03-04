@@ -1,40 +1,56 @@
 
 
-# Professional Polish: Remove Placeholders, Add Visual Interest, Optimize Lead Funnel
+# Remaining Work: Restore Full 15-Question Clinical Profile
 
-## Current Issues Found
+## Status Check
 
-1. **Placeholder WhatsApp number** — `27XXXXXXXXXX` in SuccessScreen is fake/broken data. Either needs the real number or removal.
-2. **Generic shop URLs** — all strains link to `healingbuds.co.za/shop` instead of specific product pages.
-3. **No visual imagery** — every screen is text + icons + glows. No product photography, botanical illustrations, or visual hooks to establish the cannabis/medical brand instantly.
-4. **"Skip for now" leak** — the contact capture skip button is a 10px afterthought that still lets leads escape without providing any contact info. The email was already captured on screen 1, so the skip is fine — but it should be clearer that results will go to their email.
-5. **No strain imagery on results** — the success screen strain card is pure text. A product photo or botanical illustration would make the recommendation feel tangible and worth ordering.
+Three of the four improvements are **already done**:
+- Micro-copy tweaks (ContactCapture, SuccessScreen) — done
+- Sales-first success screen (price, "Order This Strain", no fake WhatsApp) — done
+- Filter matcher to available strains only — done (line 15 of strainMatcher.ts)
 
-## Changes
+**The only remaining work is restoring the survey from 8 to 15 questions** and updating the matcher to score them.
 
-### 1. Remove all placeholder/fake data
-- **SuccessScreen**: Remove the WhatsApp "Chat with Consultant" button entirely (the number is fake). Replace with a "Questions? Email us" link pointing to a real email, or remove the row completely.
-- **Strains data**: Keep shop URLs as-is (they do link to the real domain — specific product pages can be updated later by the user).
+## Current 8 Questions (IDs: q1, q2, q3, q5, q6, q7, q9, q15)
 
-### 2. Add botanical hero imagery to SqueezeScreen
-- Add a subtle, high-quality SVG botanical illustration (cannabis leaf silhouette or trichome pattern) rendered as a CSS/SVG background element behind the form card. Not a photo — a clean vector that reinforces "medical cannabis" within 3 seconds.
-- Use a semi-transparent layered SVG with the brand gold/teal colors, positioned as a decorative element above or behind the headline.
+Missing: q4, q8, q10, q11, q12, q13, q14 — these were cut earlier. They need to be designed to add clinical depth without bloating the experience.
 
-### 3. Add strain type indicator with visual flair to SuccessScreen
-- Add a strain type badge (Indica/Sativa/Hybrid) to each strain in `strains.ts` and display it as a colored pill on the result card — this is data users expect from a cannabis recommendation.
-- Add a decorative botanical SVG element on the result card for visual richness.
+## 7 New Questions to Add
 
-### 4. Strengthen the contact capture conversion copy
-- Change "Skip for now" to "Just send it to my email" — makes clear they still get results, reduces friction anxiety.
-- Add micro-copy below the form: "Your results are also sent to {email}" — reassures they won't lose their recommendation.
+| ID | Question | Options | Matching Logic |
+|---|---|---|---|
+| q4 | Preferred consumption method? | Flower / Vape / Edible / Oil | Informational — sent to webhook for consultant use |
+| q8 | How do you want your body to feel? | Light & Functional / Warm & Relaxed / Heavy & Sedated / No Preference | Maps to effects (Energetic vs Relaxed vs Sleepy) — 2pts |
+| q10 | How often do you consume? | Daily / Few times a week / Weekends / Rarely | Maps to THC tolerance thresholds — 1pt |
+| q11 | Do you have any medical conditions? | Chronic Pain / Anxiety / Insomnia / None | Reinforces q1 goal matching — 2pts |
+| q12 | What's your ideal session length? | Quick (15-30min) / Medium (1-2hr) / Extended (3hr+) / No Preference | Maps to strain duration/potency — 1pt |
+| q13 | Do you prefer to consume alone or socially? | Solo / Social / Both | Maps to effects (Focused/Relaxed vs Giggly/Euphoric) — 1pt |
+| q14 | How important is discretion to you? | Very / Somewhat / Not Important | Informational — webhook data for product format recommendations |
 
-### 5. Add a subtle botanical pattern to the survey flow
-- Add a faint decorative SVG leaf in the corner of each question card — small touch that maintains the medical-cannabis brand identity throughout the flow.
+## Question Order (optimized for engagement)
+
+1. q1 — Primary goal (the hook)
+2. q2 — Experience level
+3. q11 — Medical conditions (clinical depth early)
+4. q3 — Time of day
+5. q4 — Consumption method
+6. q5 — Mental effect
+7. q8 — Body effect
+8. q6 — THC anxiety sensitivity
+9. q7 — Flavour profile
+10. q10 — Consumption frequency
+11. q9 — Physical relief
+12. q12 — Session length
+13. q13 — Solo or social
+14. q14 — Discretion
+15. q15 — Current state of mind (the closer)
 
 ## Files Modified
-- `src/components/SqueezeScreen.tsx` — add botanical SVG hero element
-- `src/components/SuccessScreen.tsx` — remove fake WhatsApp, add strain type badge, add botanical decoration
-- `src/components/ContactCapture.tsx` — improve skip copy, add email reassurance
-- `src/components/SurveyFlow.tsx` — add subtle botanical accent to question cards
-- `src/data/strains.ts` — add `type: "indica" | "sativa" | "hybrid"` field to each strain
+
+- **`src/data/surveyQuestions.ts`** — Add 7 new questions, reorder to 15-question sequence
+- **`src/lib/strainMatcher.ts`** — Add scoring rules for q8, q10, q11, q12, q13; update maxScore from 22 to ~32; keep q4 and q14 as informational (no scoring)
+
+## Midpoint Update
+
+The `MIDPOINT` constant in SurveyFlow.tsx is calculated dynamically (`Math.floor(surveyQuestions.length / 2)`), so it will automatically adjust to question 7-8 — no change needed there.
 
