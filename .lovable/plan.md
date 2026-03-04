@@ -1,56 +1,54 @@
 
 
-# Remaining Work: Restore Full 15-Question Clinical Profile
+# More Greens + AI Strain Imagery
 
-## Status Check
+## What's Changing
 
-Three of the four improvements are **already done**:
-- Micro-copy tweaks (ContactCapture, SuccessScreen) — done
-- Sales-first success screen (price, "Order This Strain", no fake WhatsApp) — done
-- Filter matcher to available strains only — done (line 15 of strainMatcher.ts)
+The app is currently gold-heavy. The brand palette has rich teals and greens (`--primary-green`, `--secondary-green`, `--accent-green`, `--deep-teal`) that are barely used. We'll rebalance the palette and add AI-generated bud images for each strain on the success screen.
 
-**The only remaining work is restoring the survey from 8 to 15 questions** and updating the matcher to score them.
+## 1. Rebalance Colors — Bring in Greens
 
-## Current 8 Questions (IDs: q1, q2, q3, q5, q6, q7, q9, q15)
+Currently almost every accent is `--brand-gold`. We'll shift secondary elements to the green/teal palette:
 
-Missing: q4, q8, q10, q11, q12, q13, q14 — these were cut earlier. They need to be designed to add clinical depth without bloating the experience.
+- **Survey option icons**: Change default icon background from gold-tinted to teal/green tinted (`--accent-green`, `--primary`)
+- **Progress bar (LeafProgress)**: Gradient from `--primary` (teal) to `--accent-green` instead of gold-to-teal
+- **Trust badges**: Use `--accent-green` for icons instead of gold
+- **Strain card effects badges**: Use teal/green tones (`--accent-green` bg) instead of all-gold
+- **Confetti particles**: Mix green + gold instead of all gold
+- **Ambient particles + orbs**: Increase green orb intensity, add a `--lime-green` particle layer
+- **Loading spinner**: Second ring uses `--accent-green` instead of subtle primary
+- **BotanicalAccent SVG**: Tint with `--accent-green` instead of all gold
+- **Form card gold shimmer lines**: Change to a green-to-gold gradient
+- **POPIA badge border**: Use `--accent-green` tint
 
-## 7 New Questions to Add
+Gold stays dominant on **CTAs only** (buttons, highlighted text, match percentage). Everything else gets the green treatment.
 
-| ID | Question | Options | Matching Logic |
-|---|---|---|---|
-| q4 | Preferred consumption method? | Flower / Vape / Edible / Oil | Informational — sent to webhook for consultant use |
-| q8 | How do you want your body to feel? | Light & Functional / Warm & Relaxed / Heavy & Sedated / No Preference | Maps to effects (Energetic vs Relaxed vs Sleepy) — 2pts |
-| q10 | How often do you consume? | Daily / Few times a week / Weekends / Rarely | Maps to THC tolerance thresholds — 1pt |
-| q11 | Do you have any medical conditions? | Chronic Pain / Anxiety / Insomnia / None | Reinforces q1 goal matching — 2pts |
-| q12 | What's your ideal session length? | Quick (15-30min) / Medium (1-2hr) / Extended (3hr+) / No Preference | Maps to strain duration/potency — 1pt |
-| q13 | Do you prefer to consume alone or socially? | Solo / Social / Both | Maps to effects (Focused/Relaxed vs Giggly/Euphoric) — 1pt |
-| q14 | How important is discretion to you? | Very / Somewhat / Not Important | Informational — webhook data for product format recommendations |
+## 2. AI-Generated Strain Bud Images
 
-## Question Order (optimized for engagement)
+Add a unique bud image for each strain displayed on the success screen result card.
 
-1. q1 — Primary goal (the hook)
-2. q2 — Experience level
-3. q11 — Medical conditions (clinical depth early)
-4. q3 — Time of day
-5. q4 — Consumption method
-6. q5 — Mental effect
-7. q8 — Body effect
-8. q6 — THC anxiety sensitivity
-9. q7 — Flavour profile
-10. q10 — Consumption frequency
-11. q9 — Physical relief
-12. q12 — Session length
-13. q13 — Solo or social
-14. q14 — Discretion
-15. q15 — Current state of mind (the closer)
+### How it works:
+- Add an `imageUrl` field to the `Strain` interface in `strains.ts`
+- Pre-generate 7 strain images using the Lovable AI image API (Gemini flash-image) via a one-time generation approach — but since we can't run code at build time, we'll use **static placeholder bud photos** from the existing `hero-bud.jpg` asset as a base, then create a component that generates and caches strain-specific images client-side using the AI gateway.
+
+**Simpler approach**: Since the project doesn't have Supabase/Cloud connected, we'll use the existing `hero-bud.jpg` and `hero-trichomes.jpg` assets creatively — showing them as styled product imagery on the strain card with a green-tinted overlay matching the strain type (indica=deep teal, sativa=lime-gold, hybrid=accent-green).
+
+### Success screen strain card changes:
+- Add a product image area at the top of the strain card using `hero-bud.jpg`
+- Apply a colored overlay based on strain type (indica/sativa/hybrid)
+- Round the image with the card, add a subtle gradient fade into the card content
 
 ## Files Modified
 
-- **`src/data/surveyQuestions.ts`** — Add 7 new questions, reorder to 15-question sequence
-- **`src/lib/strainMatcher.ts`** — Add scoring rules for q8, q10, q11, q12, q13; update maxScore from 22 to ~32; keep q4 and q14 as informational (no scoring)
-
-## Midpoint Update
-
-The `MIDPOINT` constant in SurveyFlow.tsx is calculated dynamically (`Math.floor(surveyQuestions.length / 2)`), so it will automatically adjust to question 7-8 — no change needed there.
+| File | Changes |
+|------|---------|
+| `src/components/SqueezeScreen.tsx` | Trust badge icons → green, radial spotlight → green tint |
+| `src/components/SurveyFlow.tsx` | Option icon defaults → green/teal, gold accent line → green-gold gradient |
+| `src/components/ContactCapture.tsx` | Lock icon → green, strain teaser border → green |
+| `src/components/LoadingScreen.tsx` | Second/third spinner rings → green, progress bar starts green |
+| `src/components/SuccessScreen.tsx` | Add hero bud image to strain card, effects badges → green, confetti → mixed green/gold |
+| `src/components/BotanicalAccent.tsx` | SVG fill → `--accent-green` instead of all gold |
+| `src/components/AmbientParticles.tsx` | Increase green orb presence, add lime particle |
+| `src/components/LeafProgress.tsx` | Progress gradient → green-dominant |
+| `src/index.css` | No changes needed — tokens already defined |
 
