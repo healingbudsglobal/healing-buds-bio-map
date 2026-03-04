@@ -117,16 +117,16 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
         variants={itemVariants}
         className="font-display text-3xl font-extrabold leading-[1.1] tracking-[0.02em] text-foreground sm:text-4xl md:text-5xl mb-2 drop-shadow-md"
       >
-        Your Personalised
+        Find Your
         <br />
-        <span className="text-[hsl(var(--brand-gold))]">Strain Prescription</span>
+        <span className="text-[hsl(var(--brand-gold))]">Plant-Based Frequency</span>
       </motion.h1>
 
       <motion.p
         variants={itemVariants}
         className="mb-7 max-w-xs text-sm leading-relaxed text-muted-foreground"
       >
-        90-second guided consultation · clinically informed
+        A 60-second medical mapping to find the right strain for your relief.
       </motion.p>
 
       {/* Form — glass card with stronger blur over flower */}
@@ -181,12 +181,12 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
           whileTap={{ scale: 0.97 }}
           className="group w-full rounded-2xl gradient-accent py-4 font-display font-bold text-white text-base transition-all hover:brightness-110 animate-pulse-glow flex items-center justify-center gap-2 min-h-[52px]"
         >
-          Start Clinical Assessment
+          Begin Mapping
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </motion.button>
 
         <p className="text-[11px] text-muted-foreground mt-0.5 text-center">
-          90-second clinical assessment
+          60 seconds · clinically informed · private
         </p>
       </motion.form>
 

@@ -215,16 +215,16 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
                       animate={{ opacity: 1, x: 0, scale: 1 }}
                       transition={{ delay: 0.08 + i * 0.06, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                       onClick={() => handleSelect(option.label)}
-                      whileHover={{ scale: 1.02, x: 4 }}
-                      whileTap={{ scale: 0.97 }}
-                      className={`group w-full rounded-xl border px-4 py-3.5 text-left text-sm font-medium text-foreground transition-all duration-200 sm:text-base min-h-[52px] ${
+                      whileHover={{ scale: 1.03, x: 6, boxShadow: "var(--shadow-glow-gold)" }}
+                      whileTap={{ scale: 0.94 }}
+                      className={`group w-full rounded-xl border px-4 py-4 text-left text-base font-semibold text-foreground transition-all duration-200 sm:text-lg min-h-[64px] ${
                         isSelected
                           ? 'border-[hsl(var(--brand-gold))] bg-[hsl(var(--brand-gold)_/_0.12)] shadow-[var(--shadow-glow-gold)]'
                           : 'border-[hsl(170_8%_25%)] bg-[hsl(var(--surface))] hover:border-[hsl(var(--brand-gold)_/_0.5)] hover:bg-[hsl(var(--brand-gold)_/_0.06)]'
                       }`}
                     >
                       <span className="flex items-center gap-3">
-                        <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-all duration-300 ${
+                        <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-lg transition-all duration-300 ${
                           isSelected
                             ? 'bg-[hsl(var(--brand-gold)_/_0.2)] text-[hsl(var(--brand-gold))] scale-110'
                             : `${iconColorClass} group-hover:scale-105`

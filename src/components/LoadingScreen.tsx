@@ -4,11 +4,65 @@ import hbLogoJar from "@/assets/hb-logo-jar.png";
 import heroFlower from "@/assets/hero-flower.jpg";
 
 const STATUS_MESSAGES = [
-  "Analysing your profile…",
-  "Cross-referencing terpene database…",
+  "Cross-referencing your symptoms with the Healing Buds Master Strain Library…",
+  "Analysing terpene ratios…",
+  "Matching ECS receptors…",
   "Evaluating potency thresholds…",
-  "Generating your match…",
+  "Generating your clinical profile…",
+  "Success.",
 ];
+
+// DNA Helix component — geometric green dots spinning
+const DnaHelix = () => {
+  const dots = 12;
+  return (
+    <div className="relative h-32 w-16 mx-auto">
+      {Array.from({ length: dots }).map((_, i) => {
+        const progress = i / dots;
+        const angle = progress * Math.PI * 3;
+        const x1 = Math.sin(angle) * 24;
+        const x2 = Math.sin(angle + Math.PI) * 24;
+        const y = progress * 128;
+        const delay = i * 0.08;
+        return (
+          <motion.div key={i} className="absolute left-1/2" style={{ top: y }}>
+            {/* Strand 1 */}
+            <motion.div
+              className="absolute h-2.5 w-2.5 rounded-full bg-[hsl(var(--accent-green))]"
+              style={{ left: x1 - 5 }}
+              animate={{
+                opacity: [0.3, 1, 0.3],
+                scale: [0.7, 1.1, 0.7],
+              }}
+              transition={{ duration: 1.8, delay, repeat: Infinity, ease: "easeInOut" }}
+            />
+            {/* Strand 2 */}
+            <motion.div
+              className="absolute h-2 w-2 rounded-full bg-[hsl(var(--brand-gold))]"
+              style={{ left: x2 - 4 }}
+              animate={{
+                opacity: [0.2, 0.8, 0.2],
+                scale: [0.6, 1, 0.6],
+              }}
+              transition={{ duration: 1.8, delay: delay + 0.3, repeat: Infinity, ease: "easeInOut" }}
+            />
+            {/* Connector line */}
+            <motion.div
+              className="absolute h-px top-1"
+              style={{
+                left: Math.min(x1, x2) - 4,
+                width: Math.abs(x1 - x2) + 8,
+                background: `linear-gradient(90deg, hsl(var(--accent-green) / 0.3), hsl(var(--brand-gold) / 0.2))`,
+              }}
+              animate={{ opacity: [0.1, 0.4, 0.1] }}
+              transition={{ duration: 1.8, delay, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </motion.div>
+        );
+      })}
+    </div>
+  );
+};
 
 const LoadingScreen = () => {
   const [msgIndex, setMsgIndex] = useState(0);
@@ -16,8 +70,8 @@ const LoadingScreen = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setMsgIndex((i) => (i + 1) % STATUS_MESSAGES.length);
-    }, 800);
+      setMsgIndex((i) => Math.min(i + 1, STATUS_MESSAGES.length - 1));
+    }, 500);
     return () => clearInterval(interval);
   }, []);
 
@@ -48,62 +102,46 @@ const LoadingScreen = () => {
         <div className="absolute inset-0 bg-[hsl(var(--primary-green)_/_0.15)]" style={{ mixBlendMode: "overlay" }} />
       </div>
 
-      {/* Green radial glow */}
-      <div className="pointer-events-none absolute">
-        <motion.div
-          className="h-56 w-56 rounded-full bg-[hsl(var(--accent-green))]"
-          animate={{ opacity: [0.06, 0.12, 0.06], scale: [1, 1.1, 1] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          style={{ filter: "blur(80px)" }}
-        />
-      </div>
-
+      {/* DNA Helix animation */}
       <motion.div
         className="relative mb-8"
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       >
-        <div className="h-24 w-24 rounded-full border border-border" />
-        {/* Spinning ring 1 — gold */}
-        <div
-          className="absolute inset-0 h-24 w-24 rounded-full border-[3px] border-[hsl(var(--brand-gold)_/_0.8)] border-t-transparent"
-          style={{ animation: "spin 1.2s linear infinite" }}
-        />
-        {/* Spinning ring 2 — accent green */}
-        <div
-          className="absolute inset-1.5 h-[84px] w-[84px] rounded-full border border-[hsl(var(--accent-green)_/_0.5)] border-b-transparent"
-          style={{ animation: "spin 2s linear infinite reverse" }}
-        />
-        {/* Spinning ring 3 — deep teal */}
-        <div
-          className="absolute inset-3 h-[72px] w-[72px] rounded-full border border-[hsl(var(--deep-teal)_/_0.3)] border-l-transparent"
-          style={{ animation: "spin 3s linear infinite" }}
-        />
+        {/* Outer spinning ring */}
+        <div className="absolute -inset-4 rounded-full border border-[hsl(var(--accent-green)_/_0.15)]" style={{ animation: "spin 8s linear infinite" }} />
+        <DnaHelix />
+        {/* Logo centered over helix */}
         <span className="absolute inset-0 flex items-center justify-center">
           <motion.img
             src={hbLogoJar}
             alt="HB"
-            className="h-8 w-auto"
-            animate={{ scale: [1, 1.1, 1] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="h-8 w-auto drop-shadow-lg"
+            animate={{ scale: [1, 1.08, 1], opacity: [0.8, 1, 0.8] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
           />
         </span>
       </motion.div>
 
-      <h2 className="font-display text-2xl font-bold tracking-[0.02em] text-foreground mb-3 text-glow">
-        Calculating Your Profile…
+      <h2 className="font-display text-xl font-bold tracking-[0.02em] text-foreground mb-4 text-glow sm:text-2xl">
+        Processing Your Bio-Map…
       </h2>
 
-      <div className="h-6 relative">
+      {/* Cycling status messages */}
+      <div className="h-12 relative w-full max-w-xs">
         <AnimatePresence mode="wait">
           <motion.p
             key={msgIndex}
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.25 }}
-            className="text-sm text-muted-foreground absolute inset-x-0"
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+            className={`text-sm absolute inset-x-0 ${
+              msgIndex === STATUS_MESSAGES.length - 1
+                ? "font-bold text-[hsl(var(--accent-green))]"
+                : "text-muted-foreground"
+            }`}
           >
             {STATUS_MESSAGES[msgIndex]}
           </motion.p>
@@ -111,7 +149,7 @@ const LoadingScreen = () => {
       </div>
 
       {/* Progress bar */}
-      <div className="mt-8 w-48 h-1 rounded-full bg-[hsl(var(--surface-elevated))] overflow-hidden">
+      <div className="mt-6 w-56 h-1.5 rounded-full bg-[hsl(var(--surface-elevated))] overflow-hidden">
         <div
           className="h-full rounded-full transition-all duration-[3000ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
           style={{
