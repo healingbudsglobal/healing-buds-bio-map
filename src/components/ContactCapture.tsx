@@ -10,6 +10,16 @@ interface ContactCaptureProps {
   userEmail?: string;
 }
 
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 16, filter: "blur(4px)" },
+  visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const } },
+};
+
 const ContactCapture = ({ onSubmit, onSkip, strainName, userEmail }: ContactCaptureProps) => {
   const [name, setName] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
@@ -31,24 +41,18 @@ const ContactCapture = ({ onSubmit, onSkip, strainName, userEmail }: ContactCapt
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
       className="relative z-10 flex flex-col items-center justify-center px-5 text-center max-w-sm w-full"
     >
       {/* Logo */}
-      <div className="mb-6">
+      <motion.div variants={itemVariants} className="mb-6">
         <img src={hbLogoWhite} alt="Healing Buds" className="h-10 w-auto" />
-      </div>
-
-      {/* Ambient glow orbs */}
-      <div className="ambient-glow" />
+      </motion.div>
 
       <motion.h2
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.15 }}
+        variants={itemVariants}
         className="font-display text-2xl font-bold tracking-[0.02em] text-foreground sm:text-3xl mb-2"
       >
         Your Clinical Profile Is <span className="text-[hsl(var(--brand-gold))]">Ready</span>
@@ -57,16 +61,18 @@ const ContactCapture = ({ onSubmit, onSkip, strainName, userEmail }: ContactCapt
       {/* Blurred strain teaser */}
       {strainName && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.25 }}
+          variants={itemVariants}
           className="mb-4 w-full rounded-xl border border-[hsl(var(--brand-gold)_/_0.3)] bg-[hsl(175_6%_16%)] p-4 relative overflow-hidden"
         >
           <div className="flex items-center justify-center gap-2">
-            <div className="relative">
+            <motion.div
+              className="relative"
+              animate={{ rotate: [0, 10, -10, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            >
               <div className="absolute inset-0 h-8 w-8 rounded-full border border-[hsl(var(--brand-gold)_/_0.15)] scale-150" />
               <Lock className="h-4 w-4 text-[hsl(var(--brand-gold))] relative z-10" />
-            </div>
+            </motion.div>
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Your Top Match</span>
           </div>
           <p className="mt-2 font-display text-lg font-bold text-foreground blur-[6px] select-none">
@@ -77,21 +83,19 @@ const ContactCapture = ({ onSubmit, onSkip, strainName, userEmail }: ContactCapt
       )}
 
       <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
+        variants={itemVariants}
         className="mb-6 text-sm text-muted-foreground leading-relaxed max-w-xs"
       >
         Where should we send your clinical profile?
       </motion.p>
 
       <motion.form
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
+        variants={itemVariants}
         onSubmit={handleSubmit}
-        className="flex w-full flex-col gap-3"
+        className="flex w-full flex-col gap-3 glass-card-elevated rounded-2xl p-5 relative overflow-hidden"
       >
+        <div className="absolute top-0 left-0 right-0 h-[2px] gradient-accent opacity-50" />
+
         <div className="relative">
           <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <input
@@ -114,23 +118,34 @@ const ContactCapture = ({ onSubmit, onSkip, strainName, userEmail }: ContactCapt
           />
         </div>
 
-        {error && <p className="text-sm text-destructive">{error}</p>}
+        {error && (
+          <motion.p
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-sm text-destructive"
+          >
+            {error}
+          </motion.p>
+        )}
 
-        <button
+        <motion.button
           type="submit"
-          className="group w-full rounded-2xl gradient-accent py-4 font-display font-bold text-white text-base transition-all hover:brightness-110 hover:scale-[1.02] active:scale-[0.98] animate-pulse-glow flex items-center justify-center gap-2 min-h-[52px]"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
+          className="group w-full rounded-2xl gradient-accent py-4 font-display font-bold text-white text-base transition-all hover:brightness-110 animate-pulse-glow flex items-center justify-center gap-2 min-h-[52px]"
         >
           See My Recommendation
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-        </button>
+        </motion.button>
 
-        <button
+        <motion.button
           type="button"
           onClick={onSkip}
+          whileHover={{ x: 4 }}
           className="text-xs text-muted-foreground hover:text-foreground transition-colors mt-1 min-h-[44px] px-4"
         >
           Just send it to my email →
-        </button>
+        </motion.button>
 
         {userEmail && (
           <p className="text-[11px] text-muted-foreground mt-1">
@@ -141,9 +156,7 @@ const ContactCapture = ({ onSubmit, onSkip, strainName, userEmail }: ContactCapt
 
       {/* POPIA */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.7 }}
+        variants={itemVariants}
         className="mt-5 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--brand-gold)_/_0.15)] bg-[hsl(var(--brand-gold)_/_0.04)] px-4 py-2 text-xs text-muted-foreground"
       >
         <Shield className="h-3.5 w-3.5 text-[hsl(var(--brand-gold))]" />

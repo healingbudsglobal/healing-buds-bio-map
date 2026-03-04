@@ -4,18 +4,26 @@ import hbLogoJar from "@/assets/hb-logo-jar.png";
 
 const STATUS_MESSAGES = [
   "Analysing your profile…",
-  "Cross-referencing strain database…",
+  "Cross-referencing terpene database…",
+  "Evaluating potency thresholds…",
   "Generating your match…",
 ];
 
 const LoadingScreen = () => {
   const [msgIndex, setMsgIndex] = useState(0);
+  const [progressWidth, setProgressWidth] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setMsgIndex((i) => (i + 1) % STATUS_MESSAGES.length);
-    }, 1000);
+    }, 800);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    // Animate progress bar from 0 to 95% over 3s
+    const timer = setTimeout(() => setProgressWidth(95), 100);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -28,13 +36,23 @@ const LoadingScreen = () => {
     >
       {/* Radial glow behind spinner */}
       <div className="pointer-events-none absolute">
-        <div className="h-56 w-56 rounded-full bg-[hsl(var(--brand-gold))] opacity-[0.09] blur-[80px]" />
+        <motion.div
+          className="h-56 w-56 rounded-full bg-[hsl(var(--brand-gold))]"
+          animate={{ opacity: [0.06, 0.12, 0.06], scale: [1, 1.1, 1] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          style={{ filter: "blur(80px)" }}
+        />
       </div>
 
-      <div className="relative mb-8">
+      <motion.div
+        className="relative mb-8"
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      >
         {/* Outer ring */}
         <div className="h-24 w-24 rounded-full border border-border" />
-        {/* Spinning ring 1 — gold, thicker */}
+        {/* Spinning ring 1 — gold */}
         <div
           className="absolute inset-0 h-24 w-24 rounded-full border-[3px] border-[hsl(var(--brand-gold)_/_0.8)] border-t-transparent"
           style={{ animation: "spin 1.2s linear infinite" }}
@@ -51,14 +69,15 @@ const LoadingScreen = () => {
         />
         {/* Center jar logo */}
         <span className="absolute inset-0 flex items-center justify-center">
-          <img
+          <motion.img
             src={hbLogoJar}
             alt="HB"
             className="h-8 w-auto"
-            style={{ animation: "pulse 2s ease-in-out infinite" }}
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           />
         </span>
-      </div>
+      </motion.div>
 
       <h2 className="font-display text-2xl font-bold tracking-[0.02em] text-foreground mb-3 text-glow">
         Calculating Your Profile…
@@ -69,10 +88,10 @@ const LoadingScreen = () => {
         <AnimatePresence mode="wait">
           <motion.p
             key={msgIndex}
-            initial={{ opacity: 0, y: 6 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.3 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.25 }}
             className="text-sm text-muted-foreground absolute inset-x-0"
           >
             {STATUS_MESSAGES[msgIndex]}
@@ -80,18 +99,15 @@ const LoadingScreen = () => {
         </AnimatePresence>
       </div>
 
-      {/* Animated dots — gold */}
-      <div className="mt-8 flex gap-2">
-        {[0, 1, 2].map((i) => (
-          <div
-            key={i}
-            className="h-2.5 w-2.5 rounded-full bg-[hsl(var(--brand-gold))]"
-            style={{
-              animation: "dotPulse 1.4s infinite ease-in-out both",
-              animationDelay: `${i * 0.16}s`,
-            }}
-          />
-        ))}
+      {/* Progress bar */}
+      <div className="mt-8 w-48 h-1 rounded-full bg-[hsl(var(--surface-elevated))] overflow-hidden">
+        <div
+          className="h-full rounded-full transition-all duration-[3000ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+          style={{
+            width: `${progressWidth}%`,
+            background: "linear-gradient(90deg, hsl(var(--primary)), hsl(var(--brand-gold)))",
+          }}
+        />
       </div>
     </motion.div>
   );
