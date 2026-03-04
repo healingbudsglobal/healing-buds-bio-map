@@ -130,12 +130,12 @@ const OtpVerification = ({ email, otpCode, onVerified, onResend }: OtpVerificati
             onChange={setValue}
             onComplete={handleComplete}
           >
-            <InputOTPGroup className="gap-2">
+            <InputOTPGroup className="gap-2.5">
               {[0, 1, 2, 3, 4, 5].map((i) => (
                 <InputOTPSlot
                   key={i}
                   index={i}
-                  className="h-13 w-11 border border-[hsl(var(--accent-green)_/_0.2)] bg-[hsl(180_8%_7%_/_0.7)] text-foreground text-lg font-bold rounded-xl backdrop-blur-sm transition-all duration-200 ring-0 data-[active=true]:ring-2 data-[active=true]:ring-[hsl(var(--accent-green)_/_0.5)] data-[active=true]:border-[hsl(var(--accent-green)_/_0.4)] data-[active=true]:bg-[hsl(var(--accent-green)_/_0.05)] first:rounded-l-xl last:rounded-r-xl"
+                  className="!h-14 !w-12 !border !rounded-xl !border-[hsl(var(--accent-green)_/_0.2)] !bg-[hsl(180_8%_7%_/_0.8)] text-foreground !text-xl font-bold backdrop-blur-sm transition-all duration-200 !ring-0 data-[active]:!ring-2 data-[active]:!ring-[hsl(var(--accent-green)_/_0.6)] data-[active]:!border-[hsl(var(--accent-green)_/_0.5)] data-[active]:!bg-[hsl(var(--accent-green)_/_0.08)] data-[active]:shadow-[0_0_12px_hsl(var(--accent-green)_/_0.15)]"
                 />
               ))}
             </InputOTPGroup>
