@@ -34,6 +34,17 @@ export const surveyQuestions: SurveyQuestion[] = [
     ],
   },
   {
+    id: "q11",
+    question: "Do you have any medical conditions?",
+    subtitle: "This helps us prioritise therapeutic benefits",
+    options: [
+      { label: "Chronic Pain", icon: "activity" },
+      { label: "Anxiety", icon: "brain" },
+      { label: "Insomnia", icon: "moon-star" },
+      { label: "None", icon: "check" },
+    ],
+  },
+  {
     id: "q3",
     question: "When do you usually consume?",
     subtitle: "Time of day influences strain selection",
@@ -41,6 +52,17 @@ export const surveyQuestions: SurveyQuestion[] = [
       { label: "Morning", icon: "sunrise" },
       { label: "Afternoon", icon: "sun" },
       { label: "Night", icon: "moon-star" },
+    ],
+  },
+  {
+    id: "q4",
+    question: "What's your preferred consumption method?",
+    subtitle: "We'll pass this to your consultant for tailored advice",
+    options: [
+      { label: "Flower", icon: "flower" },
+      { label: "Vape", icon: "wind" },
+      { label: "Edible", icon: "cookie" },
+      { label: "Oil", icon: "droplets" },
     ],
   },
   {
@@ -52,6 +74,17 @@ export const surveyQuestions: SurveyQuestion[] = [
       { label: "Euphoric", icon: "sparkles" },
       { label: "Deep", icon: "waves" },
       { label: "Sedation", icon: "bed" },
+    ],
+  },
+  {
+    id: "q8",
+    question: "How do you want your body to feel?",
+    subtitle: "Physical sensation matters as much as mental effect",
+    options: [
+      { label: "Light & Functional", icon: "feather" },
+      { label: "Warm & Relaxed", icon: "flame" },
+      { label: "Heavy & Sedated", icon: "anchor" },
+      { label: "No Preference", icon: "minus" },
     ],
   },
   {
@@ -77,6 +110,17 @@ export const surveyQuestions: SurveyQuestion[] = [
     ],
   },
   {
+    id: "q10",
+    question: "How often do you consume?",
+    subtitle: "Frequency helps us gauge your tolerance level",
+    options: [
+      { label: "Daily", icon: "calendar-check" },
+      { label: "Few times a week", icon: "calendar" },
+      { label: "Weekends", icon: "sun" },
+      { label: "Rarely", icon: "clock" },
+    ],
+  },
+  {
     id: "q9",
     question: "Do you need physical relief?",
     subtitle: "Important for matching body-focused strains",
@@ -85,6 +129,37 @@ export const surveyQuestions: SurveyQuestion[] = [
       { label: "Joint", icon: "bone" },
       { label: "Nausea", icon: "pill" },
       { label: "None", icon: "check" },
+    ],
+  },
+  {
+    id: "q12",
+    question: "What's your ideal session length?",
+    subtitle: "Some strains hit fast and fade, others linger",
+    options: [
+      { label: "Quick (15-30min)", icon: "timer" },
+      { label: "Medium (1-2hr)", icon: "clock" },
+      { label: "Extended (3hr+)", icon: "hourglass" },
+      { label: "No Preference", icon: "minus" },
+    ],
+  },
+  {
+    id: "q13",
+    question: "Do you prefer to consume alone or socially?",
+    subtitle: "Social strains differ from solo-session strains",
+    options: [
+      { label: "Solo", icon: "user" },
+      { label: "Social", icon: "users" },
+      { label: "Both", icon: "user-plus" },
+    ],
+  },
+  {
+    id: "q14",
+    question: "How important is discretion to you?",
+    subtitle: "We'll note this for your consultant's recommendation",
+    options: [
+      { label: "Very", icon: "eye-off" },
+      { label: "Somewhat", icon: "eye" },
+      { label: "Not Important", icon: "megaphone" },
     ],
   },
   {
