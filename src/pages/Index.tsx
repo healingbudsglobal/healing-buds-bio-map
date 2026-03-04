@@ -48,8 +48,8 @@ const Index = () => {
       if (contactName) payload.name = contactName;
       if (whatsapp) payload.whatsapp = whatsapp;
 
-      surveyQuestions.forEach((q, i) => {
-        payload[`q${i + 1}`] = surveyAnswers[q.id] || "";
+      surveyQuestions.forEach((q) => {
+        payload[q.id] = surveyAnswers[q.id] || "";
       });
 
       try {
@@ -79,12 +79,17 @@ const Index = () => {
   }, [sendWebhook]);
 
   return (
-    <div className="leaf-pattern flex min-h-[100dvh] items-center justify-center">
+    <div className="leaf-pattern flex min-h-[100dvh] items-center justify-center pb-[env(safe-area-inset-bottom)]">
       <AnimatePresence mode="wait">
         {screen === "squeeze" && <SqueezeScreen key="squeeze" onSubmit={handleEmailSubmit} />}
         {screen === "survey" && <SurveyFlow key="survey" onComplete={handleSurveyComplete} />}
         {screen === "contact" && (
-          <ContactCapture key="contact" onSubmit={handleContactSubmit} onSkip={handleContactSkip} />
+          <ContactCapture
+            key="contact"
+            onSubmit={handleContactSubmit}
+            onSkip={handleContactSkip}
+            strainName={strainResult?.strain.name}
+          />
         )}
         {screen === "loading" && <LoadingScreen key="loading" />}
         {screen === "success" && <SuccessScreen key="success" result={strainResult} />}

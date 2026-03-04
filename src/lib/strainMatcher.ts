@@ -8,7 +8,8 @@ export interface StrainMatch {
 
 /**
  * Weighted strain matching engine.
- * Maps survey answers to strain attributes and returns the best match.
+ * Maps 8 survey answers to strain attributes and returns the best match.
+ * Removed questions use sensible defaults internally.
  */
 export function matchStrain(answers: Record<string, string>): StrainMatch {
   const scored = strains.map((strain) => {
@@ -37,13 +38,6 @@ export function matchStrain(answers: Record<string, string>): StrainMatch {
     if ((flav === "Diesel/Gas" || flav === "Diesel / Gas") && strain.flavours.some((f) => ["Diesel", "Spicy"].includes(f))) score += 3;
     if (flav === "Citrus" && strain.flavours.some((f) => ["Citrus", "Pineapple", "Tropical"].includes(f))) score += 3;
 
-    // Q13: Body stone
-    const body = answers.q13;
-    if (body === "Yes" && strain.effects.includes("Relaxed") && strain.effects.includes("Sleepy")) score += 3;
-    if (body === "No" && (strain.effects.includes("Uplifted") || strain.effects.includes("Focused") || strain.effects.includes("Energetic"))) score += 3;
-    if (body === "Balanced" && strain.effects.includes("Relaxed") && !strain.effects.includes("Sleepy")) score += 2;
-    if (body === "Balanced" && strain.effects.includes("Euphoric")) score += 1;
-
     // === MEDIUM WEIGHT (2 pts each) ===
 
     // Q3: Timing
@@ -51,12 +45,6 @@ export function matchStrain(answers: Record<string, string>): StrainMatch {
     if (timing === "Morning" && (strain.effects.includes("Energetic") || strain.effects.includes("Focused") || strain.effects.includes("Uplifted"))) score += 2;
     if (timing === "Afternoon" && (strain.effects.includes("Euphoric") || strain.effects.includes("Happy") || strain.effects.includes("Giggly"))) score += 2;
     if (timing === "Night" && (strain.effects.includes("Sleepy") || strain.effects.includes("Relaxed"))) score += 2;
-
-    // Q4: Munchies
-    const munch = answers.q4;
-    if ((munch === "I want them!" || munch === "I want it!") && strain.effects.includes("Hungry")) score += 2;
-    if (munch === "Avoid" && !strain.effects.includes("Hungry")) score += 2;
-    if (munch === "Neutral") score += 1;
 
     // Q6: THC anxiety
     const anx = answers.q6;
@@ -79,25 +67,14 @@ export function matchStrain(answers: Record<string, string>): StrainMatch {
 
     // === LOW WEIGHT (1 pt each) ===
 
-    // Q2: Tolerance → prefer higher THC for advanced
+    // Q2: Tolerance
     const tol = answers.q2;
     if (tol === "Advanced" && strain.thc >= 23) score += 1;
     if (tol === "Beginner" && strain.thc < 22) score += 1;
     if (tol === "Micro-doser" && strain.thc < 20) score += 1;
 
-    // Q10: Bag appeal — no direct data, skip
-    // Q11: Duration — no direct data, skip
-    // Q12: Setting
-    const setting = answers.q12;
-    if (setting === "Social" && (strain.effects.includes("Giggly") || strain.effects.includes("Happy"))) score += 1;
-    if (setting === "Home" && strain.effects.includes("Relaxed")) score += 1;
-    if (setting === "Work" && strain.effects.includes("Focused")) score += 1;
-    if (setting === "Outdoor" && (strain.effects.includes("Energetic") || strain.effects.includes("Uplifted"))) score += 1;
-
-    // Q14: Smell sensitivity — no direct data, give slight edge to mild strains
-    const smell = answers.q14;
-    if (smell === "Low-odor" && strain.flavours.some((f) => ["Vanilla", "Floral", "Creamy", "Fruit"].includes(f))) score += 1;
-    if (smell === "Love the skunk" && strain.flavours.some((f) => ["Diesel", "Pine", "Spicy", "Earthy"].includes(f))) score += 1;
+    // Defaults for removed questions — give balanced strains a slight edge
+    if (strain.effects.includes("Relaxed") && strain.effects.includes("Euphoric")) score += 1;
 
     // Availability penalty
     if (!strain.available) score -= 2;
@@ -105,17 +82,16 @@ export function matchStrain(answers: Record<string, string>): StrainMatch {
     return { strain, score };
   });
 
-  // Sort descending
   scored.sort((a, b) => b.score - a.score);
 
   const best = scored[0];
-  // Max possible ~28 pts (4 high×3 + 5 med×2 + 3 low×1)
-  const maxScore = 25;
+  // Max possible ~22 pts (3 high×3 + 4 med×2 + 2 low×1)
+  const maxScore = 22;
   const compatibility = Math.min(Math.round((best.score / maxScore) * 100), 99);
 
   return {
     strain: best.strain,
     score: best.score,
-    compatibility: Math.max(compatibility, 65), // floor at 65% so it always feels good
+    compatibility: Math.max(compatibility, 65),
   };
 }

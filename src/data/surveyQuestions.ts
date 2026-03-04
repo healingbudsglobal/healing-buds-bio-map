@@ -44,16 +44,6 @@ export const surveyQuestions: SurveyQuestion[] = [
     ],
   },
   {
-    id: "q4",
-    question: "How do you feel about appetite stimulation?",
-    subtitle: "Some strains stimulate appetite more than others",
-    options: [
-      { label: "I want it!", icon: "utensils" },
-      { label: "Neutral", icon: "minus" },
-      { label: "Avoid", icon: "x" },
-    ],
-  },
-  {
     id: "q5",
     question: "What kind of mental effect do you prefer?",
     subtitle: "This helps match your cerebral sweet spot",
@@ -87,17 +77,6 @@ export const surveyQuestions: SurveyQuestion[] = [
     ],
   },
   {
-    id: "q8",
-    question: "What's your preferred method?",
-    subtitle: "Different methods deliver different experiences",
-    options: [
-      { label: "Flower", icon: "flower-2" },
-      { label: "Vaporizer", icon: "wind" },
-      { label: "Edibles", icon: "cookie" },
-      { label: "Concentrates", icon: "flask-conical" },
-    ],
-  },
-  {
     id: "q9",
     question: "Do you need physical relief?",
     subtitle: "Important for matching body-focused strains",
@@ -106,56 +85,6 @@ export const surveyQuestions: SurveyQuestion[] = [
       { label: "Joint", icon: "bone" },
       { label: "Nausea", icon: "pill" },
       { label: "None", icon: "check" },
-    ],
-  },
-  {
-    id: "q10",
-    question: "How important is visual appeal?",
-    subtitle: "Some people appreciate the aesthetics",
-    options: [
-      { label: "Very", icon: "eye" },
-      { label: "Somewhat", icon: "scan-eye" },
-      { label: "Effects Only", icon: "target" },
-    ],
-  },
-  {
-    id: "q11",
-    question: "How long should the effect last?",
-    subtitle: "Duration varies widely by strain",
-    options: [
-      { label: "Short", icon: "timer" },
-      { label: "Medium", icon: "clock" },
-      { label: "Long", icon: "hourglass" },
-    ],
-  },
-  {
-    id: "q12",
-    question: "Where will you mostly consume?",
-    subtitle: "Setting influences the ideal strain",
-    options: [
-      { label: "Social", icon: "users" },
-      { label: "Outdoor", icon: "mountain" },
-      { label: "Home", icon: "home" },
-      { label: "Work", icon: "briefcase" },
-    ],
-  },
-  {
-    id: "q13",
-    question: "Do you want a body stone?",
-    subtitle: "From functional to full relaxation",
-    options: [
-      { label: "Yes", icon: "armchair" },
-      { label: "No", icon: "person-standing" },
-      { label: "Balanced", icon: "scale" },
-    ],
-  },
-  {
-    id: "q14",
-    question: "How sensitive are you to strong aromas?",
-    subtitle: "Some strains have a stronger scent profile",
-    options: [
-      { label: "Low-odor", icon: "wind" },
-      { label: "Love the skunk", icon: "sparkles" },
     ],
   },
   {
