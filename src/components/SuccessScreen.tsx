@@ -138,11 +138,11 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
               </div>
             </div>
 
-            {/* Availability */}
-            <div className="flex items-center gap-2">
-              <span className={`h-2 w-2 rounded-full ${strain.available ? 'bg-primary' : 'bg-destructive'}`} />
-              <span className="text-xs text-muted-foreground">
-                {strain.available ? "In Stock" : "Currently Unavailable"}
+            {/* Price + availability */}
+            <div className="flex items-center justify-between">
+              <span className="text-lg font-bold text-foreground">{strain.price}</span>
+              <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                Limited availability
               </span>
             </div>
           </motion.div>
@@ -157,7 +157,7 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
             rel="noopener noreferrer"
             className="mt-4 group w-full rounded-2xl gradient-accent py-4 font-display font-bold text-white text-base transition-all hover:brightness-110 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 min-h-[52px]"
           >
-            Shop This Strain
+            Order This Strain
             <ExternalLink className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </motion.a>
 

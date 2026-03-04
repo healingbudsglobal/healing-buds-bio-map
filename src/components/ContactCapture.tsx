@@ -81,7 +81,7 @@ const ContactCapture = ({ onSubmit, onSkip, strainName }: ContactCaptureProps) =
         transition={{ delay: 0.3 }}
         className="mb-6 text-sm text-muted-foreground leading-relaxed max-w-xs"
       >
-        Enter your details to unlock your full strain report and receive future updates.
+        Where should we send your clinical profile?
       </motion.p>
 
       <motion.form
@@ -119,7 +119,7 @@ const ContactCapture = ({ onSubmit, onSkip, strainName }: ContactCaptureProps) =
           type="submit"
           className="group w-full rounded-2xl gradient-accent py-4 font-display font-bold text-white text-base transition-all hover:brightness-110 hover:scale-[1.02] active:scale-[0.98] animate-pulse-glow flex items-center justify-center gap-2 min-h-[52px]"
         >
-          Unlock My Recommendation
+          See My Recommendation
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </button>
 
