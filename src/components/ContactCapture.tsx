@@ -47,6 +47,18 @@ const ContactCapture = ({ onSubmit, onSkip, strainName, userEmail }: ContactCapt
       animate="visible"
       className="relative z-10 flex flex-col items-center justify-center px-5 text-center max-w-sm w-full"
     >
+      {/* Cinematic flower backdrop — subtle, professional */}
+      <div className="pointer-events-none fixed inset-0 overflow-hidden">
+        <img
+          src={heroFlower}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover opacity-[0.07]"
+          style={{ filter: "blur(25px) saturate(1.2)", mixBlendMode: "soft-light" }}
+        />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_30%,hsl(180_8%_7%_/_0.9)_75%)]" />
+        <div className="absolute inset-0 bg-[hsl(var(--primary-green)_/_0.12)]" style={{ mixBlendMode: "overlay" }} />
+      </div>
+
       <motion.div variants={itemVariants} className="mb-6">
         <img src={hbLogoWhite} alt="Healing Buds" className="h-10 w-auto" />
       </motion.div>
@@ -58,20 +70,23 @@ const ContactCapture = ({ onSubmit, onSkip, strainName, userEmail }: ContactCapt
         Your Clinical Profile Is <span className="text-[hsl(var(--brand-gold))]">Ready</span>
       </motion.h2>
 
-      {/* Blurred strain teaser — green border */}
+      {/* Blurred strain teaser with flower peek */}
       {strainName && (
         <motion.div
           variants={itemVariants}
-          className="mb-4 w-full rounded-xl border border-[hsl(var(--accent-green)_/_0.3)] bg-[hsl(175_6%_16%)] p-4 relative overflow-hidden"
+          className="mb-4 w-full rounded-xl border border-[hsl(var(--accent-green)_/_0.3)] bg-[hsl(175_6%_16%_/_0.8)] backdrop-blur-xl p-4 relative overflow-hidden"
         >
-          {/* Blurred flower teaser behind locked strain */}
-          <img
+          {/* Cropped flower peek behind locked area */}
+          <motion.img
             src={heroFlower}
             alt=""
-            className="absolute inset-0 w-full h-full object-cover opacity-[0.06]"
-            style={{ filter: "blur(20px)", mixBlendMode: "luminosity" }}
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ filter: "blur(12px) saturate(1.4)", mixBlendMode: "luminosity" }}
+            animate={{ opacity: [0.08, 0.14, 0.08] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           />
-          <div className="flex items-center justify-center gap-2">
+          <div className="absolute inset-0 bg-[hsl(175_6%_16%_/_0.7)]" />
+          <div className="flex items-center justify-center gap-2 relative z-10">
             <motion.div
               className="relative"
               animate={{ rotate: [0, 10, -10, 0] }}
@@ -82,10 +97,9 @@ const ContactCapture = ({ onSubmit, onSkip, strainName, userEmail }: ContactCapt
             </motion.div>
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Your Top Match</span>
           </div>
-          <p className="mt-2 font-display text-lg font-bold text-foreground blur-[6px] select-none">
+          <p className="mt-2 font-display text-lg font-bold text-foreground blur-[6px] select-none relative z-10">
             {strainName}
           </p>
-          <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--surface-elevated))] via-transparent to-transparent" />
         </motion.div>
       )}
 
@@ -162,7 +176,7 @@ const ContactCapture = ({ onSubmit, onSkip, strainName, userEmail }: ContactCapt
         )}
       </motion.form>
 
-      {/* POPIA — green tint */}
+      {/* POPIA */}
       <motion.div
         variants={itemVariants}
         className="mt-5 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--accent-green)_/_0.2)] bg-[hsl(var(--accent-green)_/_0.04)] px-4 py-2 text-xs text-muted-foreground"
