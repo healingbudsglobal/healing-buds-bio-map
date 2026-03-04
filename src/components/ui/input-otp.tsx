@@ -36,6 +36,7 @@ const InputOTPSlot = React.forwardRef<
         isActive && "z-10 ring-2 ring-ring ring-offset-background",
         className,
       )}
+      data-active={isActive || undefined}
       {...props}
     >
       {char}
