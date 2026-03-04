@@ -95,6 +95,7 @@ const Index = () => {
             onSubmit={handleContactSubmit}
             onSkip={handleContactSkip}
             strainName={strainResult?.strain.name}
+            userEmail={email}
           />
         )}
         {screen === "loading" && <LoadingScreen key="loading" />}

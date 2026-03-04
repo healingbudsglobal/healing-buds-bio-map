@@ -1,5 +1,8 @@
+export type StrainType = "indica" | "sativa" | "hybrid";
+
 export interface Strain {
   name: string;
+  type: StrainType;
   effects: string[];
   flavours: string[];
   thc: number;
@@ -12,6 +15,7 @@ export interface Strain {
 export const strains: Strain[] = [
   {
     name: "BlockBerry",
+    type: "indica",
     effects: ["Relaxed", "Sleepy", "Hungry"],
     flavours: ["Berry", "Vanilla", "Citrus"],
     thc: 23.0,
@@ -22,6 +26,7 @@ export const strains: Strain[] = [
   },
   {
     name: "Blue Zushi",
+    type: "hybrid",
     effects: ["Focused", "Relaxed", "Euphoric"],
     flavours: ["Fruit", "Mint", "Diesel"],
     thc: 21.9,
@@ -32,6 +37,7 @@ export const strains: Strain[] = [
   },
   {
     name: "Candy Pave",
+    type: "sativa",
     effects: ["Giggly", "Euphoric", "Uplifted"],
     flavours: ["Candy", "Floral", "Creamy"],
     thc: 24.5,
@@ -42,6 +48,7 @@ export const strains: Strain[] = [
   },
   {
     name: "Caribbean Breeze",
+    type: "sativa",
     effects: ["Energetic", "Happy", "Uplifted"],
     flavours: ["Tropical", "Citrus", "Pineapple"],
     thc: 23.0,
@@ -52,6 +59,7 @@ export const strains: Strain[] = [
   },
   {
     name: "Femme Fatale",
+    type: "hybrid",
     effects: ["Relaxed", "Happy", "Sleepy"],
     flavours: ["Grape", "Tropical", "Pear"],
     thc: 21.9,
@@ -62,6 +70,7 @@ export const strains: Strain[] = [
   },
   {
     name: "NFS 12",
+    type: "indica",
     effects: ["Relaxed", "Sleepy", "Euphoric"],
     flavours: ["Pine", "Diesel", "Spicy"],
     thc: 17.5,
@@ -72,6 +81,7 @@ export const strains: Strain[] = [
   },
   {
     name: "Peanut Butter Breath",
+    type: "hybrid",
     effects: ["Relaxed", "Sleepy", "Hungry"],
     flavours: ["Nutty", "Earthy", "Herbal"],
     thc: 22.6,

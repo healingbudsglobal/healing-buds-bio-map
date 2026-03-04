@@ -7,9 +7,10 @@ interface ContactCaptureProps {
   onSubmit: (name: string, whatsapp: string) => void;
   onSkip: () => void;
   strainName?: string;
+  userEmail?: string;
 }
 
-const ContactCapture = ({ onSubmit, onSkip, strainName }: ContactCaptureProps) => {
+const ContactCapture = ({ onSubmit, onSkip, strainName, userEmail }: ContactCaptureProps) => {
   const [name, setName] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [error, setError] = useState("");
@@ -126,10 +127,16 @@ const ContactCapture = ({ onSubmit, onSkip, strainName }: ContactCaptureProps) =
         <button
           type="button"
           onClick={onSkip}
-          className="text-[10px] text-muted-foreground hover:text-foreground transition-colors mt-1"
+          className="text-xs text-muted-foreground hover:text-foreground transition-colors mt-1 min-h-[44px] px-4"
         >
-          Skip for now
+          Just send it to my email →
         </button>
+
+        {userEmail && (
+          <p className="text-[11px] text-muted-foreground mt-1">
+            Your results are also sent to <span className="text-foreground">{userEmail}</span>
+          </p>
+        )}
       </motion.form>
 
       {/* POPIA */}

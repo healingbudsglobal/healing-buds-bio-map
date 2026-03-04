@@ -3,6 +3,7 @@ import { ArrowRight, Shield, FlaskConical, Microscope } from "lucide-react";
 import { motion } from "framer-motion";
 import { validateEmail } from "@/lib/emailValidation";
 import hbLogoWhite from "@/assets/hb-logo-white-full.png";
+import BotanicalAccent from "@/components/BotanicalAccent";
 import {
   Select,
   SelectContent,
@@ -58,8 +59,11 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       className="relative z-10 flex flex-col items-center justify-center px-5 text-center"
     >
-      {/* Ambient glow orbs — replace old hero circle */}
+      {/* Ambient glow orbs */}
       <div className="ambient-glow" />
+
+      {/* Botanical hero illustration */}
+      <BotanicalAccent variant="hero" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%]" />
 
       {/* Radial spotlight behind form */}
       <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-[radial-gradient(circle,hsl(40_85%_55%_/_0.04)_0%,transparent_70%)]" />
