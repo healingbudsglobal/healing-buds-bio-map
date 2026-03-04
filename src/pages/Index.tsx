@@ -4,6 +4,7 @@ import SurveyFlow from "@/components/SurveyFlow";
 import LoadingScreen from "@/components/LoadingScreen";
 import SuccessScreen from "@/components/SuccessScreen";
 import { surveyQuestions } from "@/data/surveyQuestions";
+import { matchStrain, type StrainMatch } from "@/lib/strainMatcher";
 
 type Screen = "squeeze" | "survey" | "loading" | "success";
 
@@ -13,6 +14,7 @@ const Index = () => {
   const [screen, setScreen] = useState<Screen>("squeeze");
   const [email, setEmail] = useState("");
   const [province, setProvince] = useState("");
+  const [strainResult, setStrainResult] = useState<StrainMatch | null>(null);
 
   const handleEmailSubmit = useCallback((submittedEmail: string, submittedProvince: string) => {
     setEmail(submittedEmail);
@@ -24,7 +26,15 @@ const Index = () => {
     async (answers: Record<string, string>) => {
       setScreen("loading");
 
-      const payload: Record<string, string> = { email, province };
+      const result = matchStrain(answers);
+      setStrainResult(result);
+
+      const payload: Record<string, string> = {
+        email,
+        province,
+        matched_strain: result.strain.name,
+        compatibility: `${result.compatibility}%`,
+      };
       surveyQuestions.forEach((q, i) => {
         payload[`q${i + 1}`] = answers[q.id] || "";
       });
@@ -49,7 +59,7 @@ const Index = () => {
       {screen === "squeeze" && <SqueezeScreen onSubmit={handleEmailSubmit} />}
       {screen === "survey" && <SurveyFlow onComplete={handleSurveyComplete} />}
       {screen === "loading" && <LoadingScreen />}
-      {screen === "success" && <SuccessScreen />}
+      {screen === "success" && <SuccessScreen result={strainResult} />}
     </div>
   );
 };
