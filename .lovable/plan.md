@@ -1,54 +1,56 @@
 
 
-# Visual Quality Upgrade: Hero Bud Image + Graphical Polish
+# WhatsApp Optional + Email OTP Verification
 
-## What's happening
+## What's changing
 
-The uploaded image is a stunning macro photograph of a cannabis bud with vivid red/purple hues and visible trichomes. We'll incorporate this as a hero visual element across the app — on the squeeze screen as an ambient background element, and enhance the overall graphical quality with refined glassmorphism, better depth layering, and cinematic visual effects.
+Two modifications to the intake flow:
 
-## Changes
+1. **WhatsApp becomes optional** — Remove the required validation on the WhatsApp field in `ContactCapture`. Add "(optional)" hint to the placeholder. Allow submission with just a name.
 
-### 1. Add the uploaded bud image to the project
-- Copy `WhatsApp_Image_2026-03-03_at_23.29.51-2.jpeg` to `src/assets/hero-flower.jpg`
-- Use it as a decorative hero element — not a flat background, but a softly blurred, cropped botanical accent
+2. **Email OTP verification screen** — After the squeeze screen collects the email, insert a new "verify" step where the user enters a 6-digit code. The OTP is generated client-side and sent via the existing Make.com webhook (which triggers an email to the user). This confirms lead quality before proceeding to the survey.
 
-### 2. SqueezeScreen — Ambient flower backdrop
-- Add the bud image as a large, softly blurred (blur-3xl), low-opacity background element behind the form card, centered and scaled up
-- Apply a radial gradient mask so it fades smoothly into the dark background
-- Layer it beneath the existing glass card with `mix-blend-mode: luminosity` for a subtle, moody botanical vibe
-- This creates an immediate "premium cannabis" first impression within 2 seconds
+## New flow
 
-### 3. SuccessScreen — Enhanced strain card hero
-- Replace the flat `h-44` image container with a taller `h-56` hero area
-- Add a subtle parallax-like scale animation on mount (scale from 1.1 to 1.0)
-- Add a vignette overlay (radial gradient dark edges) for a cinematic product-photography feel
-- Add a subtle glow ring around the strain type badge
+```text
+Squeeze (email + province)
+  → OTP Verify (enter 6-digit code sent to email)
+    → Survey (15 questions)
+      → Contact (name required, WhatsApp optional)
+        → Loading → Success
+```
 
-### 4. LoadingScreen — Flower pulse backdrop
-- Add the bud image as a very subtle pulsing backdrop behind the spinner rings (opacity 0.06, blur-2xl, scale animation)
-- Creates visual continuity between screens
+## Implementation
 
-### 5. ContactCapture — Blurred flower teaser
-- Add small cropped bud image behind the blurred strain name teaser, reinforcing that something visually rich is waiting
-- Very low opacity, heavily blurred — just enough to add depth
+### New screen type + state in `Index.tsx`
+- Add `"otp"` to the `Screen` type
+- Add `otpCode` state (generated 6-digit string)
+- After email submit: generate OTP, fire webhook with `{email, otp_code, type: "otp_verification"}`, navigate to `"otp"` screen
+- On OTP verified: proceed to `"survey"`
 
-### 6. AmbientParticles — Richer depth layers
-- Add a 5th radial glow using a warm purple/magenta tint (`330 40% 30%`) at very low opacity to complement the flower image's red-purple tones
-- Slightly increase particle count and variance
+### New component `OtpVerification.tsx`
+- Uses the existing `input-otp` component (already installed)
+- 6-digit input with the `InputOTP`, `InputOTPGroup`, `InputOTPSlot` components
+- Shows the email address the code was sent to
+- "Resend code" button with 30-second cooldown timer
+- Validates entered code against the generated OTP
+- Styled consistently with other screens (glass card, flower backdrop, brand colors)
 
-### 7. CSS polish
-- Add a new utility class `.flower-vignette` for the radial dark-edge mask
-- Add `.flower-glow` for a subtle warm ambient glow effect
+### `ContactCapture.tsx` changes
+- Remove the WhatsApp required validation — only validate if a value is provided
+- Update placeholder to `"WhatsApp number (optional)"`
+- Allow form submission with just a name
+- Update `onSubmit` signature to accept optional whatsapp: `(name: string, whatsapp?: string)`
 
-## Files Modified
+### `Index.tsx` webhook changes
+- New `sendOtpWebhook` function that posts `{email, province, otp_code, type: "otp_verification"}` to the Make.com webhook
+- The Make.com scenario should be configured to send an email with the OTP code when it receives this payload type
+
+## Files modified
 
 | File | Change |
 |------|--------|
-| `src/assets/hero-flower.jpg` | New — copied from upload |
-| `src/components/SqueezeScreen.tsx` | Add blurred flower backdrop behind form |
-| `src/components/SuccessScreen.tsx` | Taller hero image, cinematic vignette, scale-in animation |
-| `src/components/LoadingScreen.tsx` | Subtle flower pulse backdrop |
-| `src/components/ContactCapture.tsx` | Flower image behind blurred teaser |
-| `src/components/AmbientParticles.tsx` | Add warm purple glow layer |
-| `src/index.css` | Add `.flower-vignette` and `.flower-glow` utilities |
+| `src/pages/Index.tsx` | Add "otp" screen, OTP generation, OTP webhook call |
+| `src/components/OtpVerification.tsx` | New — 6-digit OTP entry screen |
+| `src/components/ContactCapture.tsx` | WhatsApp optional, relaxed validation |
 
