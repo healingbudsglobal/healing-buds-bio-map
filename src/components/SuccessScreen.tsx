@@ -1,7 +1,7 @@
 import { CheckCircle, Mail, RotateCcw, ExternalLink, Leaf, Share2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import BotanicalAccent from "@/components/BotanicalAccent";
+
 import type { StrainMatch } from "@/lib/strainMatcher";
 
 const strainTypeConfig = {
@@ -117,7 +117,7 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
             )}
 
             <div className="p-5 relative">
-              <BotanicalAccent variant="card" className="absolute -right-4 -bottom-4 rotate-12" />
+              
 
               <div className="flex items-start justify-between mb-3 relative z-10">
                 <div>
