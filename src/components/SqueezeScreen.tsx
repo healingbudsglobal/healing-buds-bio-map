@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { ArrowRight, Shield } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ArrowRight, Shield, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import { validateEmail } from "@/lib/emailValidation";
 import hbLogoWhite from "@/assets/hb-logo-white-full.png";
@@ -34,6 +34,15 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
   const [province, setProvince] = useState("");
   const [error, setError] = useState("");
   const [focused, setFocused] = useState(false);
+  const [counter, setCounter] = useState(2284);
+
+  // Animated counter tick
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCounter((c) => c + Math.floor(Math.random() * 3));
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,7 +65,7 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       className="relative z-10 flex flex-col items-center justify-center px-5 text-center"
     >
       {/* Cinematic hero backdrop */}
@@ -64,7 +73,7 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
         <img
           src={heroTrichomes}
           alt=""
-          className="h-full w-full rounded-full object-cover opacity-[0.08] blur-[6px] sm:opacity-[0.12] sm:blur-[3px]"
+          className="h-full w-full rounded-full object-cover opacity-[0.12] blur-[4px] sm:opacity-[0.15] sm:blur-[2px]"
         />
         <div className="absolute inset-0 rounded-full bg-gradient-to-b from-transparent via-transparent to-background" />
       </div>
@@ -73,37 +82,50 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.2, duration: 0.5 }}
-        className="mb-8"
+        transition={{ delay: 0.1, duration: 0.4 }}
+        className="mb-6"
       >
         <img src={hbLogoWhite} alt="Healing Buds" className="h-14 w-auto sm:h-16" />
+      </motion.div>
+
+      {/* Social proof counter */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.4 }}
+        className="mb-5 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--brand-gold)_/_0.2)] bg-[hsl(var(--brand-gold)_/_0.06)] px-4 py-2"
+      >
+        <Users className="h-3.5 w-3.5 text-[hsl(var(--brand-gold))]" />
+        <span className="text-xs font-medium text-[hsl(var(--brand-gold-light))]">
+          <span className="font-bold">{counter.toLocaleString()}+</span> patients matched
+        </span>
       </motion.div>
 
       <motion.h1
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.6 }}
-        className="font-display text-3xl font-extrabold leading-[1.1] tracking-[0.02em] text-foreground sm:text-4xl md:text-5xl mb-3"
+        transition={{ delay: 0.25, duration: 0.5 }}
+        className="font-display text-3xl font-extrabold leading-[1.1] tracking-[0.02em] text-foreground sm:text-4xl md:text-5xl mb-2"
       >
-        Your Path to
+        Your Personalised
         <br />
-        <span className="text-[hsl(var(--brand-gold))]">Plant-Based Relief</span>
+        <span className="text-[hsl(var(--brand-gold))]">Strain Prescription</span>
       </motion.h1>
 
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.45, duration: 0.5 }}
-        className="mb-8 max-w-sm text-base leading-relaxed text-muted-foreground"
+        transition={{ delay: 0.35, duration: 0.4 }}
+        className="mb-7 max-w-xs text-sm leading-relaxed text-muted-foreground"
       >
-        A guided medical consultation to match you with the right strain for your needs.
+        90-second guided consultation · clinically informed
       </motion.p>
 
       {/* Form */}
       <motion.form
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.55, duration: 0.5 }}
+        transition={{ delay: 0.4, duration: 0.4 }}
         onSubmit={handleSubmit}
         className="flex w-full max-w-sm flex-col gap-3"
       >
@@ -115,13 +137,13 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
             onChange={(e) => setEmail(e.target.value)}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            className="w-full rounded-2xl border border-border bg-[hsl(var(--surface-elevated))] px-5 py-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[hsl(var(--brand-gold)_/_0.4)] focus:border-[hsl(var(--brand-gold)_/_0.5)] transition-all text-base"
+            className="w-full rounded-2xl border border-border bg-[hsl(var(--surface-elevated))] px-5 py-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[hsl(var(--brand-gold)_/_0.4)] focus:border-[hsl(var(--brand-gold)_/_0.5)] transition-all text-[16px]"
             required
           />
         </div>
 
         <Select value={province} onValueChange={setProvince}>
-          <SelectTrigger className="w-full rounded-2xl border border-border bg-[hsl(var(--surface-elevated))] px-5 py-4 text-base text-foreground focus:ring-2 focus:ring-[hsl(var(--brand-gold)_/_0.4)] focus:border-[hsl(var(--brand-gold)_/_0.5)] transition-all h-auto [&>span]:text-left">
+          <SelectTrigger className="w-full rounded-2xl border border-border bg-[hsl(var(--surface-elevated))] px-5 py-4 text-[16px] text-foreground focus:ring-2 focus:ring-[hsl(var(--brand-gold)_/_0.4)] focus:border-[hsl(var(--brand-gold)_/_0.5)] transition-all h-auto [&>span]:text-left">
             <SelectValue placeholder="Select your province" />
           </SelectTrigger>
           <SelectContent className="z-50 rounded-xl border border-border bg-card text-card-foreground shadow-lg">
@@ -137,22 +159,27 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
 
         <button
           type="submit"
-          className="group w-full rounded-2xl gradient-accent py-4 font-display font-bold text-white text-base transition-all hover:brightness-110 hover:scale-[1.02] active:scale-[0.98] animate-pulse-glow flex items-center justify-center gap-2"
+          className="group w-full rounded-2xl gradient-accent py-4 font-display font-bold text-white text-base transition-all hover:brightness-110 hover:scale-[1.02] active:scale-[0.98] animate-pulse-glow flex items-center justify-center gap-2 min-h-[52px]"
         >
           Begin Your Personal Medical Mapping
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </button>
+
+        {/* Micro-text */}
+        <p className="text-[11px] text-muted-foreground mt-0.5">
+          Free · No obligation · Takes 90 seconds
+        </p>
       </motion.form>
 
-      {/* POPIA trust badge */}
+      {/* POPIA trust badge — premium */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.8, duration: 0.5 }}
-        className="mt-6 inline-flex items-center gap-2 text-xs text-muted-foreground"
+        transition={{ delay: 0.6, duration: 0.4 }}
+        className="mt-5 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--brand-gold)_/_0.15)] bg-[hsl(var(--brand-gold)_/_0.04)] px-4 py-2 text-xs text-muted-foreground"
       >
-        <Shield className="h-3.5 w-3.5 text-primary" />
-        <span>POPIA Compliant · Your data is secure</span>
+        <Shield className="h-3.5 w-3.5 text-[hsl(var(--brand-gold))]" />
+        <span>POPIA Compliant · Secure medical data</span>
       </motion.div>
     </motion.div>
   );

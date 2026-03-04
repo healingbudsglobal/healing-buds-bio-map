@@ -6,9 +6,9 @@ interface LeafProgressProps {
   totalSteps: number;
 }
 
-const LeafProgress = ({ progress, currentStep, totalSteps }: LeafProgressProps) => {
+const LeafProgress = ({ progress }: LeafProgressProps) => {
   return (
-    <div className="fixed top-0 left-0 right-0 z-50">
+    <div className="fixed top-0 left-0 right-0 z-50" style={{ paddingTop: "env(safe-area-inset-top)" }}>
       {/* Track */}
       <div className="h-1 bg-[hsl(var(--surface))]">
         <motion.div
@@ -28,6 +28,7 @@ const LeafProgress = ({ progress, currentStep, totalSteps }: LeafProgressProps) 
         initial={{ left: 0 }}
         animate={{ left: `${Math.min(progress, 97)}%` }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        style={{ paddingTop: "env(safe-area-inset-top)" }}
       >
         <motion.svg
           width="16"

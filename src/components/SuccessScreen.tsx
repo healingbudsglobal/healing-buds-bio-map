@@ -1,4 +1,4 @@
-import { CheckCircle, Mail, RotateCcw, ExternalLink, Leaf } from "lucide-react";
+import { CheckCircle, Mail, RotateCcw, ExternalLink, Leaf, MessageCircle, Share2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import type { StrainMatch } from "@/lib/strainMatcher";
@@ -10,6 +10,21 @@ interface SuccessScreenProps {
 const SuccessScreen = ({ result }: SuccessScreenProps) => {
   const strain = result?.strain;
 
+  const handleShare = async () => {
+    const text = `I just got matched with ${strain?.name} on Healing Buds! 🌿`;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: "My Strain Match", text, url: window.location.href });
+      } catch {}
+    } else {
+      await navigator.clipboard.writeText(text + " " + window.location.href);
+    }
+  };
+
+  const whatsappUrl = strain
+    ? `https://wa.me/27XXXXXXXXXX?text=${encodeURIComponent(`Hi, I just completed my strain mapping and was matched with ${strain.name}. I'd like to learn more!`)}`
+    : "#";
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -18,6 +33,23 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       className="relative z-10 flex flex-col items-center justify-center px-5 text-center max-w-md w-full"
     >
+      {/* Gold confetti particles */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {[0, 1, 2].map((i) => (
+          <div
+            key={i}
+            className="absolute rounded-full bg-[hsl(var(--brand-gold))]"
+            style={{
+              width: 6,
+              height: 6,
+              left: `${30 + i * 20}%`,
+              animation: `confettiFloat 2.5s ease-out ${i * 0.3}s forwards`,
+              opacity: 0,
+            }}
+          />
+        ))}
+      </div>
+
       {/* Glow */}
       <div className="pointer-events-none absolute">
         <div className="h-48 w-48 rounded-full bg-[hsl(var(--brand-gold))] opacity-[0.06] blur-[80px]" />
@@ -115,7 +147,7 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
             </div>
           </motion.div>
 
-          {/* Shop CTA */}
+          {/* Shop CTA — full width, prominent */}
           <motion.a
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -123,11 +155,35 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
             href={strain.shopUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 group w-full rounded-2xl gradient-accent py-4 font-display font-bold text-white text-base transition-all hover:brightness-110 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
+            className="mt-4 group w-full rounded-2xl gradient-accent py-4 font-display font-bold text-white text-base transition-all hover:brightness-110 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 min-h-[52px]"
           >
             Shop This Strain
             <ExternalLink className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </motion.a>
+
+          {/* WhatsApp + Share row */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            className="mt-3 flex w-full gap-3"
+          >
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 flex items-center justify-center gap-2 rounded-2xl border border-border bg-[hsl(var(--surface-elevated))] py-3 text-sm font-medium text-foreground hover:bg-[hsl(var(--brand-gold)_/_0.08)] transition-all min-h-[48px]"
+            >
+              <MessageCircle className="h-4 w-4 text-[hsl(var(--brand-gold))]" />
+              Chat with Consultant
+            </a>
+            <button
+              onClick={handleShare}
+              className="flex items-center justify-center gap-2 rounded-2xl border border-border bg-[hsl(var(--surface-elevated))] px-4 py-3 text-sm font-medium text-foreground hover:bg-[hsl(var(--brand-gold)_/_0.08)] transition-all min-h-[48px]"
+            >
+              <Share2 className="h-4 w-4 text-[hsl(var(--brand-gold))]" />
+            </button>
+          </motion.div>
         </>
       )}
 
@@ -140,7 +196,7 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
       {/* Back */}
       <button
         onClick={() => window.location.reload()}
-        className="mt-4 inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors"
+        className="mt-4 inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors min-h-[48px]"
       >
         <RotateCcw className="h-3.5 w-3.5" />
         Start Over

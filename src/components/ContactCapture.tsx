@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Shield, User, Phone } from "lucide-react";
+import { ArrowRight, Shield, User, Phone, Lock } from "lucide-react";
 import hbLogoWhite from "@/assets/hb-logo-white-full.png";
 
 interface ContactCaptureProps {
   onSubmit: (name: string, whatsapp: string) => void;
   onSkip: () => void;
+  strainName?: string;
 }
 
-const ContactCapture = ({ onSubmit, onSkip }: ContactCaptureProps) => {
+const ContactCapture = ({ onSubmit, onSkip, strainName }: ContactCaptureProps) => {
   const [name, setName] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [error, setError] = useState("");
@@ -51,16 +52,35 @@ const ContactCapture = ({ onSubmit, onSkip }: ContactCaptureProps) => {
         transition={{ delay: 0.15 }}
         className="font-display text-2xl font-bold tracking-[0.02em] text-foreground sm:text-3xl mb-2"
       >
-        We've Mapped Your <span className="text-[hsl(var(--brand-gold))]">Results</span>
+        Your Clinical Profile Is <span className="text-[hsl(var(--brand-gold))]">Ready</span>
       </motion.h2>
+
+      {/* Blurred strain teaser */}
+      {strainName && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.25 }}
+          className="mb-4 w-full rounded-xl border border-[hsl(var(--brand-gold)_/_0.2)] bg-[hsl(var(--surface-elevated))] p-4 relative overflow-hidden"
+        >
+          <div className="flex items-center justify-center gap-2">
+            <Lock className="h-4 w-4 text-[hsl(var(--brand-gold))]" />
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Your Top Match</span>
+          </div>
+          <p className="mt-2 font-display text-lg font-bold text-foreground blur-[6px] select-none">
+            {strainName}
+          </p>
+          <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--surface-elevated))] via-transparent to-transparent" />
+        </motion.div>
+      )}
 
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}
-        className="mb-8 text-sm text-muted-foreground leading-relaxed max-w-xs"
+        className="mb-6 text-sm text-muted-foreground leading-relaxed max-w-xs"
       >
-        Where should we send your clinical strain profile for future updates?
+        Enter your details to unlock your full strain report and receive future updates.
       </motion.p>
 
       <motion.form
@@ -77,7 +97,7 @@ const ContactCapture = ({ onSubmit, onSkip }: ContactCaptureProps) => {
             placeholder="Your first name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full rounded-2xl border border-border bg-[hsl(var(--surface-elevated))] pl-11 pr-5 py-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[hsl(var(--brand-gold)_/_0.4)] focus:border-[hsl(var(--brand-gold)_/_0.5)] transition-all text-base"
+            className="w-full rounded-2xl border border-border bg-[hsl(var(--surface-elevated))] pl-11 pr-5 py-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[hsl(var(--brand-gold)_/_0.4)] focus:border-[hsl(var(--brand-gold)_/_0.5)] transition-all text-[16px]"
           />
         </div>
 
@@ -88,7 +108,7 @@ const ContactCapture = ({ onSubmit, onSkip }: ContactCaptureProps) => {
             placeholder="WhatsApp number"
             value={whatsapp}
             onChange={(e) => setWhatsapp(e.target.value)}
-            className="w-full rounded-2xl border border-border bg-[hsl(var(--surface-elevated))] pl-11 pr-5 py-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[hsl(var(--brand-gold)_/_0.4)] focus:border-[hsl(var(--brand-gold)_/_0.5)] transition-all text-base"
+            className="w-full rounded-2xl border border-border bg-[hsl(var(--surface-elevated))] pl-11 pr-5 py-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[hsl(var(--brand-gold)_/_0.4)] focus:border-[hsl(var(--brand-gold)_/_0.5)] transition-all text-[16px]"
           />
         </div>
 
@@ -96,16 +116,16 @@ const ContactCapture = ({ onSubmit, onSkip }: ContactCaptureProps) => {
 
         <button
           type="submit"
-          className="group w-full rounded-2xl gradient-accent py-4 font-display font-bold text-white text-base transition-all hover:brightness-110 hover:scale-[1.02] active:scale-[0.98] animate-pulse-glow flex items-center justify-center gap-2"
+          className="group w-full rounded-2xl gradient-accent py-4 font-display font-bold text-white text-base transition-all hover:brightness-110 hover:scale-[1.02] active:scale-[0.98] animate-pulse-glow flex items-center justify-center gap-2 min-h-[52px]"
         >
-          See My Recommendations
+          Unlock My Recommendation
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </button>
 
         <button
           type="button"
           onClick={onSkip}
-          className="text-xs text-muted-foreground hover:text-foreground transition-colors mt-1"
+          className="text-[10px] text-muted-foreground hover:text-foreground transition-colors mt-1"
         >
           Skip for now
         </button>
@@ -116,9 +136,9 @@ const ContactCapture = ({ onSubmit, onSkip }: ContactCaptureProps) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.7 }}
-        className="mt-6 inline-flex items-center gap-2 text-xs text-muted-foreground"
+        className="mt-5 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--brand-gold)_/_0.15)] bg-[hsl(var(--brand-gold)_/_0.04)] px-4 py-2 text-xs text-muted-foreground"
       >
-        <Shield className="h-3.5 w-3.5 text-primary" />
+        <Shield className="h-3.5 w-3.5 text-[hsl(var(--brand-gold))]" />
         <span>POPIA Compliant · Secure medical data</span>
       </motion.div>
     </motion.div>

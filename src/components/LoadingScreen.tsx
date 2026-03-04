@@ -1,7 +1,23 @@
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import hbLogoJar from "@/assets/hb-logo-jar.png";
 
+const STATUS_MESSAGES = [
+  "Analysing your profile…",
+  "Cross-referencing strain database…",
+  "Generating your match…",
+];
+
 const LoadingScreen = () => {
+  const [msgIndex, setMsgIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMsgIndex((i) => (i + 1) % STATUS_MESSAGES.length);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -25,7 +41,7 @@ const LoadingScreen = () => {
         />
         {/* Spinning ring 2 — teal */}
         <div
-          className="absolute inset-1.5 h-[84px] w-[84px] rounded-full border border-[hsl(var(--accent-green)_/_0.3)] border-b-transparent"
+          className="absolute inset-1.5 h-[84px] w-[84px] rounded-full border border-primary/30 border-b-transparent"
           style={{ animation: "spin 2s linear infinite reverse" }}
         />
         {/* Spinning ring 3 */}
@@ -44,12 +60,25 @@ const LoadingScreen = () => {
         </span>
       </div>
 
-      <h2 className="font-display text-2xl font-bold tracking-[0.02em] text-foreground mb-2 text-glow">
-        Calculating Your Profile...
+      <h2 className="font-display text-2xl font-bold tracking-[0.02em] text-foreground mb-3 text-glow">
+        Calculating Your Profile…
       </h2>
-      <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
-        Mapping your responses to our recommended strain database
-      </p>
+
+      {/* Cycling status messages */}
+      <div className="h-6 relative">
+        <AnimatePresence mode="wait">
+          <motion.p
+            key={msgIndex}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.3 }}
+            className="text-sm text-muted-foreground absolute inset-x-0"
+          >
+            {STATUS_MESSAGES[msgIndex]}
+          </motion.p>
+        </AnimatePresence>
+      </div>
 
       {/* Animated dots — gold */}
       <div className="mt-8 flex gap-2">
