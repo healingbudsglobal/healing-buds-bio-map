@@ -3,6 +3,7 @@ import { ArrowRight, Shield, FlaskConical, Microscope } from "lucide-react";
 import { motion } from "framer-motion";
 import { validateEmail } from "@/lib/emailValidation";
 import hbLogoWhite from "@/assets/hb-logo-white-full.png";
+import heroFlower from "@/assets/hero-flower.jpg";
 
 import {
   Select,
@@ -62,7 +63,35 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
       animate="visible"
       className="relative z-10 flex flex-col items-center justify-center px-5 text-center"
     >
-      {/* Ambient green glow backdrop */}
+      {/* Hero flower — cinematic backdrop with heavy blur & vignette */}
+      <motion.div
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5 }}
+      >
+        <motion.img
+          src={heroFlower}
+          alt=""
+          className="absolute top-1/2 left-1/2 w-[140%] max-w-none h-auto min-h-full object-cover"
+          style={{
+            transform: "translate(-50%, -50%)",
+            opacity: 0.12,
+            mixBlendMode: "soft-light",
+            filter: "blur(40px) saturate(1.2)",
+          }}
+          initial={{ scale: 1, x: "-50%", y: "-50%" }}
+          animate={{ scale: 1.05, x: "-50%", y: "-50%" }}
+          transition={{ duration: 20, ease: "linear", repeat: Infinity, repeatType: "reverse" }}
+        />
+        {/* Strong radial vignette */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_55%_45%_at_center,transparent_15%,hsl(180_8%_7%_/_0.8)_65%,hsl(180_8%_7%)_100%)]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[hsl(180_8%_7%)] via-[hsl(180_8%_7%_/_0.4)] to-[hsl(180_8%_7%_/_0.7)]" />
+        {/* Green tint overlay */}
+        <div className="absolute inset-0 bg-[hsl(var(--primary-green)_/_0.2)]" style={{ mixBlendMode: "overlay" }} />
+      </motion.div>
+
+      {/* Ambient green glow */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_40%_30%,hsl(var(--accent-green)_/_0.06)_0%,transparent_60%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_70%,hsl(var(--primary-green)_/_0.08)_0%,transparent_55%)]" />
