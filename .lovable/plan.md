@@ -1,30 +1,49 @@
 
 
-# Auto-Send Matched Strain Email via Make.com Webhook
+# Visual Overhaul — Kill the Dark Circle, Elevate Every Screen
 
-## Approach
-The app already sends data to your Make.com webhook. The simplest and most reliable approach is to **enrich the webhook payload** with all strain details so Make.com can auto-send a branded email with the strain info and shop link. No new backend or email service needed — Make.com handles the email delivery.
+## Problem
+The squeeze screen has a massive 500px circular image (`hero-trichomes.jpg` with `rounded-full`) that looks like a dark, murky blob — not the premium medical-wellness vibe intended. The overall aesthetic is too dark and muddy. The webhook payload enrichment is already complete (effects, flavours, THC, CBD, price, shop URL are all being sent).
 
 ## What Changes
 
-### 1. Enrich webhook payload in `src/pages/Index.tsx`
-Currently the payload sends `matched_strain` (name only) and `compatibility`. Add the full strain profile so Make.com has everything it needs to build the email:
-- `strain_effects` — e.g. "Relaxed, Sleepy, Hungry"
-- `strain_flavours` — e.g. "Berry, Vanilla, Citrus"  
-- `strain_thc` — e.g. "23.0%"
-- `strain_cbd` — e.g. "0.1%"
-- `strain_price` — e.g. "R191.20/g"
-- `strain_shop_url` — e.g. "https://healingbuds.co.za/shop"
+### 1. SqueezeScreen — Replace circle with elegant ambient glow
+**Remove** the `heroTrichomes` circular image entirely. Replace with:
+- Two subtle gradient orbs (gold + teal) positioned behind the content — floating, organic, no hard edges
+- A very faint radial gradient "spotlight" effect centered on the card area for depth
+- Slightly brighter input fields and form area — add a subtle glass card wrapper around the form section for visual containment
+- Result: clean, modern, premium feel without the dark circle
 
-### 2. Make.com Configuration (your side)
-In your Make.com scenario, add a **Gmail/SMTP/SendGrid module** after the webhook trigger that:
-- Sends to the captured `email`
-- Subject: "Your Personalised Strain Match — {strain_name}"
-- Body uses the enriched payload fields to build a branded email with strain details + CTA linking to `strain_shop_url`
+### 2. SurveyFlow — Warmer glass card
+- The `glass-card-elevated` background is too dark (`hsl(175 6% 11% / 0.75)`). Lighten to `hsl(175 6% 14% / 0.8)` with a stronger border
+- Add a subtle gold gradient line at the top of the question card for premium feel
+- Option tiles: increase border contrast slightly so they don't merge into the background
+
+### 3. ContactCapture — More visual depth
+- Add the same ambient glow orbs as the squeeze screen for consistency
+- The blurred strain teaser card needs more contrast — brighter border, slightly lighter background
+- Add a faint decorative ring/circle behind the lock icon for visual interest
+
+### 4. LoadingScreen — Brighter, more alive
+- The spinning rings are hard to see. Increase the gold ring's border width and opacity
+- Add a very subtle radial glow behind the spinner to make it pop
+- Status text slightly brighter
+
+### 5. SuccessScreen — Polish
+- Already has good structure but ensure the strain card has enough contrast against the dark background
+- The confetti particles are invisible (they reference `--brand-gold` but are tiny). Make them slightly larger and add a second wave
+
+### 6. Global CSS — Lift the darkness
+- `--muted-foreground` is too dim (`165 10% 55%`) — raise to `165 10% 62%` so body text is more readable
+- `--surface-elevated` from `175 6% 13%` → `175 6% 15%` for more visible cards
+- Add a new `.ambient-glow` utility class for the floating orb effect reused across screens
+- `--gradient-hero` background: add a subtle warm shift so the background isn't pure cold charcoal
 
 ## Files Modified
-- `src/pages/Index.tsx` — add strain details to webhook payload (6 new fields)
-
-## Note
-The email template design and sending is handled in Make.com, not in the app code. This keeps things simple and lets you customize the email template visually in Make.com's editor without code changes.
+- `src/components/SqueezeScreen.tsx` — remove circle image, add ambient orbs + glass card wrapper
+- `src/components/SurveyFlow.tsx` — warmer card, brighter option borders
+- `src/components/ContactCapture.tsx` — add ambient orbs, brighter teaser card
+- `src/components/LoadingScreen.tsx` — brighter spinner, glow behind it
+- `src/components/SuccessScreen.tsx` — minor contrast improvements
+- `src/index.css` — lighten muted-foreground, surface-elevated, add ambient-glow utility, warm hero gradient
 
