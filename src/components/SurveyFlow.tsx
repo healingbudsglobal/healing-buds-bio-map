@@ -20,8 +20,8 @@ const SECTION_META: Record<string, { emoji: string; subtitle: string }> = {
 
 // Color mapping for icon backgrounds based on option intent
 const getIconColor = (_questionId: string, optionLabel: string): string => {
-  const calmOptions = ["Relaxed & Stress-Free", "Deep Sleep & Sedation", "Heavy body sensations", "Pain management", "Anxiety/Stress relief", "Solo relaxation/Bedtime", "Evening/Nighttime", "Strictly at home", "I sometimes feel anxious", "I prefer a balanced 1:1 ratio", "Floral/Lavender", "Muscle recovery & inflammation", "Very important", "Brain fog", "Daytime sleepiness"];
-  const activeOptions = ["Energized & Productive", "Creative & Inspired", "Light head change", "Increased focus/energy", "Socializing with friends", "Creative work or hobbies", "Physical exercise/Yoga", "Morning/Daytime", "On-the-go/Social", "I enjoy it; no negative effects", "Citrus/Zesty", "Cognitive enhancement", "Seasoned", "Intense/Heavy"];
+  const calmOptions = ["Relaxed & Stress-Free", "Deep Sleep & Sedation", "Heavy body sensations", "Full-body immersion", "Gentle body relaxation", "Pain management", "Anxiety/Stress relief", "Sleep aid", "Social anxiety relief", "Relaxing alone", "Meditation/Yoga", "Evening", "Night", "Quiet/private space", "I sometimes feel anxious/paranoid", "I am very sensitive (can feel 2.5mg)", "I prefer CBD-dominant or 1:1 ratios", "Sweet/Floral (Linalool)", "Yes - chronic pain/inflammation", "Yes - general aches", "Very important - low odor preferred", "Paranoia/Anxiety", "Sleepiness", "Memory fog"];
+  const activeOptions = ["Energized & Productive", "Creative & Inspired", "Focused & Clear", "Social & Talkative", "Light head change only", "Focus/ADHD support", "Creativity boost", "Work/Study", "Creative projects", "Physical activity", "Socializing with friends", "Morning", "Afternoon", "Social setting", "Outdoors/nature", "Active/busy environment", "I need higher doses for effects", "Citrus/Zesty (Limonene)", "Pine/Fresh (Pinene)", "Gassy/Diesel", "Yes - post-workout recovery", "Daily consumer", "Experienced (few times a week)", "Maximum intensity", "Strong pronounced effect", "Racing thoughts"];
   if (calmOptions.includes(optionLabel)) return "bg-[hsl(var(--deep-teal)_/_0.2)] text-[hsl(var(--deep-teal))]";
   if (activeOptions.includes(optionLabel)) return "bg-[hsl(var(--accent-green)_/_0.15)] text-[hsl(var(--accent-green))]";
   return "bg-[hsl(var(--primary)_/_0.12)] text-primary";
@@ -31,11 +31,13 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [multiSelected, setMultiSelected] = useState<Set<string>>(new Set());
   const [direction, setDirection] = useState(1);
   const [showSectionCard, setShowSectionCard] = useState(false);
   const [pendingSectionName, setPendingSectionName] = useState("");
 
   const question = surveyQuestions[currentIndex];
+  const isMulti = question.type === "multi";
   const progress = ((currentIndex) / surveyQuestions.length) * 100;
 
   // Compute which indices are the first question of a new section
@@ -51,7 +53,47 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
     return starts;
   }, []);
 
+  const advanceToNext = (newAnswers: Record<string, string>) => {
+    if (currentIndex < surveyQuestions.length - 1) {
+      const nextIndex = currentIndex + 1;
+      const nextQuestion = surveyQuestions[nextIndex];
+      if (sectionStartIndices.has(nextIndex) && nextQuestion.section !== question.section) {
+        setPendingSectionName(nextQuestion.section);
+        setShowSectionCard(true);
+        setTimeout(() => {
+          setShowSectionCard(false);
+          setCurrentIndex(nextIndex);
+          setMultiSelected(new Set());
+        }, 1600);
+      } else {
+        setCurrentIndex(nextIndex);
+        setMultiSelected(new Set());
+      }
+    } else {
+      onComplete(newAnswers);
+    }
+  };
+
   const handleSelect = (optionLabel: string) => {
+    if (isMulti) {
+      // Toggle multi-select
+      setMultiSelected((prev) => {
+        const next = new Set(prev);
+        if (optionLabel === "None of these") {
+          return next.has("None of these") ? new Set() : new Set(["None of these"]);
+        }
+        next.delete("None of these");
+        if (next.has(optionLabel)) {
+          next.delete(optionLabel);
+        } else {
+          next.add(optionLabel);
+        }
+        return next;
+      });
+      return;
+    }
+
+    // Single select — auto-advance
     setSelectedOption(optionLabel);
     const newAnswers = { ...answers, [question.id]: optionLabel };
     setAnswers(newAnswers);
@@ -59,29 +101,22 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
     setTimeout(() => {
       setSelectedOption(null);
       setDirection(1);
-      if (currentIndex < surveyQuestions.length - 1) {
-        const nextIndex = currentIndex + 1;
-        const nextQuestion = surveyQuestions[nextIndex];
-        // Show section title card when entering a new section
-        if (sectionStartIndices.has(nextIndex) && nextQuestion.section !== question.section) {
-          setPendingSectionName(nextQuestion.section);
-          setShowSectionCard(true);
-          setTimeout(() => {
-            setShowSectionCard(false);
-            setCurrentIndex(nextIndex);
-          }, 1600);
-        } else {
-          setCurrentIndex(nextIndex);
-        }
-      } else {
-        onComplete(newAnswers);
-      }
+      advanceToNext(newAnswers);
     }, 300);
+  };
+
+  const handleMultiContinue = () => {
+    const value = Array.from(multiSelected).join(", ");
+    const newAnswers = { ...answers, [question.id]: value };
+    setAnswers(newAnswers);
+    setDirection(1);
+    advanceToNext(newAnswers);
   };
 
   const handleBack = () => {
     if (currentIndex > 0) {
       setDirection(-1);
+      setMultiSelected(new Set());
       setCurrentIndex(currentIndex - 1);
     }
   };
@@ -227,7 +262,9 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
 
               <div className="flex flex-col gap-2.5">
                 {question.options.map((option, i) => {
-                  const isSelected = selectedOption === option.label;
+                  const isSelected = isMulti
+                    ? multiSelected.has(option.label)
+                    : selectedOption === option.label;
                   const iconColorClass = getIconColor(question.id, option.label);
                   return (
                     <motion.button
@@ -272,6 +309,20 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
                   );
                 })}
               </div>
+
+              {/* Multi-select continue button */}
+              {isMulti && (
+                <motion.button
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  onClick={handleMultiContinue}
+                  disabled={multiSelected.size === 0}
+                  className="mt-5 w-full rounded-xl bg-[hsl(var(--accent-green))] py-3.5 text-base font-bold text-background transition-all hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  Continue
+                </motion.button>
+              )}
             </div>
           </motion.div>
         </AnimatePresence>
