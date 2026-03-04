@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Shield, FlaskConical, FileCheck, ArrowRight, Sparkles } from "lucide-react";
+import { validateEmail } from "@/lib/emailValidation";
 import hbLogoWhite from "@/assets/hb-logo-white-full.png";
 import {
   Select,
@@ -35,8 +36,9 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = email.trim();
-    if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
-      setError("Please enter a valid email address");
+    const validation = validateEmail(trimmed);
+    if (!validation.valid) {
+      setError(validation.error || "Please enter a valid email address");
       return;
     }
     if (!province) {
