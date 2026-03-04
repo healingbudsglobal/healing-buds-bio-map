@@ -126,8 +126,10 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
             animate="center"
             exit="exit"
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="glass-card-elevated rounded-2xl p-6 sm:p-8"
+            className="glass-card-elevated rounded-2xl p-6 sm:p-8 relative overflow-hidden"
           >
+            {/* Gold accent line at top */}
+            <div className="absolute top-0 left-0 right-0 h-[2px] gradient-accent opacity-60" />
             <h2 className="font-display text-xl font-bold tracking-[0.02em] text-foreground sm:text-2xl mb-1">
               {question.question}
             </h2>
@@ -149,7 +151,7 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
                     className={`group w-full rounded-xl border px-4 py-3.5 text-left text-sm font-medium text-foreground transition-all duration-200 sm:text-base active:scale-[0.97] min-h-[52px] ${
                       isSelected
                         ? 'border-[hsl(var(--brand-gold))] bg-[hsl(var(--brand-gold)_/_0.1)] scale-[1.02] shadow-[var(--shadow-glow-gold)]'
-                        : 'border-border bg-[hsl(var(--surface))] hover:border-[hsl(var(--brand-gold)_/_0.5)] hover:bg-[hsl(var(--brand-gold)_/_0.06)] hover:scale-[1.01]'
+                        : 'border-[hsl(170_8%_25%)] bg-[hsl(var(--surface))] hover:border-[hsl(var(--brand-gold)_/_0.5)] hover:bg-[hsl(var(--brand-gold)_/_0.06)] hover:scale-[1.01]'
                     }`}
                   >
                     <span className="flex items-center gap-3">

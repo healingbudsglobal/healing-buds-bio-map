@@ -41,10 +41,8 @@ const ContactCapture = ({ onSubmit, onSkip, strainName }: ContactCaptureProps) =
         <img src={hbLogoWhite} alt="Healing Buds" className="h-10 w-auto" />
       </div>
 
-      {/* Glow */}
-      <div className="pointer-events-none absolute">
-        <div className="h-48 w-48 rounded-full bg-[hsl(var(--brand-gold))] opacity-[0.06] blur-[80px]" />
-      </div>
+      {/* Ambient glow orbs */}
+      <div className="ambient-glow" />
 
       <motion.h2
         initial={{ opacity: 0, y: 8 }}
@@ -61,10 +59,13 @@ const ContactCapture = ({ onSubmit, onSkip, strainName }: ContactCaptureProps) =
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.25 }}
-          className="mb-4 w-full rounded-xl border border-[hsl(var(--brand-gold)_/_0.2)] bg-[hsl(var(--surface-elevated))] p-4 relative overflow-hidden"
+          className="mb-4 w-full rounded-xl border border-[hsl(var(--brand-gold)_/_0.3)] bg-[hsl(175_6%_16%)] p-4 relative overflow-hidden"
         >
           <div className="flex items-center justify-center gap-2">
-            <Lock className="h-4 w-4 text-[hsl(var(--brand-gold))]" />
+            <div className="relative">
+              <div className="absolute inset-0 h-8 w-8 rounded-full border border-[hsl(var(--brand-gold)_/_0.15)] scale-150" />
+              <Lock className="h-4 w-4 text-[hsl(var(--brand-gold))] relative z-10" />
+            </div>
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Your Top Match</span>
           </div>
           <p className="mt-2 font-display text-lg font-bold text-foreground blur-[6px] select-none">

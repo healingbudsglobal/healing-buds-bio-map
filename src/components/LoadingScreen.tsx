@@ -26,17 +26,17 @@ const LoadingScreen = () => {
       transition={{ duration: 0.4 }}
       className="relative z-10 flex flex-col items-center justify-center px-6 text-center"
     >
-      {/* Glow orb */}
+      {/* Radial glow behind spinner */}
       <div className="pointer-events-none absolute">
-        <div className="h-48 w-48 rounded-full bg-[hsl(var(--brand-gold))] opacity-[0.06] blur-[80px]" />
+        <div className="h-56 w-56 rounded-full bg-[hsl(var(--brand-gold))] opacity-[0.09] blur-[80px]" />
       </div>
 
       <div className="relative mb-8">
         {/* Outer ring */}
         <div className="h-24 w-24 rounded-full border border-border" />
-        {/* Spinning ring 1 — gold */}
+        {/* Spinning ring 1 — gold, thicker */}
         <div
-          className="absolute inset-0 h-24 w-24 rounded-full border-2 border-[hsl(var(--brand-gold))] border-t-transparent"
+          className="absolute inset-0 h-24 w-24 rounded-full border-[3px] border-[hsl(var(--brand-gold)_/_0.8)] border-t-transparent"
           style={{ animation: "spin 1.2s linear infinite" }}
         />
         {/* Spinning ring 2 — teal */}
