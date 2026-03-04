@@ -231,6 +231,15 @@
     filter: blur(80px);
     animation: orbFloat 15s ease-in-out infinite reverse;
   }
+
+  .flower-vignette {
+    mask-image: radial-gradient(ellipse 70% 60% at center, black 30%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at center, black 30%, transparent 80%);
+  }
+
+  .flower-glow {
+    box-shadow: 0 0 60px -15px hsl(330 40% 30% / 0.2), 0 0 40px -10px hsl(164 48% 53% / 0.15);
+  }
 }
 
 @keyframes pulseGlow {

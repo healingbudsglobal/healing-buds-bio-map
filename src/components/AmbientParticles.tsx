@@ -22,6 +22,8 @@ const AmbientParticles = () => {
       <div className="absolute bottom-[15%] right-[10%] h-[400px] w-[400px] rounded-full bg-[hsl(var(--primary)_/_0.05)] blur-[100px]" style={{ animation: "orbFloat 20s ease-in-out infinite reverse" }} />
       <div className="absolute top-[60%] left-[60%] h-[300px] w-[300px] rounded-full bg-[hsl(var(--lime-green)_/_0.03)] blur-[80px]" style={{ animation: "orbFloat 25s ease-in-out infinite" }} />
       <div className="absolute top-[30%] right-[30%] h-[350px] w-[350px] rounded-full bg-[hsl(var(--deep-teal)_/_0.04)] blur-[100px]" style={{ animation: "orbFloat 18s ease-in-out infinite" }} />
+      {/* Warm purple/magenta glow to complement hero flower */}
+      <div className="absolute top-[45%] left-[35%] h-[400px] w-[400px] rounded-full bg-[hsl(330_40%_30%_/_0.035)] blur-[120px]" style={{ animation: "orbFloat 22s ease-in-out infinite reverse" }} />
 
       {particles.map((p) => (
         <motion.div

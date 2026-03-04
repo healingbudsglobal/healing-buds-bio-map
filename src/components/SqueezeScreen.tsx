@@ -3,6 +3,7 @@ import { ArrowRight, Shield, FlaskConical, Microscope } from "lucide-react";
 import { motion } from "framer-motion";
 import { validateEmail } from "@/lib/emailValidation";
 import hbLogoWhite from "@/assets/hb-logo-white-full.png";
+import heroFlower from "@/assets/hero-flower.jpg";
 import BotanicalAccent from "@/components/BotanicalAccent";
 import {
   Select,
@@ -63,6 +64,16 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
       animate="visible"
       className="relative z-10 flex flex-col items-center justify-center px-5 text-center"
     >
+      {/* Hero flower backdrop — blurred, masked, cinematic */}
+      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[55%] w-[600px] h-[600px] sm:w-[700px] sm:h-[700px]">
+        <img
+          src={heroFlower}
+          alt=""
+          className="w-full h-full object-cover flower-vignette scale-110 opacity-[0.12]"
+          style={{ mixBlendMode: "luminosity", filter: "blur(8px) saturate(1.4)" }}
+        />
+      </div>
+
       {/* Botanical hero illustration */}
       <BotanicalAccent variant="hero" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%]" />
 

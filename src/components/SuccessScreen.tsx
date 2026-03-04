@@ -94,9 +94,14 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
             variants={itemVariants}
             className="mt-4 w-full rounded-2xl border border-[hsl(170_8%_25%)] bg-[hsl(175_6%_16%)] text-left shadow-elegant relative overflow-hidden"
           >
-            {/* Strain bud image */}
+            {/* Strain bud image — cinematic hero */}
             {strain.imageUrl && (
-              <div className="relative h-44 w-full overflow-hidden rounded-t-2xl">
+              <motion.div
+                className="relative h-56 w-full overflow-hidden rounded-t-2xl"
+                initial={{ scale: 1.1 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              >
                 <img
                   src={strain.imageUrl}
                   alt={`${strain.name} cannabis bud`}
@@ -104,9 +109,11 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
                 />
                 {/* Strain type colored overlay */}
                 <div className={`absolute inset-0 bg-gradient-to-t ${strainTypeConfig[strain.type].overlay} to-transparent opacity-40`} />
+                {/* Cinematic vignette */}
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,hsl(175_6%_16%_/_0.7)_100%)]" />
                 {/* Bottom fade into card */}
-                <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[hsl(175_6%_16%)] to-transparent" />
-              </div>
+                <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[hsl(175_6%_16%)] to-transparent" />
+              </motion.div>
             )}
 
             <div className="p-5 relative">

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Shield, User, Phone, Lock } from "lucide-react";
 import hbLogoWhite from "@/assets/hb-logo-white-full.png";
+import heroFlower from "@/assets/hero-flower.jpg";
 
 interface ContactCaptureProps {
   onSubmit: (name: string, whatsapp: string) => void;
@@ -63,6 +64,13 @@ const ContactCapture = ({ onSubmit, onSkip, strainName, userEmail }: ContactCapt
           variants={itemVariants}
           className="mb-4 w-full rounded-xl border border-[hsl(var(--accent-green)_/_0.3)] bg-[hsl(175_6%_16%)] p-4 relative overflow-hidden"
         >
+          {/* Blurred flower teaser behind locked strain */}
+          <img
+            src={heroFlower}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover opacity-[0.06]"
+            style={{ filter: "blur(20px)", mixBlendMode: "luminosity" }}
+          />
           <div className="flex items-center justify-center gap-2">
             <motion.div
               className="relative"
