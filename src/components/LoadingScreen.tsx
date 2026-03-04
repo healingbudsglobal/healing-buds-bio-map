@@ -38,11 +38,11 @@ const LoadingScreen = () => {
       </div>
 
       <h2 className="font-display text-2xl font-bold tracking-[0.02em] text-foreground mb-2 text-glow">
-        Analyzing Your Biological Profile...
-      </h2>
-      <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
-        Cross-referencing your bio-profile with our lab-tested strain inventory
-      </p>
+      Finding Your Match...
+    </h2>
+    <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
+      Matching your profile to our strains
+    </p>
 
       {/* Animated dots — gold */}
       <div className="mt-8 flex gap-2">

@@ -1,5 +1,4 @@
 import { CheckCircle, Mail, RotateCcw, ExternalLink, Leaf } from "lucide-react";
-import hbLogoWhite from "@/assets/hb-logo-white-full.png";
 import { Badge } from "@/components/ui/badge";
 import type { StrainMatch } from "@/lib/strainMatcher";
 
@@ -11,7 +10,7 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
   const strain = result?.strain;
 
   return (
-    <div className="animate-scale-in relative z-10 flex flex-col items-center justify-center px-6 text-center max-w-md w-full">
+    <div className="animate-scale-in relative z-10 flex flex-col items-center justify-center px-5 text-center max-w-md w-full">
       {/* Glow */}
       <div className="pointer-events-none absolute">
         <div className="h-48 w-48 rounded-full bg-[hsl(var(--brand-gold))] opacity-[0.06] blur-[80px]" />
@@ -19,7 +18,6 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
 
       {/* Success icon */}
       <div className="relative mb-6">
-        <div className="absolute inset-0 h-20 w-20 rounded-full bg-[hsl(var(--brand-gold)_/_0.08)]" style={{ animation: 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite' }} />
         <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-[hsl(var(--brand-gold)_/_0.1)] border border-[hsl(var(--brand-gold)_/_0.25)] shadow-[var(--shadow-glow-gold)]">
           <CheckCircle className="h-10 w-10 text-[hsl(var(--brand-gold))]" />
         </div>
@@ -64,9 +62,6 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
               <div className="rounded-lg border border-border bg-[hsl(var(--surface))] px-3 py-1.5 text-xs">
                 <span className="text-muted-foreground">CBD </span>
                 <span className="font-bold text-foreground">{strain.cbd}%</span>
-              </div>
-              <div className="rounded-lg border border-border bg-[hsl(var(--surface))] px-3 py-1.5 text-xs">
-                <span className="text-muted-foreground">{strain.price}</span>
               </div>
             </div>
 
@@ -130,14 +125,6 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
         <RotateCcw className="h-3.5 w-3.5" />
         Start Over
       </button>
-
-      {/* Brand footer */}
-      <div className="mt-8 flex flex-col items-center gap-2">
-        <img src={hbLogoWhite} alt="Healing Buds" className="h-7 w-auto opacity-50" />
-        <span className="text-[10px] text-muted-foreground tracking-[0.15em] uppercase">
-          Precision Strain Match™
-        </span>
-      </div>
     </div>
   );
 };
