@@ -1,16 +1,29 @@
 import { useState, useCallback } from "react";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import SqueezeScreen from "@/components/SqueezeScreen";
 import SurveyFlow from "@/components/SurveyFlow";
 import ContactCapture from "@/components/ContactCapture";
 import LoadingScreen from "@/components/LoadingScreen";
 import SuccessScreen from "@/components/SuccessScreen";
+import AmbientParticles from "@/components/AmbientParticles";
 import { surveyQuestions } from "@/data/surveyQuestions";
 import { matchStrain, type StrainMatch } from "@/lib/strainMatcher";
 
 type Screen = "squeeze" | "survey" | "contact" | "loading" | "success";
 
 const WEBHOOK_URL = "https://hook.eu1.make.com/70z505ty60nkksvtl6l6r1yzj4cs58tb";
+
+// Cinematic screen transition variants
+const screenVariants = {
+  initial: { opacity: 0, y: 40, scale: 0.97, filter: "blur(6px)" },
+  animate: { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" },
+  exit: { opacity: 0, y: -30, scale: 1.02, filter: "blur(4px)" },
+};
+
+const screenTransition = {
+  duration: 0.6,
+  ease: [0.16, 1, 0.3, 1] as const,
+};
 
 const Index = () => {
   const [screen, setScreen] = useState<Screen>("squeeze");
@@ -85,21 +98,33 @@ const Index = () => {
   }, [sendWebhook]);
 
   return (
-    <div className="leaf-pattern flex min-h-[100dvh] items-center justify-center pb-[env(safe-area-inset-bottom)]">
+    <div className="leaf-pattern relative flex min-h-[100dvh] items-center justify-center overflow-hidden pb-[env(safe-area-inset-bottom)]">
+      {/* Persistent ambient particles across all screens */}
+      <AmbientParticles />
+
       <AnimatePresence mode="wait">
-        {screen === "squeeze" && <SqueezeScreen key="squeeze" onSubmit={handleEmailSubmit} />}
-        {screen === "survey" && <SurveyFlow key="survey" onComplete={handleSurveyComplete} />}
-        {screen === "contact" && (
-          <ContactCapture
-            key="contact"
-            onSubmit={handleContactSubmit}
-            onSkip={handleContactSkip}
-            strainName={strainResult?.strain.name}
-            userEmail={email}
-          />
-        )}
-        {screen === "loading" && <LoadingScreen key="loading" />}
-        {screen === "success" && <SuccessScreen key="success" result={strainResult} />}
+        <motion.div
+          key={screen}
+          variants={screenVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          transition={screenTransition}
+          className="flex w-full items-center justify-center"
+        >
+          {screen === "squeeze" && <SqueezeScreen onSubmit={handleEmailSubmit} />}
+          {screen === "survey" && <SurveyFlow onComplete={handleSurveyComplete} />}
+          {screen === "contact" && (
+            <ContactCapture
+              onSubmit={handleContactSubmit}
+              onSkip={handleContactSkip}
+              strainName={strainResult?.strain.name}
+              userEmail={email}
+            />
+          )}
+          {screen === "loading" && <LoadingScreen />}
+          {screen === "success" && <SuccessScreen result={strainResult} />}
+        </motion.div>
       </AnimatePresence>
     </div>
   );
