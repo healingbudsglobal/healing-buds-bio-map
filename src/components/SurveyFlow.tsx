@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { surveyQuestions } from "@/data/surveyQuestions";
 import { ChevronLeft } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -6,31 +6,50 @@ import { icons } from "lucide-react";
 import hbLogoWhite from "@/assets/hb-logo-white-full.png";
 import LeafProgress from "@/components/LeafProgress";
 
-
 interface SurveyFlowProps {
   onComplete: (answers: Record<string, string>) => void;
 }
 
+// Section metadata for title cards
+const SECTION_META: Record<string, { emoji: string; subtitle: string }> = {
+  "Experience & Tolerance": { emoji: "🧬", subtitle: "Let's calibrate your baseline" },
+  "The Desired State": { emoji: "🎯", subtitle: "Mapping your ideal high" },
+  "Biological Sensitivities": { emoji: "🛡️", subtitle: "Safety & flavour profiling" },
+  "Advanced Synergy": { emoji: "⚡", subtitle: "Fine-tuning your match" },
+};
+
 // Color mapping for icon backgrounds based on option intent
 const getIconColor = (_questionId: string, optionLabel: string): string => {
-  const calmOptions = ["Relaxation", "Sleep Support", "Night", "Sedation", "Stressed", "Sore", "Heavy & Sedated", "Warm & Relaxed", "Chronic Pain", "Insomnia", "Solo"];
-  const activeOptions = ["Creativity & Focus", "Morning", "Functional", "Euphoric", "Adventurous", "Bored", "Light & Functional", "Social", "Daily"];
+  const calmOptions = ["Relaxed & Stress-Free", "Deep Sleep & Sedation", "Heavy body sensations", "Pain management", "Anxiety/Stress relief", "Solo relaxation/Bedtime", "Evening/Nighttime", "Strictly at home", "I sometimes feel anxious", "I prefer a balanced 1:1 ratio", "Floral/Lavender", "Muscle recovery & inflammation", "Very important", "Brain fog", "Daytime sleepiness"];
+  const activeOptions = ["Energized & Productive", "Creative & Inspired", "Light head change", "Increased focus/energy", "Socializing with friends", "Creative work or hobbies", "Physical exercise/Yoga", "Morning/Daytime", "On-the-go/Social", "I enjoy it; no negative effects", "Citrus/Zesty", "Cognitive enhancement", "Seasoned", "Intense/Heavy"];
   if (calmOptions.includes(optionLabel)) return "bg-[hsl(var(--deep-teal)_/_0.2)] text-[hsl(var(--deep-teal))]";
   if (activeOptions.includes(optionLabel)) return "bg-[hsl(var(--accent-green)_/_0.15)] text-[hsl(var(--accent-green))]";
   return "bg-[hsl(var(--primary)_/_0.12)] text-primary";
 };
-
-const MIDPOINT = Math.floor(surveyQuestions.length / 2);
 
 const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [direction, setDirection] = useState(1);
-  const [showMotivation, setShowMotivation] = useState(false);
+  const [showSectionCard, setShowSectionCard] = useState(false);
+  const [pendingSectionName, setPendingSectionName] = useState("");
 
   const question = surveyQuestions[currentIndex];
   const progress = ((currentIndex) / surveyQuestions.length) * 100;
+
+  // Compute which indices are the first question of a new section
+  const sectionStartIndices = useMemo(() => {
+    const starts = new Set<number>();
+    let lastSection = "";
+    surveyQuestions.forEach((q, i) => {
+      if (q.section !== lastSection) {
+        starts.add(i);
+        lastSection = q.section;
+      }
+    });
+    return starts;
+  }, []);
 
   const handleSelect = (optionLabel: string) => {
     setSelectedOption(optionLabel);
@@ -42,12 +61,15 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
       setDirection(1);
       if (currentIndex < surveyQuestions.length - 1) {
         const nextIndex = currentIndex + 1;
-        if (currentIndex === MIDPOINT - 1) {
-          setShowMotivation(true);
+        const nextQuestion = surveyQuestions[nextIndex];
+        // Show section title card when entering a new section
+        if (sectionStartIndices.has(nextIndex) && nextQuestion.section !== question.section) {
+          setPendingSectionName(nextQuestion.section);
+          setShowSectionCard(true);
           setTimeout(() => {
-            setShowMotivation(false);
+            setShowSectionCard(false);
             setCurrentIndex(nextIndex);
-          }, 1400);
+          }, 1600);
         } else {
           setCurrentIndex(nextIndex);
         }
@@ -97,6 +119,8 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
     }),
   };
 
+  const sectionMeta = SECTION_META[pendingSectionName] || { emoji: "🌿", subtitle: "" };
+
   return (
     <div className="relative z-10 flex w-full max-w-lg flex-col px-5" style={{ perspective: "1200px" }}>
       <LeafProgress
@@ -123,9 +147,9 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
         </motion.span>
       </div>
 
-      {/* Motivational midpoint flash */}
+      {/* Section title card */}
       <AnimatePresence>
-        {showMotivation && (
+        {showSectionCard && (
           <motion.div
             initial={{ opacity: 0, scale: 0.85, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -140,19 +164,19 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
                 transition={{ delay: 0.15, type: "spring", stiffness: 300, damping: 15 }}
                 className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[hsl(var(--accent-green)_/_0.12)] border border-[hsl(var(--accent-green)_/_0.25)]"
               >
-                <span className="text-2xl">🌿</span>
+                <span className="text-2xl">{sectionMeta.emoji}</span>
               </motion.div>
               <p className="font-display text-xl font-bold text-[hsl(var(--accent-green))]">
-                Halfway there!
+                {pendingSectionName}
               </p>
-              <p className="mt-1.5 text-sm text-muted-foreground">Your profile is taking shape</p>
+              <p className="mt-1.5 text-sm text-muted-foreground">{sectionMeta.subtitle}</p>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Question card */}
-      {!showMotivation && (
+      {!showSectionCard && (
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={question.id}
@@ -166,13 +190,10 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
           >
             {/* Card with layered depth */}
             <div className="relative glass-card-elevated rounded-2xl p-6 sm:p-8">
-              {/* Botanical accent in corner */}
-              
-
               {/* Green-to-gold accent line at top */}
               <div className="absolute top-0 left-0 right-0 h-[2px] opacity-60" style={{ background: 'linear-gradient(90deg, hsl(var(--accent-green)), hsl(var(--brand-gold)))' }} />
 
-              {/* Question number pill */}
+              {/* Section + question number pill */}
               <motion.div
                 initial={{ opacity: 0, x: -12 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -181,7 +202,7 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--accent-green))] animate-pulse" />
                 <span className="text-[10px] font-semibold uppercase tracking-wider text-[hsl(var(--accent-green))]">
-                  Question {currentIndex + 1}
+                  {question.section} · Q{currentIndex + 1}
                 </span>
               </motion.div>
 
@@ -257,7 +278,7 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
       )}
 
       {/* Back button — thumb zone */}
-      {currentIndex > 0 && !showMotivation && (
+      {currentIndex > 0 && !showSectionCard && (
         <motion.button
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}

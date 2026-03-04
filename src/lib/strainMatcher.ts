@@ -7,102 +7,89 @@ export interface StrainMatch {
 }
 
 /**
- * Weighted strain matching engine.
+ * Weighted strain matching engine — Precision Bio-Mapping v2.
  * Maps 15 survey answers to strain attributes and returns the best match.
- * q4 (method) and q14 (discretion) are informational only — no scoring.
+ * Informational only (no scoring): consumption_format, discretion, recovery_support, effects_avoid.
  */
 export function matchStrain(answers: Record<string, string>): StrainMatch {
   const availableStrains = strains.filter((s) => s.available);
   const scored = availableStrains.map((strain) => {
     let score = 0;
 
-    // === HIGH WEIGHT (3 pts each) ===
+    // ═══ HIGH WEIGHT (3 pts each) ═══
 
-    // Q1: Primary goal
-    const goal = answers.q1;
-    if (goal === "Relaxation" && strain.effects.includes("Relaxed")) score += 3;
-    if (goal === "Pain Relief" && (strain.effects.includes("Relaxed") || strain.cbd > 0)) score += 3;
-    if ((goal === "Creativity/Focus" || goal === "Creativity & Focus") && (strain.effects.includes("Focused") || strain.effects.includes("Euphoric") || strain.effects.includes("Uplifted"))) score += 3;
-    if (goal === "Sleep Support" && strain.effects.includes("Sleepy")) score += 3;
+    // primary_vibe — single biggest factor
+    const vibe = answers.primary_vibe;
+    if (vibe === "Energized & Productive" && (strain.effects.includes("Energetic") || strain.effects.includes("Focused") || strain.effects.includes("Uplifted"))) score += 3;
+    if (vibe === "Relaxed & Stress-Free" && strain.effects.includes("Relaxed")) score += 3;
+    if (vibe === "Creative & Inspired" && (strain.effects.includes("Euphoric") || strain.effects.includes("Giggly") || strain.effects.includes("Uplifted"))) score += 3;
+    if (vibe === "Deep Sleep & Sedation" && strain.effects.includes("Sleepy")) score += 3;
 
-    // Q5: Head effect
-    const head = answers.q5;
-    if (head === "Functional" && strain.effects.includes("Focused")) score += 3;
-    if (head === "Euphoric" && (strain.effects.includes("Euphoric") || strain.effects.includes("Giggly") || strain.effects.includes("Happy"))) score += 3;
-    if (head === "Deep" && strain.effects.includes("Relaxed") && strain.thc >= 22) score += 3;
-    if (head === "Sedation" && strain.effects.includes("Sleepy")) score += 3;
+    // body_impact
+    const body = answers.body_impact;
+    if (body === "Heavy body sensations" && (strain.effects.includes("Sleepy") || strain.effects.includes("Relaxed")) && strain.type === "indica") score += 3;
+    if (body === "Light head change" && (strain.effects.includes("Focused") || strain.effects.includes("Euphoric") || strain.effects.includes("Uplifted"))) score += 3;
+    if (body === "Balanced physical and mental" && strain.type === "hybrid") score += 3;
 
-    // Q7: Flavour profile
-    const flav = answers.q7;
-    if ((flav === "Earthy/Pine" || flav === "Earthy / Pine") && strain.flavours.some((f) => ["Earthy", "Pine", "Herbal", "Nutty", "Spicy"].includes(f))) score += 3;
-    if ((flav === "Sweet/Fruity" || flav === "Sweet / Fruity") && strain.flavours.some((f) => ["Berry", "Fruit", "Candy", "Grape", "Tropical", "Pear", "Pineapple", "Vanilla", "Floral", "Creamy"].includes(f))) score += 3;
-    if ((flav === "Diesel/Gas" || flav === "Diesel / Gas") && strain.flavours.some((f) => ["Diesel", "Spicy"].includes(f))) score += 3;
-    if (flav === "Citrus" && strain.flavours.some((f) => ["Citrus", "Pineapple", "Tropical"].includes(f))) score += 3;
+    // terpene_pref — flavour mapping
+    const terp = answers.terpene_pref;
+    if (terp === "Citrus/Zesty" && strain.flavours.some((f) => ["Citrus", "Pineapple", "Tropical"].includes(f))) score += 3;
+    if (terp === "Floral/Lavender" && strain.flavours.some((f) => ["Floral", "Candy", "Creamy", "Vanilla"].includes(f))) score += 3;
+    if (terp === "Earthy/Spicy" && strain.flavours.some((f) => ["Earthy", "Pine", "Spicy", "Diesel", "Herbal", "Nutty"].includes(f))) score += 3;
+    // "No preference" — no score
 
-    // === MEDIUM WEIGHT (2 pts each) ===
+    // ═══ MEDIUM WEIGHT (2 pts each) ═══
 
-    // Q3: Timing
-    const timing = answers.q3;
-    if (timing === "Morning" && (strain.effects.includes("Energetic") || strain.effects.includes("Focused") || strain.effects.includes("Uplifted"))) score += 2;
-    if (timing === "Afternoon" && (strain.effects.includes("Euphoric") || strain.effects.includes("Happy") || strain.effects.includes("Giggly"))) score += 2;
-    if (timing === "Night" && (strain.effects.includes("Sleepy") || strain.effects.includes("Relaxed"))) score += 2;
+    // thc_reaction — safety
+    const thc = answers.thc_reaction;
+    if (thc === "I enjoy it; no negative effects" && strain.thc >= 22) score += 2;
+    if (thc === "I sometimes feel anxious" && strain.thc < 22) score += 2;
+    if (thc === "I prefer a balanced 1:1 ratio" && strain.cbd > 0) score += 2;
 
-    // Q6: THC anxiety
-    const anx = answers.q6;
-    if (anx === "Often" && strain.thc < 20) score += 2;
-    if (anx === "Occasionally" && strain.thc < 23) score += 1;
-    if (anx === "Never" && strain.thc >= 22) score += 2;
-    if (anx === "Rarely") score += 1;
+    // specific_benefit
+    const benefit = answers.specific_benefit;
+    if (benefit === "Pain management" && (strain.effects.includes("Relaxed") || strain.cbd > 0)) score += 2;
+    if (benefit === "Anxiety/Stress relief" && strain.effects.includes("Relaxed") && strain.thc < 24) score += 2;
+    if (benefit === "Increased focus/energy" && (strain.effects.includes("Focused") || strain.effects.includes("Energetic"))) score += 2;
+    if (benefit === "Appetite stimulation" && strain.effects.includes("Hungry")) score += 2;
 
-    // Q8: Body feel
-    const body = answers.q8;
-    if (body === "Light & Functional" && (strain.effects.includes("Energetic") || strain.effects.includes("Focused"))) score += 2;
-    if (body === "Warm & Relaxed" && strain.effects.includes("Relaxed")) score += 2;
-    if (body === "Heavy & Sedated" && strain.effects.includes("Sleepy")) score += 2;
-    // "No Preference" — no score
+    // time_of_day
+    const time = answers.time_of_day;
+    if (time === "Morning/Daytime" && (strain.effects.includes("Energetic") || strain.effects.includes("Focused") || strain.effects.includes("Uplifted"))) score += 2;
+    if (time === "Evening/Nighttime" && (strain.effects.includes("Sleepy") || strain.effects.includes("Relaxed"))) score += 2;
+    if (time === "Situational") score += 1;
 
-    // Q11: Medical conditions
-    const med = answers.q11;
-    if (med === "Chronic Pain" && (strain.effects.includes("Relaxed") || strain.cbd > 0)) score += 2;
-    if (med === "Anxiety" && strain.thc < 23 && strain.effects.includes("Relaxed")) score += 2;
-    if (med === "Insomnia" && strain.effects.includes("Sleepy")) score += 2;
-    // "None" — no score
+    // environment
+    const env = answers.environment;
+    if (env === "On-the-go/Social" && (strain.effects.includes("Giggly") || strain.effects.includes("Happy") || strain.effects.includes("Euphoric"))) score += 2;
+    if (env === "Strictly at home" && (strain.effects.includes("Relaxed") || strain.effects.includes("Sleepy"))) score += 2;
+    if (env === "Both") score += 1;
 
-    // Q9: Physical relief
-    const phys = answers.q9;
-    if (phys !== "None" && strain.effects.includes("Relaxed")) score += 2;
-    if (phys === "Nausea" && strain.cbd > 0) score += 1;
+    // ═══ LOW WEIGHT (1 pt each) ═══
 
-    // Q15: Vibe
-    const vibe = answers.q15;
-    if (vibe === "Stressed" && strain.effects.includes("Relaxed")) score += 2;
-    if (vibe === "Bored" && (strain.effects.includes("Euphoric") || strain.effects.includes("Giggly") || strain.effects.includes("Uplifted"))) score += 2;
-    if (vibe === "Sore" && strain.effects.includes("Relaxed") && strain.effects.includes("Sleepy")) score += 2;
-    if (vibe === "Adventurous" && (strain.effects.includes("Energetic") || strain.effects.includes("Focused") || strain.effects.includes("Uplifted"))) score += 2;
+    // exp_level — tolerance proxy
+    const exp = answers.exp_level;
+    if (exp === "Seasoned" && strain.thc >= 23) score += 1;
+    if (exp === "Newcomer" && strain.thc < 22) score += 1;
+    if (exp === "Casual") score += 1;
 
-    // === LOW WEIGHT (1 pt each) ===
+    // effect_intensity
+    const intensity = answers.effect_intensity;
+    if (intensity === "Intense/Heavy" && strain.thc >= 23) score += 1;
+    if (intensity === "Barely noticeable" && strain.thc < 20) score += 1;
+    if (intensity === "Mild/Medium" && strain.thc >= 20 && strain.thc < 24) score += 1;
 
-    // Q2: Tolerance
-    const tol = answers.q2;
-    if (tol === "Advanced" && strain.thc >= 23) score += 1;
-    if (tol === "Beginner" && strain.thc < 22) score += 1;
-    if (tol === "Micro-doser" && strain.thc < 20) score += 1;
+    // peak_duration
+    const duration = answers.peak_duration;
+    if (duration === "Short (1–2 hours)" && strain.thc < 22) score += 1;
+    if (duration === "Long-lasting (4+ hours)" && strain.thc >= 23) score += 1;
 
-    // Q10: Consumption frequency (tolerance reinforcement)
-    const freq = answers.q10;
-    if (freq === "Daily" && strain.thc >= 22) score += 1;
-    if (freq === "Rarely" && strain.thc < 22) score += 1;
-
-    // Q12: Session length
-    const session = answers.q12;
-    if (session === "Quick (15-30min)" && strain.thc < 22) score += 1;
-    if (session === "Extended (3hr+)" && strain.thc >= 23) score += 1;
-
-    // Q13: Solo or social
-    const social = answers.q13;
-    if (social === "Solo" && (strain.effects.includes("Focused") || strain.effects.includes("Relaxed"))) score += 1;
-    if (social === "Social" && (strain.effects.includes("Giggly") || strain.effects.includes("Euphoric") || strain.effects.includes("Happy"))) score += 1;
-    if (social === "Both") score += 1;
+    // paired_activity
+    const activity = answers.paired_activity;
+    if (activity === "Socializing with friends" && (strain.effects.includes("Giggly") || strain.effects.includes("Happy") || strain.effects.includes("Euphoric"))) score += 1;
+    if (activity === "Creative work or hobbies" && (strain.effects.includes("Euphoric") || strain.effects.includes("Focused"))) score += 1;
+    if (activity === "Physical exercise/Yoga" && (strain.effects.includes("Energetic") || strain.effects.includes("Uplifted"))) score += 1;
+    if (activity === "Solo relaxation/Bedtime" && (strain.effects.includes("Relaxed") || strain.effects.includes("Sleepy"))) score += 1;
 
     return { strain, score };
   });
@@ -110,8 +97,8 @@ export function matchStrain(answers: Record<string, string>): StrainMatch {
   scored.sort((a, b) => b.score - a.score);
 
   const best = scored[0];
-  // Max possible ~32 pts (3 high×3 + 6 med×2 + 4 low×1)
-  const maxScore = 32;
+  // Max possible: 3 high×3 + 4 med×2 + 4 low×1 = 9+8+4 = 21
+  const maxScore = 21;
   const compatibility = Math.min(Math.round((best.score / maxScore) * 100), 99);
 
   return {
