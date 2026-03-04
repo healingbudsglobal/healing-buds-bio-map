@@ -1,176 +1,191 @@
-export interface SurveyQuestion {
-  id: string;
-  question: string;
-  subtitle?: string;
-  options: SurveyOption[];
-}
-
 export interface SurveyOption {
   label: string;
   icon?: string; // lucide icon name
 }
 
+export interface SurveyQuestion {
+  id: string;
+  question: string;
+  subtitle?: string;
+  section: string;
+  options: SurveyOption[];
+}
+
 export const surveyQuestions: SurveyQuestion[] = [
+  // ─── Section 1: Experience & Tolerance ───
   {
-    id: "q1",
-    question: "What brings you here today?",
-    subtitle: "Choose the outcome that matters most to you",
-    options: [
-      { label: "Relaxation", icon: "heart" },
-      { label: "Pain Relief", icon: "zap" },
-      { label: "Creativity & Focus", icon: "lightbulb" },
-      { label: "Sleep Support", icon: "moon" },
-    ],
-  },
-  {
-    id: "q2",
-    question: "How would you describe your experience level?",
+    id: "exp_level",
+    section: "Experience & Tolerance",
+    question: "How would you describe your experience level with cannabis?",
     subtitle: "This helps us calibrate your ideal potency",
     options: [
-      { label: "Beginner", icon: "sprout" },
-      { label: "Intermediate", icon: "leaf" },
-      { label: "Advanced", icon: "trees" },
-      { label: "Micro-doser", icon: "droplets" },
+      { label: "Newcomer", icon: "sprout" },
+      { label: "Casual", icon: "leaf" },
+      { label: "Seasoned", icon: "trees" },
     ],
   },
   {
-    id: "q11",
-    question: "Do you have any medical conditions?",
-    subtitle: "This helps us prioritise therapeutic benefits",
+    id: "effect_intensity",
+    section: "Experience & Tolerance",
+    question: "How strongly do you prefer to feel the effects?",
+    subtitle: "From micro-dose to full immersion",
     options: [
-      { label: "Chronic Pain", icon: "activity" },
-      { label: "Anxiety", icon: "brain" },
-      { label: "Insomnia", icon: "moon-star" },
-      { label: "None", icon: "check" },
+      { label: "Barely noticeable", icon: "droplets" },
+      { label: "Mild/Medium", icon: "sun" },
+      { label: "Intense/Heavy", icon: "flame" },
     ],
   },
   {
-    id: "q3",
-    question: "When do you usually consume?",
-    subtitle: "Time of day influences strain selection",
+    id: "peak_duration",
+    section: "Experience & Tolerance",
+    question: "How long do you want the peak effects to last?",
+    subtitle: "Duration shapes which compounds we prioritise",
     options: [
-      { label: "Morning", icon: "sunrise" },
-      { label: "Afternoon", icon: "sun" },
-      { label: "Night", icon: "moon-star" },
+      { label: "Short (1–2 hours)", icon: "timer" },
+      { label: "Medium (2–4 hours)", icon: "clock" },
+      { label: "Long-lasting (4+ hours)", icon: "hourglass" },
     ],
   },
+
+  // ─── Section 2: The Desired State ───
   {
-    id: "q4",
-    question: "What's your preferred consumption method?",
-    subtitle: "We'll pass this to your consultant for tailored advice",
+    id: "primary_vibe",
+    section: "The Desired State",
+    question: "What is the primary vibe you're looking to achieve?",
+    subtitle: "This is the single biggest factor in your match",
     options: [
-      { label: "Flower", icon: "flower" },
-      { label: "Vape", icon: "wind" },
-      { label: "Edible", icon: "cookie" },
-      { label: "Oil", icon: "droplets" },
+      { label: "Energized & Productive", icon: "zap" },
+      { label: "Relaxed & Stress-Free", icon: "heart" },
+      { label: "Creative & Inspired", icon: "lightbulb" },
+      { label: "Deep Sleep & Sedation", icon: "moon" },
     ],
   },
   {
-    id: "q5",
-    question: "What kind of mental effect do you prefer?",
-    subtitle: "This helps match your cerebral sweet spot",
-    options: [
-      { label: "Functional", icon: "brain" },
-      { label: "Euphoric", icon: "sparkles" },
-      { label: "Deep", icon: "waves" },
-      { label: "Sedation", icon: "bed" },
-    ],
-  },
-  {
-    id: "q8",
-    question: "How do you want your body to feel?",
+    id: "body_impact",
+    section: "The Desired State",
+    question: "How do you want the high to impact your physical body?",
     subtitle: "Physical sensation matters as much as mental effect",
     options: [
-      { label: "Light & Functional", icon: "feather" },
-      { label: "Warm & Relaxed", icon: "flame" },
-      { label: "Heavy & Sedated", icon: "anchor" },
-      { label: "No Preference", icon: "minus" },
+      { label: "Heavy body sensations", icon: "anchor" },
+      { label: "Light head change", icon: "feather" },
+      { label: "Balanced physical and mental", icon: "scale" },
     ],
   },
   {
-    id: "q6",
-    question: "How sensitive are you to THC-related anxiety?",
-    subtitle: "We'll factor this into your recommendation",
+    id: "specific_benefit",
+    section: "The Desired State",
+    question: "Which specific benefit is most important to you right now?",
+    subtitle: "We'll weight this heavily in your match",
     options: [
-      { label: "Never", icon: "shield-check" },
-      { label: "Rarely", icon: "shield" },
-      { label: "Occasionally", icon: "shield-alert" },
-      { label: "Often", icon: "alert-triangle" },
+      { label: "Pain management", icon: "activity" },
+      { label: "Anxiety/Stress relief", icon: "brain" },
+      { label: "Increased focus/energy", icon: "target" },
+      { label: "Appetite stimulation", icon: "utensils" },
     ],
   },
   {
-    id: "q7",
-    question: "What flavour profile appeals to you?",
+    id: "paired_activity",
+    section: "The Desired State",
+    question: "What activity do you plan to pair with this experience?",
+    subtitle: "Context shapes the ideal strain profile",
+    options: [
+      { label: "Socializing with friends", icon: "users" },
+      { label: "Creative work or hobbies", icon: "palette" },
+      { label: "Physical exercise/Yoga", icon: "dumbbell" },
+      { label: "Solo relaxation/Bedtime", icon: "bed" },
+    ],
+  },
+
+  // ─── Section 3: Biological Sensitivities ───
+  {
+    id: "thc_reaction",
+    section: "Biological Sensitivities",
+    question: "How does your body typically react to high-potency THC?",
+    subtitle: "We'll factor this into your safety profile",
+    options: [
+      { label: "I enjoy it; no negative effects", icon: "shield-check" },
+      { label: "I sometimes feel anxious", icon: "alert-triangle" },
+      { label: "I prefer a balanced 1:1 ratio", icon: "scale" },
+    ],
+  },
+  {
+    id: "terpene_pref",
+    section: "Biological Sensitivities",
+    question: "Are you sensitive to specific smells or flavours?",
     subtitle: "Terpenes determine taste and therapeutic effect",
     options: [
-      { label: "Earthy / Pine", icon: "tree-pine" },
-      { label: "Sweet / Fruity", icon: "cherry" },
-      { label: "Diesel / Gas", icon: "flame" },
-      { label: "Citrus", icon: "citrus" },
+      { label: "Citrus/Zesty", icon: "citrus" },
+      { label: "Floral/Lavender", icon: "flower" },
+      { label: "Earthy/Spicy", icon: "tree-pine" },
+      { label: "No preference", icon: "minus" },
     ],
   },
   {
-    id: "q10",
-    question: "How often do you consume?",
-    subtitle: "Frequency helps us gauge your tolerance level",
+    id: "consumption_format",
+    section: "Biological Sensitivities",
+    question: "Do you have a preference for consumption format?",
+    subtitle: "We'll pass this to your consultant for tailored advice",
     options: [
-      { label: "Daily", icon: "calendar-check" },
-      { label: "Few times a week", icon: "calendar" },
-      { label: "Weekends", icon: "sun" },
-      { label: "Rarely", icon: "clock" },
+      { label: "Inhalation (Flower/Vape)", icon: "wind" },
+      { label: "Ingestion (Edibles/Tinctures)", icon: "cookie" },
+      { label: "No preference", icon: "minus" },
+    ],
+  },
+
+  // ─── Section 4: Advanced Synergy ───
+  {
+    id: "recovery_support",
+    section: "Advanced Synergy",
+    question: "Are you looking for specific metabolic or recovery support?",
+    subtitle: "Optional — helps us explore peptide pairings",
+    options: [
+      { label: "Muscle recovery & inflammation", icon: "dumbbell" },
+      { label: "Cognitive enhancement", icon: "brain" },
+      { label: "Anti-aging & skin health", icon: "sparkles" },
+      { label: "None / Not sure", icon: "minus" },
     ],
   },
   {
-    id: "q9",
-    question: "Do you need physical relief?",
-    subtitle: "Important for matching body-focused strains",
+    id: "environment",
+    section: "Advanced Synergy",
+    question: "In what environment will you be using the product?",
+    subtitle: "Setting influences the ideal effect profile",
     options: [
-      { label: "Muscle", icon: "dumbbell" },
-      { label: "Joint", icon: "bone" },
-      { label: "Nausea", icon: "pill" },
-      { label: "None", icon: "check" },
+      { label: "Strictly at home", icon: "home" },
+      { label: "On-the-go/Social", icon: "map-pin" },
+      { label: "Both", icon: "globe" },
     ],
   },
   {
-    id: "q12",
-    question: "What's your ideal session length?",
-    subtitle: "Some strains hit fast and fade, others linger",
+    id: "time_of_day",
+    section: "Advanced Synergy",
+    question: "What time of day do you primarily intend to use it?",
+    subtitle: "Morning strains differ from evening strains",
     options: [
-      { label: "Quick (15-30min)", icon: "timer" },
-      { label: "Medium (1-2hr)", icon: "clock" },
-      { label: "Extended (3hr+)", icon: "hourglass" },
-      { label: "No Preference", icon: "minus" },
+      { label: "Morning/Daytime", icon: "sunrise" },
+      { label: "Evening/Nighttime", icon: "moon-star" },
+      { label: "Situational", icon: "clock" },
     ],
   },
   {
-    id: "q13",
-    question: "Do you prefer to consume alone or socially?",
-    subtitle: "Social strains differ from solo-session strains",
+    id: "discretion",
+    section: "Advanced Synergy",
+    question: "How important is discretion for your usage?",
+    subtitle: "We'll note this for your consultant",
     options: [
-      { label: "Solo", icon: "user" },
-      { label: "Social", icon: "users" },
-      { label: "Both", icon: "user-plus" },
+      { label: "Very important", icon: "eye-off" },
+      { label: "Not important", icon: "megaphone" },
     ],
   },
   {
-    id: "q14",
-    question: "How important is discretion to you?",
-    subtitle: "We'll note this for your consultant's recommendation",
+    id: "effects_avoid",
+    section: "Advanced Synergy",
+    question: "Are there any effects you explicitly want to avoid?",
+    subtitle: "We'll steer your match away from these",
     options: [
-      { label: "Very", icon: "eye-off" },
-      { label: "Somewhat", icon: "eye" },
-      { label: "Not Important", icon: "megaphone" },
-    ],
-  },
-  {
-    id: "q15",
-    question: "What's your current state of mind?",
-    subtitle: "Let's match your energy right now",
-    options: [
-      { label: "Stressed", icon: "cloud-lightning" },
-      { label: "Bored", icon: "meh" },
-      { label: "Sore", icon: "thermometer" },
-      { label: "Adventurous", icon: "compass" },
+      { label: "Daytime sleepiness", icon: "cloud-lightning" },
+      { label: "Munchies/Increased appetite", icon: "utensils" },
+      { label: "Brain fog", icon: "cloud" },
     ],
   },
 ];
