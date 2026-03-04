@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { motion } from "framer-motion";
-import { Shield, RotateCw, Mail } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Shield, RotateCw, Mail, CheckCircle2 } from "lucide-react";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import hbLogoWhite from "@/assets/hb-logo-white-full.png";
 import heroFlower from "@/assets/hero-flower.jpg";
@@ -26,6 +26,7 @@ const itemVariants = {
 const OtpVerification = ({ email, otpCode, onVerified, onResend, onBack }: OtpVerificationProps) => {
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
+  const [verified, setVerified] = useState(false);
   const [cooldown, setCooldown] = useState(30);
   const [canResend, setCanResend] = useState(false);
 
@@ -42,7 +43,8 @@ const OtpVerification = ({ email, otpCode, onVerified, onResend, onBack }: OtpVe
     (val: string) => {
       if (val === otpCode) {
         setError("");
-        onVerified();
+        setVerified(true);
+        setTimeout(() => onVerified(), 1200);
       } else {
         setError("Incorrect code. Please try again.");
         setValue("");
@@ -89,16 +91,50 @@ const OtpVerification = ({ email, otpCode, onVerified, onResend, onBack }: OtpVe
       <motion.div variants={itemVariants} className="mb-3 flex flex-col items-center gap-3">
         <motion.div
           className="relative flex items-center justify-center h-14 w-14 rounded-2xl border border-[hsl(var(--accent-green)_/_0.25)] bg-[hsl(var(--accent-green)_/_0.08)] backdrop-blur-sm"
-          animate={{ scale: [1, 1.05, 1] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          animate={verified
+            ? { scale: [1, 1.2, 1], borderColor: "hsl(164 48% 53% / 0.6)" }
+            : { scale: [1, 1.05, 1] }
+          }
+          transition={verified
+            ? { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+            : { duration: 3, repeat: Infinity, ease: "easeInOut" }
+          }
         >
-          {/* Soft glow behind icon */}
           <div className="absolute inset-0 rounded-2xl bg-[hsl(var(--accent-green)_/_0.1)] blur-md" />
-          <Mail className="h-6 w-6 text-[hsl(var(--accent-green))] relative z-10" />
+          <AnimatePresence mode="wait">
+            {verified ? (
+              <motion.div
+                key="check"
+                initial={{ scale: 0, rotate: -90, opacity: 0 }}
+                animate={{ scale: 1, rotate: 0, opacity: 1 }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                className="relative z-10"
+              >
+                <CheckCircle2 className="h-7 w-7 text-[hsl(var(--accent-green))]" />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="mail"
+                exit={{ scale: 0, rotate: 90, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="relative z-10"
+              >
+                <Mail className="h-6 w-6 text-[hsl(var(--accent-green))]" />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
-        <h2 className="font-display text-2xl font-bold tracking-[0.02em] text-foreground">
-          Verify Your Email
-        </h2>
+        <AnimatePresence mode="wait">
+          <motion.h2
+            key={verified ? "verified" : "verify"}
+            initial={verified ? { opacity: 0, y: 8 } : false}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="font-display text-2xl font-bold tracking-[0.02em] text-foreground"
+          >
+            {verified ? "Verified!" : "Verify Your Email"}
+          </motion.h2>
+        </AnimatePresence>
       </motion.div>
 
       <motion.p variants={itemVariants} className="mb-1.5 text-sm text-muted-foreground leading-relaxed max-w-xs">
@@ -139,18 +175,30 @@ const OtpVerification = ({ email, otpCode, onVerified, onResend, onBack }: OtpVe
             value={value}
             onChange={setValue}
             onComplete={handleComplete}
+            disabled={verified}
           >
             <InputOTPGroup className="gap-2.5">
               {[0, 1, 2, 3, 4, 5].map((i) => (
                 <InputOTPSlot
                   key={i}
                   index={i}
-                  className="!h-14 !w-12 !border !rounded-xl !border-[hsl(var(--accent-green)_/_0.2)] !bg-[hsl(180_8%_7%_/_0.8)] text-foreground !text-xl font-bold backdrop-blur-sm transition-all duration-200 !ring-0 data-[active]:!ring-2 data-[active]:!ring-[hsl(var(--accent-green)_/_0.6)] data-[active]:!border-[hsl(var(--accent-green)_/_0.5)] data-[active]:!bg-[hsl(var(--accent-green)_/_0.08)] data-[active]:shadow-[0_0_12px_hsl(var(--accent-green)_/_0.15)]"
+                  className={`!h-14 !w-12 !border !rounded-xl !bg-[hsl(180_8%_7%_/_0.8)] text-foreground !text-xl font-bold backdrop-blur-sm transition-all duration-300 !ring-0 data-[active]:!ring-2 data-[active]:!ring-[hsl(var(--accent-green)_/_0.6)] data-[active]:!border-[hsl(var(--accent-green)_/_0.5)] data-[active]:!bg-[hsl(var(--accent-green)_/_0.08)] data-[active]:shadow-[0_0_12px_hsl(var(--accent-green)_/_0.15)] ${verified ? "!border-[hsl(var(--accent-green)_/_0.5)] !bg-[hsl(var(--accent-green)_/_0.1)]" : "!border-[hsl(var(--accent-green)_/_0.2)]"}`}
                 />
               ))}
             </InputOTPGroup>
           </InputOTP>
         </div>
+
+        {/* Success glow overlay */}
+        <AnimatePresence>
+          {verified && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="absolute inset-0 rounded-2xl bg-[radial-gradient(ellipse_at_center,hsl(var(--accent-green)_/_0.08)_0%,transparent_70%)] pointer-events-none z-20"
+            />
+          )}
+        </AnimatePresence>
 
         {error && (
           <motion.p
