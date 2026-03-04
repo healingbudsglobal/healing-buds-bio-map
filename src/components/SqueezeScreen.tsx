@@ -3,7 +3,7 @@ import { ArrowRight, Shield, FlaskConical, Microscope } from "lucide-react";
 import { motion } from "framer-motion";
 import { validateEmail } from "@/lib/emailValidation";
 import hbLogoWhite from "@/assets/hb-logo-white-full.png";
-import heroFlower from "@/assets/hero-flower.jpg";
+
 import {
   Select,
   SelectContent,
@@ -62,32 +62,11 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
       animate="visible"
       className="relative z-10 flex flex-col items-center justify-center px-5 text-center"
     >
-      {/* Hero flower — full-bleed cinematic backdrop with Ken Burns */}
-      <motion.div
-        className="pointer-events-none absolute inset-0 overflow-hidden"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.5 }}
-      >
-        <motion.img
-          src={heroFlower}
-          alt=""
-          className="absolute top-1/2 left-1/2 w-[140%] max-w-none h-auto min-h-full object-cover"
-          style={{
-            transform: "translate(-50%, -50%)",
-            mixBlendMode: "soft-light",
-            filter: "saturate(1.3) contrast(1.1)",
-          }}
-          initial={{ scale: 1.15, x: "-50%", y: "-50%" }}
-          animate={{ scale: 1.05, x: "-50%", y: "-50%" }}
-          transition={{ duration: 20, ease: "linear", repeat: Infinity, repeatType: "reverse" }}
-        />
-        {/* Multi-layer vignette for depth */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_center,transparent_20%,hsl(180_8%_7%_/_0.75)_70%,hsl(180_8%_7%)_100%)]" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[hsl(180_8%_7%)] via-[hsl(180_8%_7%_/_0.3)] to-[hsl(180_8%_7%_/_0.6)]" />
-        {/* Green tint overlay for brand cohesion */}
-        <div className="absolute inset-0 bg-[hsl(var(--primary-green)_/_0.25)]" style={{ mixBlendMode: "overlay" }} />
-      </motion.div>
+      {/* Ambient green glow backdrop */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_40%_30%,hsl(var(--accent-green)_/_0.06)_0%,transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_70%,hsl(var(--primary-green)_/_0.08)_0%,transparent_55%)]" />
+      </div>
 
       {/* Subtle green radial spotlight */}
       <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,hsl(var(--accent-green)_/_0.06)_0%,transparent_70%)]" />
