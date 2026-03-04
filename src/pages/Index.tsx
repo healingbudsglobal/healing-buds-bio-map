@@ -10,10 +10,9 @@ import AmbientParticles from "@/components/AmbientParticles";
 import StepProgress from "@/components/StepProgress";
 import { surveyQuestions } from "@/data/surveyQuestions";
 import { matchStrain, type StrainMatch } from "@/lib/strainMatcher";
+import { sendWebhook } from "@/lib/webhook";
 
 type Screen = "squeeze" | "otp" | "survey" | "contact" | "loading" | "success";
-
-const WEBHOOK_URL = "https://hook.eu1.make.com/70z505ty60nkksvtl6l6r1yzj4cs58tb";
 
 function generateOtp(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
@@ -46,31 +45,19 @@ const Index = () => {
     return map[screen];
   }, [screen]);
 
-  const sendOtpWebhook = useCallback(async (userEmail: string, userProvince: string, code: string) => {
-    try {
-      await fetch(WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: userEmail,
-          province: userProvince,
-          otp_code: code,
-          type: "otp_verification",
-        }),
-      });
-    } catch (err) {
-      console.error("OTP webhook error:", err);
-    }
-  }, []);
-
   const handleEmailSubmit = useCallback((submittedEmail: string, submittedProvince: string) => {
     setEmail(submittedEmail);
     setProvince(submittedProvince);
     const code = generateOtp();
     setOtpCode(code);
-    sendOtpWebhook(submittedEmail, submittedProvince, code);
+    sendWebhook({
+      email: submittedEmail,
+      province: submittedProvince,
+      otp_code: code,
+      type: "otp_verification",
+    });
     setScreen("otp");
-  }, [sendOtpWebhook]);
+  }, []);
 
   const handleOtpVerified = useCallback(() => {
     setScreen("survey");
@@ -83,8 +70,13 @@ const Index = () => {
   const handleOtpResend = useCallback(() => {
     const code = generateOtp();
     setOtpCode(code);
-    sendOtpWebhook(email, province, code);
-  }, [email, province, sendOtpWebhook]);
+    sendWebhook({
+      email,
+      province,
+      otp_code: code,
+      type: "otp_verification",
+    });
+  }, [email, province]);
 
   const handleSurveyComplete = useCallback((answers: Record<string, string>) => {
     const result = matchStrain(answers);
@@ -93,7 +85,7 @@ const Index = () => {
     setScreen("contact");
   }, []);
 
-  const sendWebhook = useCallback(
+  const handleSendResults = useCallback(
     async (contactName?: string, whatsapp?: string) => {
       if (!strainResult) return;
 
@@ -119,15 +111,7 @@ const Index = () => {
         payload[q.id] = surveyAnswers[q.id] || "";
       });
 
-      try {
-        await fetch(WEBHOOK_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-      } catch (err) {
-        console.error("Webhook error:", err);
-      }
+      await sendWebhook(payload);
 
       setTimeout(() => setScreen("success"), 3000);
     },
@@ -136,14 +120,14 @@ const Index = () => {
 
   const handleContactSubmit = useCallback(
     (name: string, whatsapp?: string) => {
-      sendWebhook(name, whatsapp);
+      handleSendResults(name, whatsapp);
     },
-    [sendWebhook]
+    [handleSendResults]
   );
 
   const handleContactSkip = useCallback(() => {
-    sendWebhook();
-  }, [sendWebhook]);
+    handleSendResults();
+  }, [handleSendResults]);
 
   return (
     <div className="leaf-pattern relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden pb-[env(safe-area-inset-bottom)]">
