@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import SqueezeScreen from "@/components/SqueezeScreen";
 import SurveyFlow from "@/components/SurveyFlow";
@@ -7,6 +7,7 @@ import LoadingScreen from "@/components/LoadingScreen";
 import SuccessScreen from "@/components/SuccessScreen";
 import OtpVerification from "@/components/OtpVerification";
 import AmbientParticles from "@/components/AmbientParticles";
+import StepProgress from "@/components/StepProgress";
 import { surveyQuestions } from "@/data/surveyQuestions";
 import { matchStrain, type StrainMatch } from "@/lib/strainMatcher";
 
@@ -37,6 +38,13 @@ const Index = () => {
   const [otpCode, setOtpCode] = useState("");
   const [surveyAnswers, setSurveyAnswers] = useState<Record<string, string>>({});
   const [strainResult, setStrainResult] = useState<StrainMatch | null>(null);
+
+  const stepIndex = useMemo(() => {
+    const map: Record<Screen, number> = {
+      squeeze: 0, otp: 1, survey: 2, contact: 3, loading: 4, success: 4,
+    };
+    return map[screen];
+  }, [screen]);
 
   const sendOtpWebhook = useCallback(async (userEmail: string, userProvince: string, code: string) => {
     try {
@@ -138,8 +146,18 @@ const Index = () => {
   }, [sendWebhook]);
 
   return (
-    <div className="leaf-pattern relative flex min-h-[100dvh] items-center justify-center overflow-hidden pb-[env(safe-area-inset-bottom)]">
+    <div className="leaf-pattern relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden pb-[env(safe-area-inset-bottom)]">
       <AmbientParticles />
+
+      {/* Step Progress - fixed at top */}
+      <motion.div
+        className="fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top)+12px)] pb-3 px-6 backdrop-blur-md bg-[hsl(180_8%_7%_/_0.5)]"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+      >
+        <StepProgress currentStep={stepIndex} />
+      </motion.div>
 
       <AnimatePresence mode="wait">
         <motion.div
