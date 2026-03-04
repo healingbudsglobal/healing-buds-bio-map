@@ -1,43 +1,40 @@
 
 
-# Sincere Marketing + healingbuds.co.za Brand Alignment
+# Professional Polish: Remove Placeholders, Add Visual Interest, Optimize Lead Funnel
 
-## What's Wrong Now
+## Current Issues Found
 
-Looking at the actual healingbuds.co.za site vs this survey app:
+1. **Placeholder WhatsApp number** — `27XXXXXXXXXX` in SuccessScreen is fake/broken data. Either needs the real number or removal.
+2. **Generic shop URLs** — all strains link to `healingbuds.co.za/shop` instead of specific product pages.
+3. **No visual imagery** — every screen is text + icons + glows. No product photography, botanical illustrations, or visual hooks to establish the cannabis/medical brand instantly.
+4. **"Skip for now" leak** — the contact capture skip button is a 10px afterthought that still lets leads escape without providing any contact info. The email was already captured on screen 1, so the skip is fine — but it should be clearer that results will go to their email.
+5. **No strain imagery on results** — the success screen strain card is pure text. A product photo or botanical illustration would make the recommendation feel tangible and worth ordering.
 
-1. **Fake social proof counter** — the `2,284+ patients matched` counter that randomly increments every 4 seconds is manufactured nonsense. The main site doesn't do this. It undermines the pharmaceutical credibility the brand is built on.
-2. **"Free · No obligation · Takes 90 seconds"** — screams lead-gen funnel, not medical consultation. The main site says "Pharmaceutical-Grade Medical Cannabis" with trust badges like EU GMP Certified, Lab Tested, Secure & Compliant.
-3. **Copy tone mismatch** — the survey uses wellness-influencer language. The main site is clinical and confident without being pushy.
+## Changes
 
-## What Changes
+### 1. Remove all placeholder/fake data
+- **SuccessScreen**: Remove the WhatsApp "Chat with Consultant" button entirely (the number is fake). Replace with a "Questions? Email us" link pointing to a real email, or remove the row completely.
+- **Strains data**: Keep shop URLs as-is (they do link to the real domain — specific product pages can be updated later by the user).
 
-### 1. Remove fake counter, add real trust signals
-- **Delete** the incrementing `counter` state and the "2,284+ patients matched" badge
-- **Replace** with the same trust badges from healingbuds.co.za: `EU GMP Certified · Lab Tested` — these are real, verifiable claims
-- Remove `"Free · No obligation · Takes 90 seconds"` line — replace with `"90-second clinical assessment"` (factual, no "free" bait)
+### 2. Add botanical hero imagery to SqueezeScreen
+- Add a subtle, high-quality SVG botanical illustration (cannabis leaf silhouette or trichome pattern) rendered as a CSS/SVG background element behind the form card. Not a photo — a clean vector that reinforces "medical cannabis" within 3 seconds.
+- Use a semi-transparent layered SVG with the brand gold/teal colors, positioned as a decorative element above or behind the headline.
 
-### 2. Tighten copy across all screens
-- SqueezeScreen headline: keep "Your Personalised Strain Prescription" (matches the clinical tone)
-- CTA: "Begin Your Personal Medical Mapping" → **"Start Clinical Assessment"** (shorter, more authoritative, matches "Check Eligibility" tone on main site)
-- ContactCapture CTA: "Unlock My Recommendation" → **"See My Recommendation"** (no "unlock" gating language)
-- ContactCapture body: "Enter your details to unlock your full strain report" → **"Where should we send your clinical profile?"**
-- SuccessScreen: Remove "In Stock / Currently Unavailable" indicator entirely (per earlier plan — only available strains shown)
-- SuccessScreen: Add price prominently + "Limited availability" (honest — these are small-batch medical strains)
-- SuccessScreen shop CTA: "Shop This Strain" → **"Order This Strain"** (direct, no browsing implied)
+### 3. Add strain type indicator with visual flair to SuccessScreen
+- Add a strain type badge (Indica/Sativa/Hybrid) to each strain in `strains.ts` and display it as a colored pill on the result card — this is data users expect from a cannabis recommendation.
+- Add a decorative botanical SVG element on the result card for visual richness.
 
-### 3. Filter matcher to available strains only
-- In `strainMatcher.ts`: filter `strains` to `available: true` before scoring
-- Remove the `-2 availability penalty` (no longer needed)
-- Every result is now purchasable — no dead ends
+### 4. Strengthen the contact capture conversion copy
+- Change "Skip for now" to "Just send it to my email" — makes clear they still get results, reduces friction anxiety.
+- Add micro-copy below the form: "Your results are also sent to {email}" — reassures they won't lose their recommendation.
 
-### 4. Color/brand consistency check
-- Colors already match healingbuds.co.za (gold CTAs, dark teal background, white text) — no changes needed
-- Trust badge styling: match the horizontal icon row from healingbuds.co.za footer (EU GMP, Lab Tested, Secure & Compliant, Discreet Delivery)
+### 5. Add a subtle botanical pattern to the survey flow
+- Add a faint decorative SVG leaf in the corner of each question card — small touch that maintains the medical-cannabis brand identity throughout the flow.
 
 ## Files Modified
-- `src/components/SqueezeScreen.tsx` — remove fake counter, add real trust badges, tighten copy
-- `src/components/ContactCapture.tsx` — sincere copy, remove "unlock" language
-- `src/components/SuccessScreen.tsx` — add price, remove stock indicator, stronger CTA, add "Limited availability"
-- `src/lib/strainMatcher.ts` — filter to available strains only, remove availability penalty
+- `src/components/SqueezeScreen.tsx` — add botanical SVG hero element
+- `src/components/SuccessScreen.tsx` — remove fake WhatsApp, add strain type badge, add botanical decoration
+- `src/components/ContactCapture.tsx` — improve skip copy, add email reassurance
+- `src/components/SurveyFlow.tsx` — add subtle botanical accent to question cards
+- `src/data/strains.ts` — add `type: "indica" | "sativa" | "hybrid"` field to each strain
 
