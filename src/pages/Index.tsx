@@ -43,6 +43,12 @@ const Index = () => {
         province,
         matched_strain: strainResult.strain.name,
         compatibility: `${strainResult.compatibility}%`,
+        strain_effects: strainResult.strain.effects.join(", "),
+        strain_flavours: strainResult.strain.flavours.join(", "),
+        strain_thc: `${strainResult.strain.thc}%`,
+        strain_cbd: `${strainResult.strain.cbd}%`,
+        strain_price: strainResult.strain.price,
+        strain_shop_url: strainResult.strain.shopUrl,
       };
 
       if (contactName) payload.name = contactName;
