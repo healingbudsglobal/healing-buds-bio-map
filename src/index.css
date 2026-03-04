@@ -23,7 +23,7 @@
     --secondary-foreground: 150 10% 90%;
 
     --muted: 175 6% 14%;
-    --muted-foreground: 165 10% 55%;
+    --muted-foreground: 165 10% 62%;
 
     --accent: 164 48% 53%;
     --accent-foreground: 0 0% 100%;
@@ -52,10 +52,10 @@
 
     /* Surfaces */
     --surface: 175 6% 10%;
-    --surface-elevated: 175 6% 13%;
+    --surface-elevated: 175 6% 15%;
 
     /* Gradients */
-    --gradient-hero: linear-gradient(165deg, hsl(180 8% 7%) 0%, hsl(175 12% 10%) 40%, hsl(178 48% 21% / 0.3) 70%, hsl(180 8% 7%) 100%);
+    --gradient-hero: linear-gradient(165deg, hsl(180 8% 7%) 0%, hsl(175 10% 10%) 30%, hsl(40 30% 12% / 0.15) 50%, hsl(178 48% 21% / 0.25) 70%, hsl(180 8% 7%) 100%);
     --gradient-card: linear-gradient(145deg, hsl(175 8% 12%) 0%, hsl(175 6% 9%) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(40 85% 55%), hsl(42 90% 42%));
     --gradient-lime: linear-gradient(90deg, hsl(40 85% 55%), hsl(38 80% 65%));
@@ -192,10 +192,44 @@
   }
 
   .glass-card-elevated {
-    background: hsl(175 6% 11% / 0.75);
+    background: hsl(175 6% 14% / 0.8);
     backdrop-filter: blur(24px);
-    border: 1px solid hsl(170 8% 25% / 0.6);
+    border: 1px solid hsl(170 8% 28% / 0.65);
     box-shadow: var(--shadow-elegant);
+  }
+
+  .ambient-glow {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+  }
+
+  .ambient-glow::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: -10%;
+    width: 50%;
+    height: 60%;
+    border-radius: 50%;
+    background: hsl(40 85% 55% / 0.06);
+    filter: blur(80px);
+    animation: orbFloat 12s ease-in-out infinite;
+  }
+
+  .ambient-glow::after {
+    content: '';
+    position: absolute;
+    bottom: -15%;
+    right: -10%;
+    width: 45%;
+    height: 55%;
+    border-radius: 50%;
+    background: hsl(164 48% 53% / 0.05);
+    filter: blur(80px);
+    animation: orbFloat 15s ease-in-out infinite reverse;
   }
 }
 

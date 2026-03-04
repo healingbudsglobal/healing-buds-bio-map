@@ -35,15 +35,15 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
     >
       {/* Gold confetti particles */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        {[0, 1, 2].map((i) => (
+        {[0, 1, 2, 3, 4].map((i) => (
           <div
             key={i}
             className="absolute rounded-full bg-[hsl(var(--brand-gold))]"
             style={{
-              width: 6,
-              height: 6,
-              left: `${30 + i * 20}%`,
-              animation: `confettiFloat 2.5s ease-out ${i * 0.3}s forwards`,
+              width: i % 2 === 0 ? 8 : 6,
+              height: i % 2 === 0 ? 8 : 6,
+              left: `${15 + i * 18}%`,
+              animation: `confettiFloat 3s ease-out ${i * 0.25}s forwards`,
               opacity: 0,
             }}
           />
@@ -78,7 +78,7 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}
-            className="mt-4 w-full rounded-2xl border border-border bg-[hsl(var(--surface-elevated))] p-5 text-left shadow-elegant"
+            className="mt-4 w-full rounded-2xl border border-[hsl(170_8%_25%)] bg-[hsl(175_6%_16%)] p-5 text-left shadow-elegant"
           >
             <div className="flex items-start justify-between mb-3">
               <div>

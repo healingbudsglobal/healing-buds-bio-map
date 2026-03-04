@@ -3,7 +3,6 @@ import { ArrowRight, Shield, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import { validateEmail } from "@/lib/emailValidation";
 import hbLogoWhite from "@/assets/hb-logo-white-full.png";
-import heroTrichomes from "@/assets/hero-trichomes.jpg";
 import {
   Select,
   SelectContent,
@@ -36,7 +35,6 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
   const [focused, setFocused] = useState(false);
   const [counter, setCounter] = useState(2284);
 
-  // Animated counter tick
   useEffect(() => {
     const interval = setInterval(() => {
       setCounter((c) => c + Math.floor(Math.random() * 3));
@@ -68,15 +66,11 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       className="relative z-10 flex flex-col items-center justify-center px-5 text-center"
     >
-      {/* Cinematic hero backdrop */}
-      <div className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 w-[500px] h-[500px] sm:w-[600px] sm:h-[600px]">
-        <img
-          src={heroTrichomes}
-          alt=""
-          className="h-full w-full rounded-full object-cover opacity-[0.12] blur-[4px] sm:opacity-[0.15] sm:blur-[2px]"
-        />
-        <div className="absolute inset-0 rounded-full bg-gradient-to-b from-transparent via-transparent to-background" />
-      </div>
+      {/* Ambient glow orbs — replace old hero circle */}
+      <div className="ambient-glow" />
+
+      {/* Radial spotlight behind form */}
+      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-[radial-gradient(circle,hsl(40_85%_55%_/_0.04)_0%,transparent_70%)]" />
 
       {/* Logo */}
       <motion.div
@@ -121,13 +115,13 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
         90-second guided consultation · clinically informed
       </motion.p>
 
-      {/* Form */}
+      {/* Form — glass card wrapper */}
       <motion.form
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.4 }}
         onSubmit={handleSubmit}
-        className="flex w-full max-w-sm flex-col gap-3"
+        className="flex w-full max-w-sm flex-col gap-3 glass-card-elevated rounded-2xl p-5"
       >
         <div className={`relative rounded-2xl transition-all duration-300 ${focused ? 'shadow-[var(--shadow-glow-gold)]' : ''}`}>
           <input
@@ -165,13 +159,12 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </button>
 
-        {/* Micro-text */}
         <p className="text-[11px] text-muted-foreground mt-0.5">
           Free · No obligation · Takes 90 seconds
         </p>
       </motion.form>
 
-      {/* POPIA trust badge — premium */}
+      {/* POPIA trust badge */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
