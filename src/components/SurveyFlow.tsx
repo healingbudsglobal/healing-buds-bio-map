@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { icons } from "lucide-react";
 import hbLogoWhite from "@/assets/hb-logo-white-full.png";
 import LeafProgress from "@/components/LeafProgress";
-import BotanicalAccent from "@/components/BotanicalAccent";
+
 
 interface SurveyFlowProps {
   onComplete: (answers: Record<string, string>) => void;
@@ -167,7 +167,7 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
             {/* Card with layered depth */}
             <div className="relative glass-card-elevated rounded-2xl p-6 sm:p-8">
               {/* Botanical accent in corner */}
-              <BotanicalAccent variant="corner" className="absolute -right-2 -top-2 rotate-45" />
+              
 
               {/* Green-to-gold accent line at top */}
               <div className="absolute top-0 left-0 right-0 h-[2px] opacity-60" style={{ background: 'linear-gradient(90deg, hsl(var(--accent-green)), hsl(var(--brand-gold)))' }} />
