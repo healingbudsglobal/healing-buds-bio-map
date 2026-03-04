@@ -12,7 +12,8 @@ export interface StrainMatch {
  * Removed questions use sensible defaults internally.
  */
 export function matchStrain(answers: Record<string, string>): StrainMatch {
-  const scored = strains.map((strain) => {
+  const availableStrains = strains.filter((s) => s.available);
+  const scored = availableStrains.map((strain) => {
     let score = 0;
 
     // === HIGH WEIGHT (3 pts each) ===
@@ -75,9 +76,6 @@ export function matchStrain(answers: Record<string, string>): StrainMatch {
 
     // Defaults for removed questions — give balanced strains a slight edge
     if (strain.effects.includes("Relaxed") && strain.effects.includes("Euphoric")) score += 1;
-
-    // Availability penalty
-    if (!strain.available) score -= 2;
 
     return { strain, score };
   });

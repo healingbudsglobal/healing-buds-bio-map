@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { ArrowRight, Shield, Users } from "lucide-react";
+import { useState } from "react";
+import { ArrowRight, Shield, FlaskConical, Microscope } from "lucide-react";
 import { motion } from "framer-motion";
 import { validateEmail } from "@/lib/emailValidation";
 import hbLogoWhite from "@/assets/hb-logo-white-full.png";
@@ -33,14 +33,6 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
   const [province, setProvince] = useState("");
   const [error, setError] = useState("");
   const [focused, setFocused] = useState(false);
-  const [counter, setCounter] = useState(2284);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCounter((c) => c + Math.floor(Math.random() * 3));
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,16 +74,21 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
         <img src={hbLogoWhite} alt="Healing Buds" className="h-14 w-auto sm:h-16" />
       </motion.div>
 
-      {/* Social proof counter */}
+      {/* Trust badges */}
       <motion.div
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4 }}
-        className="mb-5 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--brand-gold)_/_0.2)] bg-[hsl(var(--brand-gold)_/_0.06)] px-4 py-2"
+        className="mb-5 inline-flex items-center gap-4 rounded-full border border-border bg-[hsl(var(--surface-elevated))] px-5 py-2"
       >
-        <Users className="h-3.5 w-3.5 text-[hsl(var(--brand-gold))]" />
-        <span className="text-xs font-medium text-[hsl(var(--brand-gold-light))]">
-          <span className="font-bold">{counter.toLocaleString()}+</span> patients matched
+        <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+          <FlaskConical className="h-3.5 w-3.5 text-[hsl(var(--brand-gold))]" />
+          EU GMP Certified
+        </span>
+        <span className="h-3 w-px bg-border" />
+        <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+          <Microscope className="h-3.5 w-3.5 text-[hsl(var(--brand-gold))]" />
+          Lab Tested
         </span>
       </motion.div>
 
@@ -155,12 +152,12 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
           type="submit"
           className="group w-full rounded-2xl gradient-accent py-4 font-display font-bold text-white text-base transition-all hover:brightness-110 hover:scale-[1.02] active:scale-[0.98] animate-pulse-glow flex items-center justify-center gap-2 min-h-[52px]"
         >
-          Begin Your Personal Medical Mapping
+          Start Clinical Assessment
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </button>
 
         <p className="text-[11px] text-muted-foreground mt-0.5">
-          Free · No obligation · Takes 90 seconds
+          90-second clinical assessment
         </p>
       </motion.form>
 
