@@ -1,53 +1,58 @@
 
 
-## Plan: Align Codebase with Architecture Spec
+## Plan: Switch Emails to Resend via Edge Functions, Keep Make.com for Sheets
 
-The architecture document describes a more comprehensive version of what's already built. Here's what needs updating:
+Since you already use Resend for Healing Buds emails, the cleanest approach is:
 
----
+- **Resend** (via edge functions) handles all email sending — OTP verification + clinical results
+- **Make.com** (existing webhook) handles Google Sheets logging only — no email module needed
 
-### 1. Expand Survey Questions (`src/data/surveyQuestions.ts`)
-
-Every question currently has 2-4 options. The spec has 4-8 options per question. Key expansions:
-
-| Question | Current Options | Spec Options |
-|---|---|---|
-| `exp_level` | 3 | 5 |
-| `effect_intensity` | 3 | 5 |
-| `primary_vibe` | 4 | 6 (+Social & Talkative, +Focused & Clear) |
-| `body_impact` | 3 | 5 |
-| `specific_benefit` | 4 | 7 (+Sleep aid, +Focus/ADHD, +Creativity, +Social anxiety) |
-| `paired_activity` | 4 | 8 (+Work/Study, +Physical activity, +Meditation, +Sex/Intimacy) |
-| `thc_reaction` | 3 | 5 |
-| `terpene_pref` | 4 | 6 (+Pine/Fresh, +Gassy/Diesel) |
-| `consumption_format` | 3 | 7 |
-| `environment` | 3 | 5 |
-| `time_of_day` | 3 | 5 |
-| `discretion` | 2 | 3 |
-| `effects_avoid` | 3 | 7 (+Paranoia, +Racing thoughts, +Dry mouth, +Memory fog) |
-
-Also add `type: 'single' | 'multi'` field — `effects_avoid` becomes multi-select.
+This gives you faster email delivery, one email provider across all Healing Buds properties, and Make.com stays as your data pipeline to Sheets.
 
 ---
 
-### 2. Update Strain Matcher (`src/lib/strainMatcher.ts`)
+### Architecture
 
-Add scoring branches for the new options (e.g., "Social & Talkative" → Happy/Uplifted strains, "Focused & Clear" → Focused strains, "Sleep aid" → Indica/Sleepy). Adjust max score calculation to account for expanded option coverage.
+```text
+Frontend
+  ├─ OTP request ──→ Edge Function (send-otp-email) ──→ Resend API
+  │                                                       └─ noreply@send.healingbuds.co.za
+  │
+  └─ Survey complete ──→ Edge Function (submit-results)
+                            ├─→ Resend API (results email)
+                            └─→ Make.com webhook (Sheets logging w/ WhatsApp column)
+```
 
 ---
 
-### 3. Add Multi-Select Support (`src/components/SurveyFlow.tsx`)
+### Steps
 
-Currently all questions are single-select (tap = auto-advance). For `effects_avoid` (type: `multi`):
-- Allow toggling multiple options on/off
-- Show a "Continue" button instead of auto-advancing
-- Track selected items as comma-separated string in answers
+**1. Store Resend API key as a secret**
+Add `RESEND_API_KEY` to the project secrets (secure, server-side only).
 
----
+**2. Create `send-otp-email` edge function**
+- Accepts `{ email, otp_code }` 
+- Calls Resend API with the branded OTP HTML template (already built in `otp-email-template.html`)
+- Sends from `noreply@send.healingbuds.co.za`
 
-### 4. Extract Webhook Utility (`src/lib/webhook.ts`)
+**3. Create `submit-results` edge function**
+- Accepts full survey payload (email, name, whatsapp, strain match, all 15 answers)
+- Sends branded results email via Resend
+- Forwards the same payload to the Make.com webhook for Google Sheets logging (including the WhatsApp column)
 
-Create a shared webhook helper used by `Index.tsx` instead of inline fetch calls. Adds timestamp and source fields automatically. No functional change — just cleaner code.
+**4. Update `src/lib/webhook.ts`**
+- Add a `sendOtpEmail()` function that calls the `send-otp-email` edge function
+- Add a `submitResults()` function that calls the `submit-results` edge function
+- Keep `sendWebhook()` as a fallback/utility
+
+**5. Update `src/pages/Index.tsx`**
+- `handleEmailSubmit` → call `sendOtpEmail()` instead of `sendWebhook()`
+- `handleSendResults` → call `submitResults()` instead of `sendWebhook()`
+
+**6. Simplify Make.com scenario**
+- Remove the email-sending module (SMTP or HTTP/Resend)
+- Keep only: Webhook trigger → Google Sheets "Add Row" (with WhatsApp column mapped)
+- The router filter for `type: otp_verification` can be removed since OTP emails no longer go through Make.com
 
 ---
 
@@ -55,9 +60,17 @@ Create a shared webhook helper used by `Index.tsx` instead of inline fetch calls
 
 | File | Change |
 |---|---|
-| `src/data/surveyQuestions.ts` | Expand all questions to spec option counts, add `type` field |
-| `src/lib/strainMatcher.ts` | Add scoring for new options, recalculate max score |
-| `src/components/SurveyFlow.tsx` | Add multi-select mode for `effects_avoid` |
-| `src/lib/webhook.ts` | New — shared webhook utility |
-| `src/pages/Index.tsx` | Use `webhook.ts` instead of inline fetch |
+| `supabase/functions/send-otp-email/index.ts` | New — sends OTP email via Resend |
+| `supabase/functions/submit-results/index.ts` | New — sends results email via Resend + forwards to Make.com for Sheets |
+| `supabase/config.toml` | New — edge function config with `verify_jwt = false` |
+| `src/lib/webhook.ts` | Add typed functions calling edge functions |
+| `src/pages/Index.tsx` | Use new email functions instead of raw webhook |
+
+---
+
+### Make.com Changes (manual, in your Make.com dashboard)
+
+- Remove the Email/SMTP module from your scenario
+- Keep: Webhook → Router → Google Sheets (add WhatsApp column if not already there)
+- The webhook will now only receive survey result payloads (not OTP requests)
 
