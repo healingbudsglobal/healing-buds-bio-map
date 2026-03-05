@@ -10,7 +10,7 @@ import AmbientParticles from "@/components/AmbientParticles";
 import StepProgress from "@/components/StepProgress";
 import { surveyQuestions } from "@/data/surveyQuestions";
 import { matchStrain, type StrainMatch } from "@/lib/strainMatcher";
-import { sendWebhook } from "@/lib/webhook";
+import { sendOtpEmail, submitResults } from "@/lib/webhook";
 
 type Screen = "squeeze" | "otp" | "survey" | "contact" | "loading" | "success";
 
@@ -50,12 +50,7 @@ const Index = () => {
     setProvince(submittedProvince);
     const code = generateOtp();
     setOtpCode(code);
-    sendWebhook({
-      email: submittedEmail,
-      province: submittedProvince,
-      otp_code: code,
-      type: "otp_verification",
-    });
+    sendOtpEmail(submittedEmail, code);
     setScreen("otp");
   }, []);
 
@@ -70,12 +65,7 @@ const Index = () => {
   const handleOtpResend = useCallback(() => {
     const code = generateOtp();
     setOtpCode(code);
-    sendWebhook({
-      email,
-      province,
-      otp_code: code,
-      type: "otp_verification",
-    });
+    sendOtpEmail(email, code);
   }, [email, province]);
 
   const handleSurveyComplete = useCallback((answers: Record<string, string>) => {
@@ -111,7 +101,7 @@ const Index = () => {
         payload[q.id] = surveyAnswers[q.id] || "";
       });
 
-      await sendWebhook(payload);
+      await submitResults(payload);
 
       setTimeout(() => setScreen("success"), 3000);
     },
