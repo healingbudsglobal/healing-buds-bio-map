@@ -38,6 +38,7 @@ const Index = () => {
   const [otpCode, setOtpCode] = useState("");
   const [surveyAnswers, setSurveyAnswers] = useState<Record<string, string>>({});
   const [strainResult, setStrainResult] = useState<StrainMatch | null>(null);
+  const { toast } = useToast();
 
   const stepIndex = useMemo(() => {
     const map: Record<Screen, number> = {
@@ -46,14 +47,21 @@ const Index = () => {
     return map[screen];
   }, [screen]);
 
-  const handleEmailSubmit = useCallback((submittedEmail: string, submittedProvince: string) => {
+  const handleEmailSubmit = useCallback(async (submittedEmail: string, submittedProvince: string) => {
     setEmail(submittedEmail);
     setProvince(submittedProvince);
     const code = generateOtp();
     setOtpCode(code);
-    sendOtpEmail(submittedEmail, code);
     setScreen("otp");
-  }, []);
+    const success = await sendOtpEmail(submittedEmail, code);
+    if (!success) {
+      toast({
+        title: "Email delivery issue",
+        description: "Your verification code was sent via our backup system. Please check your inbox and spam folder.",
+        variant: "destructive",
+      });
+    }
+  }, [toast]);
 
   const handleOtpVerified = useCallback(() => {
     setScreen("survey");
@@ -63,11 +71,18 @@ const Index = () => {
     setScreen("squeeze");
   }, []);
 
-  const handleOtpResend = useCallback(() => {
+  const handleOtpResend = useCallback(async () => {
     const code = generateOtp();
     setOtpCode(code);
-    sendOtpEmail(email, code);
-  }, [email, province]);
+    const success = await sendOtpEmail(email, code);
+    if (!success) {
+      toast({
+        title: "Email delivery issue",
+        description: "We had trouble sending your code. Please try again in a moment.",
+        variant: "destructive",
+      });
+    }
+  }, [email, toast]);
 
   const handleSurveyComplete = useCallback((answers: Record<string, string>) => {
     const result = matchStrain(answers);
