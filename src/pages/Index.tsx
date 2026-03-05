@@ -117,7 +117,14 @@ const Index = () => {
         payload[q.id] = surveyAnswers[q.id] || "";
       });
 
-      await submitResults(payload);
+      const success = await submitResults(payload);
+      if (!success) {
+        toast({
+          title: "Results delivery issue",
+          description: "Your results were sent via our backup system. Check your inbox shortly.",
+          variant: "destructive",
+        });
+      }
 
       setTimeout(() => setScreen("success"), 3000);
     },
