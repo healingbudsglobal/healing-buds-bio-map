@@ -19,36 +19,40 @@ export async function sendWebhook(data: Record<string, unknown>): Promise<void> 
   }
 }
 
-/** Send OTP verification email via Resend (edge function) */
-export async function sendOtpEmail(email: string, otpCode: string): Promise<void> {
+/** Send OTP verification email via Resend (edge function). Returns true on success. */
+export async function sendOtpEmail(email: string, otpCode: string): Promise<boolean> {
   try {
     const { error } = await supabase.functions.invoke("send-otp-email", {
       body: { email, otp_code: otpCode },
     });
     if (error) {
       console.error("OTP email error:", error);
-      // Fallback to Make.com webhook
       await sendWebhook({ email, otp_code: otpCode, type: "otp_verification" });
+      return false;
     }
+    return true;
   } catch (err) {
     console.error("OTP email failed, falling back to webhook:", err);
     await sendWebhook({ email, otp_code: otpCode, type: "otp_verification" });
+    return false;
   }
 }
 
-/** Submit survey results — sends email via Resend + logs to Google Sheets via Make.com */
-export async function submitResults(payload: Record<string, string>): Promise<void> {
+/** Submit survey results — sends email via Resend + logs to Google Sheets via Make.com. Returns true on success. */
+export async function submitResults(payload: Record<string, string>): Promise<boolean> {
   try {
     const { error } = await supabase.functions.invoke("submit-results", {
       body: payload,
     });
     if (error) {
       console.error("Submit results error:", error);
-      // Fallback to direct webhook
       await sendWebhook(payload);
+      return false;
     }
+    return true;
   } catch (err) {
     console.error("Submit results failed, falling back to webhook:", err);
     await sendWebhook(payload);
+    return false;
   }
 }
