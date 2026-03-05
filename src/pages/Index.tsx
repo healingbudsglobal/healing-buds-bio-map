@@ -11,6 +11,7 @@ import StepProgress from "@/components/StepProgress";
 import { surveyQuestions } from "@/data/surveyQuestions";
 import { matchStrain, type StrainMatch } from "@/lib/strainMatcher";
 import { sendOtpEmail, submitResults } from "@/lib/webhook";
+import { useToast } from "@/hooks/use-toast";
 
 type Screen = "squeeze" | "otp" | "survey" | "contact" | "loading" | "success";
 
