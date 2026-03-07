@@ -119,14 +119,14 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
       >
         Find Your
         <br />
-        <span className="text-[hsl(var(--brand-gold))]">Plant-Based Frequency</span>
+        <span className="text-[hsl(var(--brand-gold))]">Perfect Strain</span>
       </motion.h1>
 
       <motion.p
         variants={itemVariants}
         className="mb-7 max-w-xs text-sm leading-relaxed text-muted-foreground"
       >
-        A 60-second medical mapping to find the right strain for your relief.
+        Answer 15 quick questions and we'll match you to the cannabis strain your body needs.
       </motion.p>
 
       {/* Form — glass card with stronger blur over flower */}
@@ -181,12 +181,12 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
           whileTap={{ scale: 0.97 }}
           className="group w-full rounded-2xl gradient-accent py-4 font-display font-bold text-white text-base transition-all hover:brightness-110 animate-pulse-glow flex items-center justify-center gap-2 min-h-[52px]"
         >
-          Begin Mapping
+          Find My Strain
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </motion.button>
 
         <p className="text-[11px] text-muted-foreground mt-0.5 text-center">
-          60 seconds · clinically informed · private
+          2 min · science-backed · 100% private
         </p>
       </motion.form>
 

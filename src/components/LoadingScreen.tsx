@@ -4,12 +4,12 @@ import hbLogoJar from "@/assets/hb-logo-jar.png";
 import heroFlower from "@/assets/hero-flower.jpg";
 
 const STATUS_MESSAGES = [
-  "Cross-referencing your symptoms with the Healing Buds Master Strain Library…",
-  "Analysing terpene ratios…",
-  "Matching ECS receptors…",
-  "Evaluating potency thresholds…",
-  "Generating your clinical profile…",
-  "Success.",
+  "Comparing your answers to our strain library…",
+  "Analysing terpene compatibility…",
+  "Matching cannabinoid ratios to your profile…",
+  "Checking strain availability…",
+  "Building your personalised result…",
+  "Done.",
 ];
 
 // DNA Helix component — geometric green dots spinning
@@ -125,7 +125,7 @@ const LoadingScreen = () => {
       </motion.div>
 
       <h2 className="font-display text-xl font-bold tracking-[0.02em] text-foreground mb-4 text-glow sm:text-2xl">
-        Processing Your Bio-Map…
+        Finding Your Match…
       </h2>
 
       {/* Cycling status messages */}

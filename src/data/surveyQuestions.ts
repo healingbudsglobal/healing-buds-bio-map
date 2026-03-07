@@ -13,12 +13,12 @@ export interface SurveyQuestion {
 }
 
 export const surveyQuestions: SurveyQuestion[] = [
-  // ─── Section 1: Experience & Tolerance ───
+  // ─── Section 1: Your Cannabis Background ───
   {
     id: "exp_level",
-    section: "Experience & Tolerance",
-    question: "How would you describe your experience level with cannabis?",
-    subtitle: "This helps us calibrate your ideal potency",
+    section: "Your Cannabis Background",
+    question: "How familiar are you with cannabis?",
+    subtitle: "So we can find the right strength for you",
     type: "single",
     options: [
       { label: "First timer / Very new", icon: "baby" },
@@ -30,9 +30,9 @@ export const surveyQuestions: SurveyQuestion[] = [
   },
   {
     id: "effect_intensity",
-    section: "Experience & Tolerance",
-    question: "How strongly do you prefer to feel the effects?",
-    subtitle: "From micro-dose to full immersion",
+    section: "Your Cannabis Background",
+    question: "How strong do you like the effects?",
+    subtitle: "From barely-there to fully immersive",
     type: "single",
     options: [
       { label: "Very mild (barely noticeable)", icon: "droplets" },
@@ -44,7 +44,7 @@ export const surveyQuestions: SurveyQuestion[] = [
   },
   {
     id: "peak_duration",
-    section: "Experience & Tolerance",
+    section: "Your Cannabis Background",
     question: "How long do you want the peak effects to last?",
     subtitle: "Duration shapes which compounds we prioritise",
     type: "single",
@@ -56,12 +56,12 @@ export const surveyQuestions: SurveyQuestion[] = [
     ],
   },
 
-  // ─── Section 2: The Desired State ───
+  // ─── Section 2: Your Ideal Experience ───
   {
     id: "primary_vibe",
-    section: "The Desired State",
-    question: "What is the primary vibe you're looking to achieve?",
-    subtitle: "This is the single biggest factor in your match",
+    section: "Your Ideal Experience",
+    question: "What experience are you looking for?",
+    subtitle: "This shapes your match more than anything",
     type: "single",
     options: [
       { label: "Energized & Productive", icon: "zap" },
@@ -74,7 +74,7 @@ export const surveyQuestions: SurveyQuestion[] = [
   },
   {
     id: "body_impact",
-    section: "The Desired State",
+    section: "Your Ideal Experience",
     question: "How do you want the high to impact your physical body?",
     subtitle: "Physical sensation matters as much as mental effect",
     type: "single",
@@ -88,7 +88,7 @@ export const surveyQuestions: SurveyQuestion[] = [
   },
   {
     id: "specific_benefit",
-    section: "The Desired State",
+    section: "Your Ideal Experience",
     question: "Which specific benefit is most important to you right now?",
     subtitle: "We'll weight this heavily in your match",
     type: "single",
@@ -104,7 +104,7 @@ export const surveyQuestions: SurveyQuestion[] = [
   },
   {
     id: "paired_activity",
-    section: "The Desired State",
+    section: "Your Ideal Experience",
     question: "What activity do you plan to pair with this experience?",
     subtitle: "Context shapes the ideal strain profile",
     type: "single",
@@ -120,12 +120,12 @@ export const surveyQuestions: SurveyQuestion[] = [
     ],
   },
 
-  // ─── Section 3: Biological Sensitivities ───
+  // ─── Section 3: Your Body & Preferences ───
   {
     id: "thc_reaction",
-    section: "Biological Sensitivities",
-    question: "How does your body typically react to high-potency THC?",
-    subtitle: "We'll factor this into your safety profile",
+    section: "Your Body & Preferences",
+    question: "How sensitive are you to THC?",
+    subtitle: "We'll use this to keep your experience comfortable",
     type: "single",
     options: [
       { label: "I am very sensitive (can feel 2.5mg)", icon: "alert-triangle" },
@@ -137,9 +137,9 @@ export const surveyQuestions: SurveyQuestion[] = [
   },
   {
     id: "terpene_pref",
-    section: "Biological Sensitivities",
-    question: "Which aroma profiles do you naturally enjoy?",
-    subtitle: "Terpenes determine taste and therapeutic effect",
+    section: "Your Body & Preferences",
+    question: "Which aromas appeal to you?",
+    subtitle: "Terpenes shape both flavour and how it feels",
     type: "single",
     options: [
       { label: "Citrus/Zesty (Limonene)", icon: "citrus" },
@@ -152,7 +152,7 @@ export const surveyQuestions: SurveyQuestion[] = [
   },
   {
     id: "consumption_format",
-    section: "Biological Sensitivities",
+    section: "Your Body & Preferences",
     question: "How do you prefer to consume?",
     subtitle: "We'll pass this to your consultant for tailored advice",
     type: "single",
@@ -167,10 +167,10 @@ export const surveyQuestions: SurveyQuestion[] = [
     ],
   },
 
-  // ─── Section 4: Advanced Synergy ───
+  // ─── Section 4: Lifestyle & Context ───
   {
     id: "recovery_support",
-    section: "Advanced Synergy",
+    section: "Lifestyle & Context",
     question: "Do you need recovery or anti-inflammatory support?",
     subtitle: "Optional — helps us explore therapeutic pairings",
     type: "single",
@@ -183,7 +183,7 @@ export const surveyQuestions: SurveyQuestion[] = [
   },
   {
     id: "environment",
-    section: "Advanced Synergy",
+    section: "Lifestyle & Context",
     question: "What is your typical environment?",
     subtitle: "Setting influences the ideal effect profile",
     type: "single",
@@ -197,7 +197,7 @@ export const surveyQuestions: SurveyQuestion[] = [
   },
   {
     id: "time_of_day",
-    section: "Advanced Synergy",
+    section: "Lifestyle & Context",
     question: "When do you typically consume?",
     subtitle: "Morning strains differ from evening strains",
     type: "single",
@@ -211,8 +211,8 @@ export const surveyQuestions: SurveyQuestion[] = [
   },
   {
     id: "discretion",
-    section: "Advanced Synergy",
-    question: "How important is discretion for your usage?",
+    section: "Lifestyle & Context",
+    question: "How important is discretion?",
     subtitle: "We'll note this for your consultant",
     type: "single",
     options: [
@@ -223,7 +223,7 @@ export const surveyQuestions: SurveyQuestion[] = [
   },
   {
     id: "effects_avoid",
-    section: "Advanced Synergy",
+    section: "Lifestyle & Context",
     question: "Any effects you want to avoid?",
     subtitle: "Select all that apply — we'll steer your match away",
     type: "multi",

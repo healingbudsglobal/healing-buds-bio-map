@@ -12,10 +12,10 @@ interface SurveyFlowProps {
 
 // Section metadata for title cards
 const SECTION_META: Record<string, { emoji: string; subtitle: string }> = {
-  "Experience & Tolerance": { emoji: "🧬", subtitle: "Let's calibrate your baseline" },
-  "The Desired State": { emoji: "🎯", subtitle: "Mapping your ideal high" },
-  "Biological Sensitivities": { emoji: "🛡️", subtitle: "Safety & flavour profiling" },
-  "Advanced Synergy": { emoji: "⚡", subtitle: "Fine-tuning your match" },
+  "Your Cannabis Background": { emoji: "🌱", subtitle: "Understanding your baseline" },
+  "Your Ideal Experience": { emoji: "🎯", subtitle: "What does relief look like for you?" },
+  "Your Body & Preferences": { emoji: "🧬", subtitle: "Safety, flavour & format" },
+  "Lifestyle & Context": { emoji: "⚡", subtitle: "Fine-tuning your match" },
 };
 
 // Color mapping for icon backgrounds based on option intent
