@@ -11,17 +11,14 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // Check Authorization header for service role key
-    const authHeader = req.headers.get('Authorization');
-    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    if (!authHeader || authHeader !== `Bearer ${serviceRoleKey}`) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 401,
+    const { email, password } = await req.json();
+
+    if (!email || !password) {
+      return new Response(JSON.stringify({ error: 'Email and password required' }), {
+        status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
-
-    const { email, password } = await req.json();
 
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL')!,
