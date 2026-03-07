@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowRight, Shield, FlaskConical, Microscope } from "lucide-react";
+import { ArrowRight, Shield, FlaskConical, Microscope, Dna, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { validateEmail } from "@/lib/emailValidation";
 import hbLogoWhite from "@/assets/hb-logo-white-full.png";
@@ -92,9 +92,27 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
       {/* Subtle green radial spotlight */}
       <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,hsl(var(--accent-green)_/_0.06)_0%,transparent_70%)]" />
 
+      {/* Animated DNA helix accent — subtle floating element */}
+      <motion.div
+        className="pointer-events-none absolute top-[12%] right-[8%] opacity-[0.07]"
+        animate={{ y: [0, -15, 0], rotate: [0, 8, 0] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <Dna className="h-24 w-24 text-[hsl(var(--accent-green))]" />
+      </motion.div>
+      <motion.div
+        className="pointer-events-none absolute bottom-[15%] left-[6%] opacity-[0.05]"
+        animate={{ y: [0, 12, 0], rotate: [0, -6, 0] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+      >
+        <Sparkles className="h-16 w-16 text-[hsl(var(--brand-gold))]" />
+      </motion.div>
+
       {/* Logo */}
       <motion.div variants={itemVariants} className="mb-6 relative">
         <img src={hbLogoWhite} alt="Healing Buds" className="h-14 w-auto sm:h-16 drop-shadow-lg" />
+        {/* Soft glow behind logo */}
+        <div className="absolute inset-0 -z-10 blur-3xl bg-[hsl(var(--accent-green)_/_0.08)] rounded-full scale-[2.5]" />
       </motion.div>
 
       {/* Trust badges */}
@@ -126,7 +144,7 @@ const SqueezeScreen = ({ onSubmit }: SqueezeScreenProps) => {
         variants={itemVariants}
         className="mb-7 max-w-xs text-sm leading-relaxed text-muted-foreground"
       >
-        Answer 15 quick questions and we'll match you to the cannabis strain your body needs.
+        Take our quick science-backed quiz and we'll match you to the cannabis strain your body needs.
       </motion.p>
 
       {/* Form — glass card with stronger blur over flower */}
