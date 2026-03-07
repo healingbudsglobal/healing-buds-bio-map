@@ -14,7 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      leads: {
+        Row: {
+          compatibility: string | null
+          created_at: string
+          email: string
+          id: string
+          matched_strain: string | null
+          name: string | null
+          province: string | null
+          source: string | null
+          strain_cbd: string | null
+          strain_effects: string | null
+          strain_flavours: string | null
+          strain_price: string | null
+          strain_shop_url: string | null
+          strain_thc: string | null
+          survey_answers: Json | null
+          whatsapp: string | null
+        }
+        Insert: {
+          compatibility?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          matched_strain?: string | null
+          name?: string | null
+          province?: string | null
+          source?: string | null
+          strain_cbd?: string | null
+          strain_effects?: string | null
+          strain_flavours?: string | null
+          strain_price?: string | null
+          strain_shop_url?: string | null
+          strain_thc?: string | null
+          survey_answers?: Json | null
+          whatsapp?: string | null
+        }
+        Update: {
+          compatibility?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          matched_strain?: string | null
+          name?: string | null
+          province?: string | null
+          source?: string | null
+          strain_cbd?: string | null
+          strain_effects?: string | null
+          strain_flavours?: string | null
+          strain_price?: string | null
+          strain_shop_url?: string | null
+          strain_thc?: string | null
+          survey_answers?: Json | null
+          whatsapp?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
