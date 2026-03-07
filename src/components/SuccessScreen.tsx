@@ -84,7 +84,7 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
         variants={itemVariants}
         className="font-display text-2xl font-extrabold tracking-[0.02em] text-foreground sm:text-3xl mb-2 text-glow"
       >
-        Your Recommendation Is Ready
+        We Found Your Match
       </motion.h2>
 
       {strain && (
@@ -124,7 +124,7 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
                   <div className="flex items-center gap-2 mb-1">
                     <Leaf className="h-4 w-4 text-[hsl(var(--accent-green))]" />
                     <span className="text-xs font-semibold tracking-[0.12em] uppercase text-muted-foreground">
-                      Your Top Match
+                      Your #1 Match
                     </span>
                   </div>
                   <h3 className="font-display text-xl font-bold text-foreground">
@@ -234,7 +234,7 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
             whileTap={{ scale: 0.97 }}
             className="mt-4 group w-full rounded-2xl gradient-accent py-4 font-display font-bold text-white text-base transition-all hover:brightness-110 flex items-center justify-center gap-2 min-h-[52px] animate-pulse-glow"
           >
-            Order This Strain
+            Shop This Strain
             <ExternalLink className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </motion.a>
 
@@ -248,7 +248,7 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
               className="flex-1 flex items-center justify-center gap-2 rounded-2xl border border-border bg-[hsl(var(--surface-elevated))] py-3 text-sm font-medium text-foreground hover:bg-[hsl(var(--accent-green)_/_0.08)] transition-all min-h-[48px]"
             >
               <Mail className="h-4 w-4 text-[hsl(var(--accent-green))]" />
-              Questions? Email Us
+              Speak to a Consultant
             </a>
             <motion.button
               onClick={handleShare}
@@ -268,7 +268,7 @@ const SuccessScreen = ({ result }: SuccessScreenProps) => {
         className="mt-4 inline-flex items-center gap-2 rounded-full border border-border bg-[hsl(var(--surface-elevated))] px-4 py-2 text-xs text-muted-foreground"
       >
         <Mail className="h-3.5 w-3.5 text-[hsl(var(--accent-green))]" />
-        Results also sent to your inbox
+        Full results sent to your email
       </motion.div>
 
       {/* Back */}

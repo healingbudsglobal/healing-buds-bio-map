@@ -7,7 +7,7 @@ interface StepProgressProps {
   labels?: string[];
 }
 
-const defaultLabels = ["Email", "Verify", "Survey", "Contact", "Results"];
+const defaultLabels = ["Sign Up", "Verify", "Profile", "Details", "Your Match"];
 
 const StepProgress = ({
   currentStep,

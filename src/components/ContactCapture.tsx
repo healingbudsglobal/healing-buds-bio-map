@@ -67,7 +67,7 @@ const ContactCapture = ({ onSubmit, onSkip, strainName, userEmail }: ContactCapt
         variants={itemVariants}
         className="font-display text-2xl font-bold tracking-[0.02em] text-foreground sm:text-3xl mb-2"
       >
-        Your Clinical Profile Is <span className="text-[hsl(var(--brand-gold))]">Ready</span>
+        Your Strain Match Is <span className="text-[hsl(var(--brand-gold))]">Ready</span>
       </motion.h2>
 
       {/* Blurred strain teaser with flower peek */}
@@ -95,7 +95,7 @@ const ContactCapture = ({ onSubmit, onSkip, strainName, userEmail }: ContactCapt
               <div className="absolute inset-0 h-8 w-8 rounded-full border border-[hsl(var(--accent-green)_/_0.15)] scale-150" />
               <Lock className="h-4 w-4 text-[hsl(var(--accent-green))] relative z-10" />
             </motion.div>
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Your Top Match</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Your #1 Match</span>
           </div>
           <p className="mt-2 font-display text-lg font-bold text-foreground blur-[6px] select-none relative z-10">
             {strainName}
@@ -107,7 +107,7 @@ const ContactCapture = ({ onSubmit, onSkip, strainName, userEmail }: ContactCapt
         variants={itemVariants}
         className="mb-6 text-sm text-muted-foreground leading-relaxed max-w-xs"
       >
-        Where should we send your clinical profile?
+        Add your name to personalise your results
       </motion.p>
 
       <motion.form
@@ -156,7 +156,7 @@ const ContactCapture = ({ onSubmit, onSkip, strainName, userEmail }: ContactCapt
           whileTap={{ scale: 0.97 }}
           className="group w-full rounded-2xl gradient-accent py-4 font-display font-bold text-white text-base transition-all hover:brightness-110 animate-pulse-glow flex items-center justify-center gap-2 min-h-[52px]"
         >
-          See My Recommendation
+          Reveal My Match
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </motion.button>
 
@@ -166,7 +166,7 @@ const ContactCapture = ({ onSubmit, onSkip, strainName, userEmail }: ContactCapt
           whileHover={{ x: 4 }}
           className="text-xs text-muted-foreground hover:text-foreground transition-colors mt-1 min-h-[44px] px-4"
         >
-          Just send it to my email →
+          Skip — email my results →
         </motion.button>
 
         {userEmail && (
