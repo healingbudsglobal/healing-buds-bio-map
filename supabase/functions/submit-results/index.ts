@@ -1,9 +1,12 @@
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
 const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/70z505ty60nkksvtl6l6r1yzj4cs58tb";
+const ADMIN_EMAIL = "healingbudsglobal@gmail.com";
 
 function buildEffectPills(effects: string): string {
   return effects.split(', ').map(e =>
@@ -17,11 +20,75 @@ function buildFlavourPills(flavours: string): string {
   ).join('');
 }
 
+function buildAdminNotificationHtml(data: Record<string, string>): string {
+  const surveyKeys = [
+    { key: 'exp_level', label: 'Experience Level' },
+    { key: 'primary_vibe', label: 'Desired Vibe' },
+    { key: 'specific_benefit', label: 'Primary Benefit' },
+    { key: 'body_impact', label: 'Body Impact' },
+    { key: 'terpene_pref', label: 'Terpene Preference' },
+    { key: 'consumption_format', label: 'Consumption Method' },
+    { key: 'time_of_day', label: 'Time of Day' },
+  ];
+
+  const surveyRows = surveyKeys
+    .filter(s => data[s.key])
+    .map(s => `<tr><td style="padding:8px 12px; border-bottom:1px solid #2F3633; font-size:12px; color:#7F958E;">${s.label}</td><td style="padding:8px 12px; border-bottom:1px solid #2F3633; font-size:13px; color:#F0F3F2; font-weight:500;">${data[s.key]}</td></tr>`)
+    .join('');
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"/><title>New Lead — Healing Buds</title></head>
+<body style="margin:0; padding:0; background-color:#101414; font-family:'Inter','Helvetica Neue',Arial,sans-serif;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#101414;">
+  <tr><td align="center" style="padding:32px 16px;">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="520" style="max-width:520px; width:100%; background-color:#1A1D1C; border:1px solid #2F3633; border-radius:16px;">
+      <tr><td style="height:3px; background:linear-gradient(90deg, #4DBFA1, #E5A31E, #4DBFA1); border-radius:16px 16px 0 0;">&nbsp;</td></tr>
+      <tr><td style="padding:24px 24px 16px;">
+        <h1 style="margin:0 0 4px; font-size:20px; font-weight:700; color:#4DBFA1;">🧬 New Bio-Map Lead</h1>
+        <p style="margin:0; font-size:13px; color:#7F958E;">${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })}</p>
+      </td></tr>
+      <tr><td style="padding:0 24px 16px;">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%; background-color:#101414; border:1px solid #2F3633; border-radius:10px;">
+          <tr><td style="padding:16px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+              <tr><td style="padding:4px 0; font-size:12px; color:#7F958E;">Name</td><td style="padding:4px 0; font-size:14px; color:#F0F3F2; font-weight:600;">${data.name || '—'}</td></tr>
+              <tr><td style="padding:4px 0; font-size:12px; color:#7F958E;">Email</td><td style="padding:4px 0; font-size:14px; color:#4DBFA1; font-weight:500;">${data.email}</td></tr>
+              <tr><td style="padding:4px 0; font-size:12px; color:#7F958E;">WhatsApp</td><td style="padding:4px 0; font-size:14px; color:#F0F3F2;">${data.whatsapp || '—'}</td></tr>
+              <tr><td style="padding:4px 0; font-size:12px; color:#7F958E;">Province</td><td style="padding:4px 0; font-size:14px; color:#F0F3F2;">${data.province || '—'}</td></tr>
+            </table>
+          </td></tr>
+        </table>
+      </td></tr>
+      <tr><td style="padding:0 24px 16px;">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%; background-color:#101414; border:1px solid #2F3633; border-radius:10px;">
+          <tr><td style="padding:16px;">
+            <p style="margin:0 0 4px; font-size:11px; color:#7F958E; text-transform:uppercase; letter-spacing:0.1em;">Matched Strain</p>
+            <p style="margin:0 0 8px; font-size:24px; font-weight:700; color:#E5A31E;">${data.matched_strain}</p>
+            <p style="margin:0; font-size:14px; color:#4DBFA1; font-weight:600;">${data.compatibility} compatibility</p>
+          </td></tr>
+        </table>
+      </td></tr>
+      ${surveyRows ? `<tr><td style="padding:0 24px 16px;">
+        <p style="margin:0 0 8px; font-size:13px; font-weight:600; color:#F0F3F2;">Survey Answers</p>
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%; background-color:#101414; border:1px solid #2F3633; border-radius:10px;">
+          ${surveyRows}
+        </table>
+      </td></tr>` : ''}
+      <tr><td style="padding:16px 24px 24px;">
+        <p style="margin:0; font-size:11px; color:#7F958E;">This is an automated notification from the Healing Buds Bio-Map Survey.</p>
+      </td></tr>
+    </table>
+  </td></tr>
+</table>
+</body>
+</html>`;
+}
+
 function buildResultsHtml(data: Record<string, string>): string {
   const name = data.name || 'there';
   const compatNum = parseInt(data.compatibility) || 85;
   
-  // Build the survey summary rows from question answers
   const surveyKeys = [
     { key: 'exp_level', label: 'Experience Level' },
     { key: 'primary_vibe', label: 'Desired Vibe' },
@@ -83,12 +150,10 @@ function buildResultsHtml(data: Record<string, string>): string {
         <!-- ═══ STRAIN MATCH CARD ═══ -->
         <tr><td style="padding:0 24px 16px;">
           <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%; background-color:#101414; border:1px solid #2F3633; border-radius:12px; overflow:hidden;">
-            <!-- Strain header with gradient -->
             <tr><td style="padding:24px 24px 16px; background:linear-gradient(135deg, rgba(77,191,161,0.12), rgba(229,163,30,0.08));">
               <p style="margin:0 0 2px; font-size:11px; color:#7F958E; text-transform:uppercase; letter-spacing:0.1em; font-weight:600;">🧬 Your Matched Strain</p>
               <h2 style="margin:0 0 4px; font-family:'DM Sans','Helvetica Neue',Arial,sans-serif; font-size:30px; font-weight:700; color:#E5A31E; letter-spacing:-0.01em;">${data.matched_strain}</h2>
             </td></tr>
-            <!-- Compatibility score -->
             <tr><td align="center" style="padding:16px 24px;">
               <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
                 <tr>
@@ -117,7 +182,6 @@ function buildResultsHtml(data: Record<string, string>): string {
         <tr><td style="padding:0 24px 16px;">
           <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
             <tr>
-              <!-- THC -->
               <td style="width:33%; padding:0 4px 0 0;">
                 <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%; background-color:#101414; border:1px solid #2F3633; border-radius:10px;">
                   <tr><td align="center" style="padding:16px 8px;">
@@ -126,7 +190,6 @@ function buildResultsHtml(data: Record<string, string>): string {
                   </td></tr>
                 </table>
               </td>
-              <!-- CBD -->
               <td style="width:33%; padding:0 4px;">
                 <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%; background-color:#101414; border:1px solid #2F3633; border-radius:10px;">
                   <tr><td align="center" style="padding:16px 8px;">
@@ -135,7 +198,6 @@ function buildResultsHtml(data: Record<string, string>): string {
                   </td></tr>
                 </table>
               </td>
-              <!-- Price -->
               <td style="width:33%; padding:0 0 0 4px;">
                 <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%; background-color:#101414; border:1px solid #2F3633; border-radius:10px;">
                   <tr><td align="center" style="padding:16px 8px;">
@@ -222,7 +284,6 @@ function buildResultsHtml(data: Record<string, string>): string {
         </td></tr>
 
       </table>
-      <!-- /Main card -->
 
       <!-- Outer footer -->
       <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="520" style="max-width:520px; width:100%;">
@@ -260,7 +321,38 @@ Deno.serve(async (req) => {
       throw new Error('RESEND_API_KEY not configured');
     }
 
-    // 1. Send results email via Resend
+    // Create Supabase service client to insert lead
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Collect survey answers into a JSONB object
+    const surveyKeys = ['exp_level', 'primary_vibe', 'specific_benefit', 'body_impact', 'terpene_pref', 'consumption_format', 'time_of_day'];
+    const surveyAnswers: Record<string, string> = {};
+    surveyKeys.forEach(k => { if (payload[k]) surveyAnswers[k] = payload[k]; });
+
+    // 1. Save lead to database
+    try {
+      await supabase.from('leads').insert({
+        email,
+        name: payload.name || null,
+        whatsapp: payload.whatsapp || null,
+        province: payload.province || null,
+        matched_strain: payload.matched_strain || null,
+        compatibility: payload.compatibility || null,
+        strain_thc: payload.strain_thc || null,
+        strain_cbd: payload.strain_cbd || null,
+        strain_price: payload.strain_price || null,
+        strain_effects: payload.strain_effects || null,
+        strain_flavours: payload.strain_flavours || null,
+        strain_shop_url: payload.strain_shop_url || null,
+        survey_answers: surveyAnswers,
+      });
+    } catch (dbErr) {
+      console.error('DB insert error:', dbErr);
+    }
+
+    // 2. Send results email to user via Resend
     const resendRes = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -280,7 +372,26 @@ Deno.serve(async (req) => {
       console.error('Resend error:', resendData);
     }
 
-    // 2. Forward to Make.com webhook for Google Sheets logging
+    // 3. Send admin notification email
+    try {
+      await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${RESEND_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: 'Healing Buds Bio-Map <noreply@send.healingbuds.co.za>',
+          to: [ADMIN_EMAIL],
+          subject: `🧬 New Lead: ${payload.name || 'Anonymous'} → ${payload.matched_strain} (${payload.compatibility})`,
+          html: buildAdminNotificationHtml(payload),
+        }),
+      });
+    } catch (adminEmailErr) {
+      console.error('Admin email error:', adminEmailErr);
+    }
+
+    // 4. Forward to Make.com webhook for Google Sheets logging
     try {
       await fetch(MAKE_WEBHOOK_URL, {
         method: 'POST',
@@ -293,7 +404,6 @@ Deno.serve(async (req) => {
       });
     } catch (webhookErr) {
       console.error('Make.com webhook error:', webhookErr);
-      // Don't fail the request if Sheets logging fails
     }
 
     return new Response(
