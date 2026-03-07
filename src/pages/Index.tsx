@@ -146,15 +146,17 @@ const Index = () => {
     <div className="leaf-pattern relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden pb-[env(safe-area-inset-bottom)]">
       <AmbientParticles />
 
-      {/* Step Progress - fixed at top */}
-      <motion.div
-        className="fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top)+12px)] pb-3 px-6 backdrop-blur-md bg-[hsl(180_8%_7%_/_0.5)]"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-      >
-        <StepProgress currentStep={stepIndex} />
-      </motion.div>
+      {/* Step Progress - fixed at top, hidden on squeeze screen */}
+      {screen !== "squeeze" && (
+        <motion.div
+          className="fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top)+12px)] pb-3 px-6 backdrop-blur-md bg-[hsl(180_8%_7%_/_0.5)]"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          <StepProgress currentStep={stepIndex} />
+        </motion.div>
+      )}
 
       <AnimatePresence mode="wait">
         <motion.div
