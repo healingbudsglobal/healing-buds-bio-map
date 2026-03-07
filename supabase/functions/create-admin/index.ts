@@ -11,15 +11,17 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { email, password, admin_secret } = await req.json();
-
-    // Simple secret check to prevent unauthorized user creation
-    if (admin_secret !== Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')) {
+    // Check Authorization header for service role key
+    const authHeader = req.headers.get('Authorization');
+    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    if (!authHeader || authHeader !== `Bearer ${serviceRoleKey}`) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         status: 401,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
+
+    const { email, password } = await req.json();
 
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL')!,
