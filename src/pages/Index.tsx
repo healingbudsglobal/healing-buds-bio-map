@@ -164,7 +164,7 @@ const Index = () => {
           animate="animate"
           exit="exit"
           transition={screenTransition}
-          className="flex w-full items-center justify-center"
+          className="flex w-full items-center justify-center pt-20"
         >
           {screen === "squeeze" && <SqueezeScreen onSubmit={handleEmailSubmit} />}
           {screen === "otp" && (

@@ -29,7 +29,7 @@ function buildOtpHtml(email: string, otpCode: string): string {
     <td align="center" style="padding:40px 16px;">
       <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="480" style="max-width:480px; width:100%; background-color:#1A1D1C; border:1px solid #2F3633; border-radius:16px;">
         <tr><td style="height:3px; background:linear-gradient(90deg, #4DBFA1, #E5A31E, #4DBFA1); border-radius:16px 16px 0 0; font-size:0; line-height:0;">&nbsp;</td></tr>
-        <tr><td align="center" style="padding:32px 32px 16px;"><img src="https://healingbuds.co.za/images/hb-logo-white-full.png" alt="Healing Buds" width="180" style="display:block; width:180px; height:auto;" /></td></tr>
+        <tr><td align="center" style="padding:32px 32px 16px;"><img src="https://biomapsurvey.lovable.app/images/hb-logo-white-full.png" alt="Healing Buds" width="180" style="display:block; width:180px; height:auto;" /></td></tr>
         <tr><td align="center" style="padding:8px 32px 4px;"><h1 style="margin:0; font-family:'DM Sans','Helvetica Neue',Arial,sans-serif; font-size:22px; font-weight:700; color:#F0F3F2; letter-spacing:0.02em;">Verify Your Email</h1></td></tr>
         <tr><td align="center" style="padding:4px 32px 24px;"><p style="margin:0; font-size:14px; line-height:1.6; color:#7F958E;">Enter the code below to verify <span style="color:#F0F3F2; font-weight:500;">${email}</span></p></td></tr>
         <tr><td align="center" style="padding:0 32px 8px;">
