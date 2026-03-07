@@ -4,7 +4,7 @@ import { ChevronLeft } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { icons } from "lucide-react";
 import hbLogoWhite from "@/assets/hb-logo-white-full.png";
-import LeafProgress from "@/components/LeafProgress";
+
 
 interface SurveyFlowProps {
   onComplete: (answers: Record<string, string>) => void;
@@ -158,11 +158,6 @@ const SurveyFlow = ({ onComplete }: SurveyFlowProps) => {
 
   return (
     <div className="relative z-10 flex w-full max-w-lg flex-col px-5" style={{ perspective: "1200px" }}>
-      <LeafProgress
-        progress={progress}
-        currentStep={currentIndex + 1}
-        totalSteps={surveyQuestions.length}
-      />
 
       {/* Header — logo + step counter */}
       <div className="mb-6 flex items-center justify-between pt-4">
